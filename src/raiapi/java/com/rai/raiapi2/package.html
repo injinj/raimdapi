@@ -1,0 +1,84 @@
+<html>
+<body>
+This package provides access to Rai Market Data middleware implementations.
+<h2> Example Configuration </h2>
+
+<h3> The api argument </h3>
+
+The api argument is used to select which API implementation to load. The API
+will dynamically load the selected api implementation if the .so file is found
+on the LD_LIBRARY_PATH. This argument must be present in the argument list
+passed to the RaiApi constructor when creating the API instance.
+
+<p>
+<code>
+/* checks if -api is present in args[] */<br/>
+api = RaiApi.RaiOpen( null, args );<br/>
+/* if first arg is not null, then it specifies the implementation */<br/>
+api = RaiApi.RaiOpen( "tibrv", args );<br/>
+</code>
+
+<p>
+Valid alternatives for the -api argument include sass2, capr, tibrv, sass3, and
+embd.  Additional implementations can be added through the inclusion of the
+relevant rai_api_&lt;implementation&gt;.so file in the dynamic library path.
+
+<p>
+<table border="1">
+<caption>Standard API Implementation Values</caption>
+<tr> <th>Value</th><th>Description</th> </tr>
+<tr> <td>sass2</td><td>TIB SASS2</td> </tr>
+<tr> <td>capr</td><td>Rai Technology's Cache Protocol</td> </tr>
+<tr> <td>tibrv</td><td>TIBCO Rendezvous</td> </tr>
+<tr> <td>sass3</td><td>TIB SASS3</td> </tr>
+<tr> <td>embd</td><td>Embedded application</td> </tr>
+</table>
+
+<h3> Running Rai API applications </h3>
+
+The use of different -api arguments requires different arguments to support the
+transport configuration parameters required. Typically these are either the
+specific arguments needed by the middleware or a configuration file that
+contains the arguments.
+
+<p>
+<table border="1">
+<caption>Rai API Argument Transport Parameters</caption>
+<tr> <th>API</th><th>Parameters</th> </tr>
+<tr> <td>sass2</td><td>raisub2 -api sass2 -daemon &lt;daemon&gt; -network &lt;network&gt; -service &lt;service&gt;</td> </tr>
+<tr> <td>capr</td><td>raisub2 -api capr -address tcp/&lt;server&gt;:&lt;port&gt;</td> </tr>
+<tr> <td>tibrv</td><td>raisub2 -api tibrv -daemon &lt;daemon&gt; -network &lt;network&gt; -service &lt;service&gt;</td> </tr>
+<tr> <td>sass3</td><td>raisub2 -api sass3 -daemon &lt;daemon&gt; -network &lt;network&gt; -service &lt;service&gt;</td> </tr>
+<tr> <td>embd</td><td>raisub2 -api embd -cfg &lt;cache.xml&gt;</td> </tr>
+</table>
+
+<h3> The SASS2 protocol </h3>
+
+The SASS2 protocol is similar to the tibrv transport except that it uses an
+older version of the RV transport which allows initial values to arrive using
+the subscription request.  The TIBRV transport must use a snapshot request in
+order to get the initial value since it does not allow an inbox reply with the
+subscription request.
+
+<h3> The SASS3 protocol </h3>
+
+The SASS3 protocol can also be used for a SASS2 subscription network as well as
+SASS3, but the publish network is different than SASS2.  The subscription side
+publishes a subscription to _SASS.feed.SUB, but otherwise is compatible with
+SASS2.  A SASS3 publisher sends data to _SASS.feed.PUB rather than the actual
+subject, so it must be used when the listener is active on _SASS.feed.PUB instead
+of _TIC.feed.&gt; as is the case with SASS2.
+
+<h3> The TIBCO protocol </h3>
+
+The TIBCO protocol is similar to the SASS2 protocol excapt that the _SNAP.feed.&gt;
+endpoint is used to get the initial values.  It uses the tibrv library distributed
+with the TIBCO rvd distribution.
+
+<h3> The CAPR protocol </h3>
+
+The CAPR protocol uses either a TCP transport or a PGM transport and is not
+compatible with the above TIB protocols.
+
+</body>
+</html>

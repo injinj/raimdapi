@@ -1,0 +1,63 @@
+CHANGELOG for raiapi/java/com/rai/raiapi
+2005/Dec/23
+  - Dictionary reload allowed (note that dictionary is in an undertermined stated during load operation so message dictionary operations may throw an error) 
+  - RaiApi.haveDictionary is always reset at beginning of dictionary load 
+  - Dictionary now checks for null session and throws exception 
+  - Error codes now mostly same as c++ version 
+2005/Oct/9
+  - Fix to RaiSubscibe which was always doing both SNAP and SUB
+  - Added TCP support
+  - Remove dependency on RV libs (not tested) 
+  - added test program subtest.java
+2005/3/2  
+  - Version chaged 1.3 Patch 4
+  - Change logLevel to GetLogLevel,SetLevel
+  - Add  GetHaveDictionary
+  - Add  GetDictLoadInProgress
+  - Change DictionaryTimeOutSeconds to Get/SetDictTimeoutSecs
+  - Add trap for bad message in RaiDict OnMsg
+2005/2/3
+  - Version changed to 1.3 Patch 1
+  - Fixed typo in RaiSubscribe.Destroy()
+
+2005/1/30
+  - Version change to 1.3 Patch 0
+  - Changed addition of control fields to new methods:
+      NewSASSMsg(), SASSInitalize(), NewRaiMsg, RaiMsgInitalize()
+  - Added new RaiException constructor that takes reason, string and throwable
+
+2005/1/27
+  - Changed msgType test to use method to String.compareTo()
+    test was failing on passed in String object
+  - Added arguments msgType and logLevel to raipub example
+  - Added enum for logLevel 0-Off, 1-Major, 2-Minor, 3-Debug, 4-Trace, 5-Full
+  - classified debug messages according to logLevel
+
+2005/1/25 
+  - fix for subscriber delete
+  - fix to correct publisher type not getting set correctly
+2005/1/5 
+  - event.receivedSubject fix to return message subject
+
+2004/12/6
+  - Improved RaiPublish constructor (this change is internal to API only) 
+  - Now trapping error when form not set before publish (default is set to EQ and warning is printed)
+
+2004/11/16
+  - TCP support (including dictionary)
+  - RV Dispatcher support added
+  - dictionary now blocks
+  - bug fixes
+2004/11/01 Version 1.0 p2
+  - added re-throw for caught errors
+  - added error strings in RaiException
+  - added cause for re-throws
+  - added RaiEvent object to be returned in RaiCallback interface
+
+2004/10/25 Version 1.0 p1
+  - added internal method for RaiSession error strings
+  - added multiple constructors for RaiExcetion
+
+2004/10/18 Version 1.0
+  - initial release 
+

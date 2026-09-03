@@ -1,0 +1,11 @@
+# build output (per-platform dirs like FC43_x86_64, EL9_x86_64 ...)
+/*_x86_64
+/*_aarch64
+# dist
+/dist
+/export
+/rpmbuild
+/dpkgbuild
+# editor
+*.swp
+*~

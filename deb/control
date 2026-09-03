@@ -1,0 +1,13 @@
+Source: raimd
+Section: devel
+Priority: optional
+Maintainer: Chris Anderson <chris@raitechnology.com>
+Build-Depends: debhelper (>= 9)
+Standards-Version: 3.9.5
+Homepage: https://www.github.com/raitechnology/raikv
+
+Package: raimd
+Architecture: amd64
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Library for market data codes
+ Codecs for market data messages.

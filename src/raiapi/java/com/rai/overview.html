@@ -1,0 +1,28 @@
+<html>
+<body>
+The 2.0 release of the Rai API and the 3.0 release of the Rai Cache
+significantly expand the capabilities of the Rai Market Data System:
+<ul>
+<li>Transport/Protocol Decoupling: Network transport options for Rai Cache and
+Rai API have been significantly extended while still retaining Rai's TIB and
+RMDS legacy system support.
+<li>High Speed Transports: The Rai Cache and Rai API now offer InfiniBand and
+10g Ethernet support through support for the OpenFabrics Alliance drivers
+(standard on Red Hat 5)
+<li>The Open Market Data Protocol (CAPR or CAche PRotocol): A transport
+independent market data protocol with wire format and service/consumer market
+data session semantics. The open CAPR protocol provides an efficient
+alternative to vendor's closed protocols that can be deployed over any
+transport.
+<li>Ultra-low latency (Embedded Applications): Applications written to the Rai
+API can be embedded within a Rai Cache process allowing for access to Rai Cache
+services within the same process space.
+<li>Dynamically Loadable Modules: The Rai Cache and Rai API now support dynamic
+loading of four types of module- protocols, services, transports and message
+formats.
+<li>Rai API Programming Model Enhancements: The Rai API 2.0 introduces a queue
+object for message dispatching, new market data quality event notifications,
+and an enhanced threading model.
+</ul>
+</body>
+</html>
