@@ -273,7 +273,7 @@ javaException( JNIEnv *env,  const char *msg )
  * Signature: ()V
  */
 JNIEXPORT void JNICALL
-JaRaiApi( initClasses )( JNIEnv *env, jclass me )
+JaRaiApi( initClasses )( JNIEnv *env, jclass /* me */ )
 {
   static const char INIT[] = "<init>";
   jclass cls;
@@ -556,7 +556,7 @@ getJNIEnv( void )
  * Signature: (J)Ljava/lang/String;
  */
 JNIEXPORT jstring JNICALL
-JaRaiApiException( getModule )( JNIEnv *env, jclass me, jlong err )
+JaRaiApiException( getModule )( JNIEnv *env, jclass /* me */, jlong err )
 {
   if ( err == 0 )
     return NULL;
@@ -569,7 +569,7 @@ JaRaiApiException( getModule )( JNIEnv *env, jclass me, jlong err )
  * Signature: (J)I
  */
 JNIEXPORT jint JNICALL
-JaRaiApiException( getErrno )( JNIEnv *env, jclass me, jlong err)
+JaRaiApiException( getErrno )( JNIEnv */* env */, jclass /* me */, jlong err)
 {
   if ( err == 0 )
     return 0;
@@ -582,7 +582,7 @@ JaRaiApiException( getErrno )( JNIEnv *env, jclass me, jlong err)
  * Signature: (J)Ljava/lang/String;
  */
 JNIEXPORT jstring JNICALL
-JaRaiApiException( getReason )( JNIEnv *env, jclass me, jlong err )
+JaRaiApiException( getReason )( JNIEnv *env, jclass /* me */, jlong err )
 {
   if ( err == 0 )
     return NULL;
@@ -596,7 +596,7 @@ JaRaiApiException( getReason )( JNIEnv *env, jclass me, jlong err )
  * Signature: (J)V
  */
 JNIEXPORT void JNICALL
-JaRaiApi( Delete )( JNIEnv *env, jclass cls, jlong me )
+JaRaiApi( Delete )( JNIEnv */* env */, jclass /* cls */, jlong me )
 {
   RaiApi *api = toApi( me );
   if ( api != NULL )
@@ -641,7 +641,7 @@ jniInterruptHandler( int sig )
  * Signature: (Ljava/lang/String;Ljava/lang/String;)V
  */
 JNIEXPORT void JNICALL
-JaRaiApi( RegisterSigHandler )( JNIEnv *env, jclass cls,
+JaRaiApi( RegisterSigHandler )( JNIEnv *env, jclass /* cls */,
                                 jstring clsNm, jstring methNm )
 {
   static const rai::ErrorRec jerr[] = {
@@ -809,7 +809,7 @@ getArgv( JNIEnv *env,  jobjectArray argv )
  * Signature: (Ljava/lang/String;[Ljava/lang/String;)Lcom/rai/raiapi2/RaiApi;
  */
 JNIEXPORT jobject JNICALL
-JaRaiApi( RaiOpen )( JNIEnv *env, jclass me, jstring apiName,
+JaRaiApi( RaiOpen )( JNIEnv *env, jclass /* me */, jstring apiName,
                      jobjectArray argv )
 {
   RaiApi      * api    = NULL;
@@ -864,7 +864,7 @@ JaRaiApi( GetApiName )( JNIEnv *env, jobject me )
  * Signature: ()Ljava/lang/String;
  */
 JNIEXPORT jstring JNICALL
-JaRaiApi( RaiVersion )( JNIEnv *env, jclass me )
+JaRaiApi( RaiVersion )( JNIEnv *env, jclass /* me */ )
 {
   return env->NewStringUTF( RaiApi::RaiVersion() );
 }
@@ -875,7 +875,7 @@ JaRaiApi( RaiVersion )( JNIEnv *env, jclass me )
  * Signature: ()J
  */
 JNIEXPORT jlong JNICALL
-JaTime( currentTimeNanosecs )( JNIEnv *env, jclass me )
+JaTime( currentTimeNanosecs )( JNIEnv */* env */, jclass /* me */ )
 {
   return (jlong) rai::Time::currentTimeNanosecs();
 }
@@ -886,7 +886,7 @@ JaTime( currentTimeNanosecs )( JNIEnv *env, jclass me )
  * Signature: (JI)Ljava/lang/String;
  */
 JNIEXPORT jstring JNICALL
-JaTime( nsTimestamp )( JNIEnv *env, jclass me, jlong ns, jint precision )
+JaTime( nsTimestamp )( JNIEnv *env, jclass /* me */, jlong ns, jint precision )
 {
   char ts[ 32 ];
   rai::TimeNSecs n = (rai::TimeNSecs) ns;
@@ -902,7 +902,7 @@ JaTime( nsTimestamp )( JNIEnv *env, jclass me, jlong ns, jint precision )
  * Signature: (J)Ljava/lang/String;
  */
 JNIEXPORT jstring JNICALL
-JaTime( nsIntervalTime )( JNIEnv *env, jclass me, jlong ns )
+JaTime( nsIntervalTime )( JNIEnv *env, jclass /* me */, jlong ns )
 {
   char buf[ 32 ];
   rai::StrUtil::intToString( (llong) ns, buf, sizeof( buf ), rai::U_NANOSECS );
@@ -916,7 +916,7 @@ JaTime( nsIntervalTime )( JNIEnv *env, jclass me, jlong ns )
  * Signature: ()J
  */
 JNIEXPORT jlong JNICALL
-JaTime( hiresTimeNanosecs )( JNIEnv *env, jclass me )
+JaTime( hiresTimeNanosecs )( JNIEnv */* env */, jclass /* me */ )
 {
   double         cpms;
   rai::TimeHires h = rai::Time::getHiresTime( &cpms );
@@ -934,7 +934,7 @@ JaTime( hiresTimeNanosecs )( JNIEnv *env, jclass me )
  * Signature: (J)J
  */
 JNIEXPORT jlong JNICALL
-JaTime( hiresTimeToNsTimestamp )( JNIEnv *env, jclass me, jlong h )
+JaTime( hiresTimeToNsTimestamp )( JNIEnv */* env */, jclass /* me */, jlong h )
 {
   double cpms = rai::Time::getCyclesPerMSec();
 
@@ -954,7 +954,7 @@ JaTime( hiresTimeToNsTimestamp )( JNIEnv *env, jclass me, jlong h )
  * Signature: (IJLjava/lang/String;)Ljava/lang/String;
  */
 JNIEXPORT jstring JNICALL
-JaTime( strftime )( JNIEnv *env, jclass me, jint tz, jlong ms,
+JaTime( strftime )( JNIEnv *env, jclass /* me */, jint tz, jlong ms,
                     jstring fmt )
 {
   const char * sfmt = env->GetStringUTFChars( fmt, NULL );
@@ -1089,7 +1089,7 @@ JaRaiApi( ParseArgs )( JNIEnv *env, jobject me, jobject args )
  * Signature: (Lcom/rai/raiapi2/Args;)Z
  */
 JNIEXPORT jboolean JNICALL
-JaRaiApi( OpenLog__Lcom_rai_raiapi2_Args_2 )( JNIEnv *env, jclass me, jobject args )
+JaRaiApi( OpenLog__Lcom_rai_raiapi2_Args_2 )( JNIEnv *env, jclass /* me */, jobject args )
 {
   bool res = false;
   try {
@@ -1106,7 +1106,7 @@ JaRaiApi( OpenLog__Lcom_rai_raiapi2_Args_2 )( JNIEnv *env, jclass me, jobject ar
  * Signature: (Lcom/rai/raiapi2/Args;)Z
  */
 JNIEXPORT void JNICALL
-JaRaiApi( OpenLog__Ljava_lang_String_2II )( JNIEnv *env, jclass me, jstring s,
+JaRaiApi( OpenLog__Ljava_lang_String_2II )( JNIEnv *env, jclass /* me */, jstring s,
                                             jint lvl, jint verb )
 {
   const char * str = ( s ? env->GetStringUTFChars( s, NULL ) : NULL );
@@ -1173,7 +1173,7 @@ done:;
  * Signature: (ILjava/lang/Exception;Ljava/lang/String;)V
  */
 JNIEXPORT void JNICALL
-JaRaiApi( Log )( JNIEnv *env, jclass cls, jint level, jthrowable err, jstring s)
+JaRaiApi( Log )( JNIEnv *env, jclass /* cls */, jint level, jthrowable err, jstring s)
 {
   const char * str = ( s ? env->GetStringUTFChars( s, NULL ) : NULL );
   if ( err != NULL ) {
@@ -1215,7 +1215,7 @@ done:;
  * Signature: (Lcom/rai/raiapi2/Args;)Z
  */
 JNIEXPORT jboolean JNICALL
-JaRaiApi( OpenDict )( JNIEnv *env, jclass me, jobject args )
+JaRaiApi( OpenDict )( JNIEnv *env, jclass /* me */, jobject args )
 {
   bool res = false;
   try {
@@ -1252,7 +1252,7 @@ JaRaiApi( CreateSession )( JNIEnv *env, jobject me )
  * Signature: (ISSSS)Lcom/rai/raimsg/RaiMsg;
  */
 JNIEXPORT jobject JNICALL
-JaRaiApi( NewRaiMsg__ISSSS )( JNIEnv *env, jclass me, jint proto,
+JaRaiApi( NewRaiMsg__ISSSS )( JNIEnv *env, jclass /* me */, jint proto,
                               jshort MsgType, jshort RecType, jshort SeqNo,
                               jshort RecStatus )
 {
@@ -1274,7 +1274,7 @@ JaRaiApi( NewRaiMsg__ISSSS )( JNIEnv *env, jclass me, jint proto,
  * Signature: (ISLjava/lang/String;SS)Lcom/rai/raimsg/RaiMsg;
  */
 JNIEXPORT jobject JNICALL
-JaRaiApi( NewRaiMsg__ISLjava_lang_String_2SS )( JNIEnv *env, jclass me,
+JaRaiApi( NewRaiMsg__ISLjava_lang_String_2SS )( JNIEnv *env, jclass /* me */,
                        jint proto, jshort MsgType, jstring FormType,
                        jshort SeqNo, jshort RecStatus )
 {
@@ -1380,7 +1380,7 @@ RaiJArgsEx::~RaiJArgsEx() {
 }
 
 JNIEXPORT void JNICALL
-JaArgs( Delete )( JNIEnv *env, jclass cls, jlong me )
+JaArgs( Delete )( JNIEnv *env, jclass /* cls */, jlong me )
 {
   RaiJArgsEx *a = toArgs( me );
   if ( a != NULL ) {
@@ -1396,7 +1396,7 @@ JaArgs( Delete )( JNIEnv *env, jclass cls, jlong me )
  * Signature: ()J
  */
 JNIEXPORT jlong JNICALL
-JaArgs( Create )( JNIEnv *env,  jclass me )
+JaArgs( Create )( JNIEnv *env,  jclass /* me */ )
 {
   RaiJArgsEx * a = NULL;
   try {
@@ -1949,7 +1949,7 @@ JaArgs( printHelp )( JNIEnv *env, jobject me, jobject out )
  * Signature: (J)V
  */
 JNIEXPORT void JNICALL
-JaRaiDict( Delete )( JNIEnv *env, jclass cls, jlong me )
+JaRaiDict( Delete )( JNIEnv */* env */, jclass /* cls */, jlong me )
 {
   RaiDict *d = toDict( me );
   if ( d != NULL )
@@ -2040,7 +2040,7 @@ JaRaiSession( Start )( JNIEnv *env, jobject me )
  * Signature: (J)V
  */
 JNIEXPORT void JNICALL
-JaRaiSession( Delete )( JNIEnv *env, jclass cls, jlong me )
+JaRaiSession( Delete )( JNIEnv */* env */, jclass /* cls */, jlong me )
 {
   RaiSession * sess = toSession( me );
   if ( sess != NULL )
@@ -2075,7 +2075,7 @@ RaiApiJDataLossCallback::jniRelease( JNIEnv *env )
 }
 
 void
-RaiApiJDataLossCallback::onDataLoss( RaiDataLossEvent &event,  void *cl )
+RaiApiJDataLossCallback::onDataLoss( RaiDataLossEvent &event,  void */* cl */ )
 {
   static const rai::ErrorRec jerr[] = {
     { 1, "Exception creating dataloss event for callback", "JRaiApi" },
@@ -2126,7 +2126,7 @@ RaiApiJDataLossCallback::onDataLoss( RaiDataLossEvent &event,  void *cl )
 }
 
 void
-RaiApiJDataLossCallback::onConnection( RaiConnectionEvent &event,  void *cl )
+RaiApiJDataLossCallback::onConnection( RaiConnectionEvent &event,  void */* cl */ )
 {
   static const rai::ErrorRec jerr[] = {
     { 1, "Exception creating connection event for callback", "JRaiApi" },
@@ -2180,7 +2180,7 @@ RaiApiJDataLossCallback::onConnection( RaiConnectionEvent &event,  void *cl )
  * Signature: (J)V
  */
 JNIEXPORT void JNICALL
-JaRaiSession( DeleteCB )( JNIEnv *env, jclass cls, jlong me )
+JaRaiSession( DeleteCB )( JNIEnv *env, jclass /* cls */, jlong me )
 {
   RaiApiJDataLossCallback * cb = (RaiApiJDataLossCallback *) me;
   if ( cb != NULL ) {
@@ -2392,7 +2392,7 @@ JaRaiSession( GetSessionName )( JNIEnv *env, jobject me )
  * Signature: (J)V
  */
 JNIEXPORT void JNICALL
-JaRaiQueue( Delete )( JNIEnv *env, jclass cls, jlong me )
+JaRaiQueue( Delete )( JNIEnv */* env */, jclass /* cls */, jlong me )
 {
   RaiQueue * queue = toQueue( me );
   if ( queue != NULL )
@@ -2436,7 +2436,7 @@ RaiApiJRaiMsgCallback::jniRelease( JNIEnv *env )
 
 
 void
-RaiApiJRaiMsgCallback::onMsg( RaiMsgEvent &event,  RaiMsg &message,  void *cl )
+RaiApiJRaiMsgCallback::onMsg( RaiMsgEvent &event,  RaiMsg &message,  void */* cl */ )
 {
   static const rai::ErrorRec jerr[] = {
     { 4, "Exception creating message event for callback", "JRaiApi" },
@@ -2611,7 +2611,7 @@ RaiApiJRaiTimerCallback::jniRelease( JNIEnv *env )
 
 
 void
-RaiApiJRaiTimerCallback::onTimer( RaiTimer &timer,  void *cl )
+RaiApiJRaiTimerCallback::onTimer( RaiTimer &/* timer */,  void */* cl */ )
 {
   static const rai::ErrorRec jerr[] = {
     { 9, "Exception in java timer callback", "JRaiApi" }
@@ -2701,7 +2701,7 @@ RaiApiJRaiSubscribeCallback::jniRelease( JNIEnv *env )
 
 void
 RaiApiJRaiSubscribeCallback::onSubscribe( RaiSubscribeEvent &event,
-                                          RaiMsg &message,  void *cl )
+                                          RaiMsg &message,  void */* cl */ )
 {
   static const rai::ErrorRec jerr[] = {
     { 10, "Exception creating subscription event for callback", "JRaiApi" },
@@ -2915,7 +2915,7 @@ JaRaiQueue( Destroy )( JNIEnv *env, jobject me )
  * Signature: (J)V
  */
 JNIEXPORT void JNICALL
-JaRaiSubscribe( Delete )( JNIEnv *env, jclass cls, jlong me )
+JaRaiSubscribe( Delete )( JNIEnv */* env */, jclass /* cls */, jlong me )
 {
   RaiSubscribe * sub = toSubscribe( me );
   if ( sub != NULL )
@@ -2929,7 +2929,7 @@ JaRaiSubscribe( Delete )( JNIEnv *env, jclass cls, jlong me )
  * Signature: (J)V
  */
 JNIEXPORT void JNICALL
-JaRaiSubscribe( DeleteCB )( JNIEnv *env, jclass cls, jlong me )
+JaRaiSubscribe( DeleteCB )( JNIEnv *env, jclass /* cls */, jlong me )
 {
   RaiApiJRaiMsgCallback *msgCb = (RaiApiJRaiMsgCallback *) (void *) me;
   if ( msgCb != NULL ) {
@@ -3047,7 +3047,7 @@ JaRaiSubscribe( InProgress )( JNIEnv *env, jobject me )
  * Signature: (J)V
  */
 JNIEXPORT void JNICALL
-JaRaiPublish( Delete )( JNIEnv *env, jclass cls, jlong me )
+JaRaiPublish( Delete )( JNIEnv */* env */, jclass /* cls */, jlong me )
 {
   RaiPublish * pub = toPublish( me );
   if ( pub != NULL )
@@ -3207,7 +3207,7 @@ JaRaiPublish( Destroy )( JNIEnv *env, jobject me )
  * Signature: (J)V
  */
 JNIEXPORT void JNICALL
-JaRaiTimer( Delete )( JNIEnv *env, jclass cls, jlong me )
+JaRaiTimer( Delete )( JNIEnv */* env */, jclass /* cls */, jlong me )
 {
   RaiTimer * tim = toTimer( me );
   if ( tim != NULL )
@@ -3220,7 +3220,7 @@ JaRaiTimer( Delete )( JNIEnv *env, jclass cls, jlong me )
  * Signature: (J)V
  */
 JNIEXPORT void JNICALL
-JaRaiTimer( DeleteCB )( JNIEnv *env, jclass cls, jlong me )
+JaRaiTimer( DeleteCB )( JNIEnv *env, jclass /* cls */, jlong me )
 {
   RaiApiJRaiTimerCallback * timCb = (RaiApiJRaiTimerCallback *) (void *) me;
 
@@ -3304,7 +3304,7 @@ JaRaiTimer( SetInterval )( JNIEnv *env, jobject me, jlong intervalMSecs )
  * Signature: (J)V
  */
 JNIEXPORT void JNICALL
-JaRaiInteractivePublish( Delete )( JNIEnv *env, jclass cls, jlong me )
+JaRaiInteractivePublish( Delete )( JNIEnv */* env */, jclass /* cls */, jlong me )
 {
   RaiInteractivePublish * ipub = toInteractivePublish( me );
   if ( ipub != NULL )
@@ -3317,7 +3317,7 @@ JaRaiInteractivePublish( Delete )( JNIEnv *env, jclass cls, jlong me )
  * Signature: (J)V
  */
 JNIEXPORT void JNICALL
-JaRaiInteractivePublish( DeleteCB )( JNIEnv *env, jclass cls, jlong me )
+JaRaiInteractivePublish( DeleteCB )( JNIEnv *env, jclass /* cls */, jlong me )
 {
   RaiApiJRaiSubscribeCallback * subCb = 
     (RaiApiJRaiSubscribeCallback *) (void *) me;
@@ -3390,7 +3390,7 @@ JaRaiInteractivePublish( InProgress )( JNIEnv *env, jobject me )
  * Signature: (J)V
  */
 JNIEXPORT void JNICALL
-Java_com_rai_raiapi2_RaiEntitlement_Delete( JNIEnv *env, jclass cls, jlong me )
+Java_com_rai_raiapi2_RaiEntitlement_Delete( JNIEnv */* env */, jclass /* cls */, jlong me )
 {
   RaiEntitlement * ent = toEntitlement( me );
   if ( ent != NULL )
