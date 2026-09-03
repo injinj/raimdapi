@@ -244,7 +244,7 @@ RaiSession::getSessionName() const
 }
 
 void
-RaiDataLossCallback::onConnection( RaiConnectionEvent &event,  void *cl )
+RaiDataLossCallback::onConnection( RaiConnectionEvent &/* event */,  void */* cl */ )
 {
 }
 

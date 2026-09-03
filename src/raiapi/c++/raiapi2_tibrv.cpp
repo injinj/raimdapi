@@ -337,7 +337,7 @@ struct RaiInteractivePublish_tibrv : public RaiInteractivePublish,
 
 
 RAI_DLL_EXPORT RaiApi *
-RaiApi_RaiOpen_tibrv( int argc,  char *argv[] )
+RaiApi_RaiOpen_tibrv( int /* argc */,  char */* argv */[] )
 {
   tibrv_status status = tibrv_Open();
   if ( status != TIBRV_OK ) {
@@ -450,7 +450,7 @@ RaiApi_tibrv::GetIoctl( const char *parameter,
 
 
 void
-RaiSession_tibrv::rvSys_onMsg( tibrvEvent I,  tibrvMsg msg,  void *cl )
+RaiSession_tibrv::rvSys_onMsg( tibrvEvent /* I */,  tibrvMsg msg,  void *cl )
 {
   static const char /*SLOWCONSUMER[]   = "CLIENT.SLOWCONSUMER",
                     ERROR_EXPIRE[]   = "ERROR.SYSTEM.LICENSE.EXPIRE",
@@ -669,7 +669,7 @@ RaiSession_tibrv::rmQueueList( RaiQueue_tibrv *q )
 
 
 void
-RaiSession_tibrv::quit_onTimer( tibrvId I,  tibrvMsg msg, void *cl )
+RaiSession_tibrv::quit_onTimer( tibrvId I,  tibrvMsg /* msg */, void *cl )
 {
   RaiSession_tibrv *me = (RaiSession_tibrv *) cl;
   tibrvEvent_Destroy( (tibrvEvent) I );
@@ -704,7 +704,7 @@ RaiSession_tibrv::~RaiSession_tibrv()
 
 
 RaiQueue *
-RaiSession_tibrv::CreateQueue( bool direct )
+RaiSession_tibrv::CreateQueue( bool /* direct */ )
 {
   RaiQueue_tibrv * q;
   tibrvQueue       rvQ;
@@ -866,7 +866,7 @@ RaiQueue_tibrv::GetDepth( void )
 
 
 RaiEntitlement *
-RaiSession_tibrv::Login( const char *user )
+RaiSession_tibrv::Login( const char */* user */ )
 {
   return NULL;
 }
@@ -920,7 +920,7 @@ RaiQueue_tibrv::NotifyStatus( Rai_u16 msgType,
 
 void
 RaiQueue_tibrv::QueueEvent( RaiAppCallback *cb,  void *eventData,
-                            Rai_i32 eventEnum,  Rai_u8 eventPriority,
+                            Rai_i32 eventEnum,  Rai_u8 /* eventPriority */,
                             Rai_u32 expireMSecs )
 {
   tibrv_f64    rv_interval;
@@ -941,7 +941,7 @@ RaiQueue_tibrv::QueueEvent( RaiAppCallback *cb,  void *eventData,
 
 
 void
-RaiQueue_tibrv::onAppTimer( tibrvEvent id,  tibrvMsg msg,  void *cl )
+RaiQueue_tibrv::onAppTimer( tibrvEvent /* id */,  tibrvMsg /* msg */,  void *cl )
 {
   AppEvent * p = (AppEvent *) cl;
   try {
@@ -1027,7 +1027,7 @@ RaiDict_tibrv::~RaiDict_tibrv()
 
 
 void
-RaiDict_tibrv::onMsg( tibrvEvent id,  tibrvMsg msg,  void *cl )
+RaiDict_tibrv::onMsg( tibrvEvent /* id */,  tibrvMsg msg,  void *cl )
 {
   RaiDict_tibrv & me = *(RaiDict_tibrv *) cl;
   RaiMsg          raiMsg;
@@ -1143,7 +1143,7 @@ RaiTimer_tibrv::~RaiTimer_tibrv()
 
 
 void
-RaiTimer_tibrv::onTimer( tibrvEvent I,  tibrvMsg msg,  void *cl )
+RaiTimer_tibrv::onTimer( tibrvEvent /* I */,  tibrvMsg /* msg */,  void *cl )
 {
   RaiTimer_tibrv & me = *(RaiTimer_tibrv *) cl;
 
@@ -1528,7 +1528,7 @@ RaiSubscribe_tibrv::Refresh( Rai_u32 timeoutMSecs )
 
 
 void
-RaiSubscribeTimer_tibrv::onTimer( tibrvEvent I,  tibrvMsg msg,  void *cl )
+RaiSubscribeTimer_tibrv::onTimer( tibrvEvent I,  tibrvMsg /* msg */,  void *cl )
 {
   RaiSubscribeTimer_tibrv * me = (RaiSubscribeTimer_tibrv *) cl;
   RaiQueue_tibrv     * q;
@@ -1628,7 +1628,7 @@ RaiPublish_tibrv::~RaiPublish_tibrv()
 
 void
 RaiPublish_tibrv::Publish( const char *subject,  const void *buffer,  
-                           Rai_u32 size,  TimeNSecs stamp,
+                           Rai_u32 size,  TimeNSecs /* stamp */,
                            Rai_u32 msgTypeId )
 {
   tibrvMsg     m = NULL;
@@ -1689,7 +1689,7 @@ static const char rv_info_sys_listen_start[] = "_RV.INFO.SYSTEM.LISTEN.START.",
                   rv_snap[] = "_SNAP.";
 
 void
-RaiInteractivePublish_tibrv::onMsg( RaiMsgEvent &event,  RaiMsg &msg,  void *cl )
+RaiInteractivePublish_tibrv::onMsg( RaiMsgEvent &event,  RaiMsg &msg,  void */* cl */ )
 {
   unsigned int off, flags;
   const char *reply;

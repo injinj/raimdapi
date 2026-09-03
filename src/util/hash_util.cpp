@@ -1254,7 +1254,7 @@ struct MD4Ctx : public RSA_Hash<128, 512/8, true, unsigned int> {
     return true;
   }
 
-  void * operator new( size_t sz, void *ptr ) { return ptr; }
+  void * operator new( size_t /* sz */, void *ptr ) { return ptr; }
   SYS_OPS( MD4Ctx );
   MD4Ctx() {}
   virtual ~MD4Ctx() {}
@@ -1517,7 +1517,7 @@ struct MD5Ctx : public RSA_Hash<128, 512/8, true, unsigned int> {
     return true;
   }
 
-  void * operator new( size_t sz, void *ptr ) { return ptr; }
+  void * operator new( size_t /* sz */, void *ptr ) { return ptr; }
   SYS_OPS( MD5Ctx );
   MD5Ctx() {}
   virtual ~MD5Ctx() {}
@@ -1681,7 +1681,7 @@ struct SHA1Ctx : public RSA_Hash<160, 512/8, false, unsigned int> {
     return true;
   }
 
-  void * operator new( size_t sz, void *ptr ) { return ptr; }
+  void * operator new( size_t /* sz */, void *ptr ) { return ptr; }
   SYS_OPS( SHA1Ctx );
   SHA1Ctx() {}
   virtual ~SHA1Ctx() {}
@@ -1948,7 +1948,7 @@ struct RIPEMD128Ctx : public RSA_Hash<128, 512/8, true, unsigned int> {
     return true;
   }
 
-  void * operator new( size_t sz, void *ptr ) { return ptr; }
+  void * operator new( size_t /* sz */, void *ptr ) { return ptr; }
   SYS_OPS( RIPEMD128Ctx );
   RIPEMD128Ctx() {}
   virtual ~RIPEMD128Ctx() {}
@@ -2306,7 +2306,7 @@ struct RIPEMD160Ctx : public RSA_Hash<160, 512/8, true, unsigned int> {
     return true;
   }
 
-  void * operator new( size_t sz, void *ptr ) { return ptr; }
+  void * operator new( size_t /* sz */, void *ptr ) { return ptr; }
   SYS_OPS( RIPEMD160Ctx );
   RIPEMD160Ctx() {}
   virtual ~RIPEMD160Ctx() {}
@@ -2503,7 +2503,7 @@ struct SHA256Ctx : public RSA_Hash<256, 512/8, false, unsigned int> {
     return true;
   }
 
-  void * operator new( size_t sz, void *ptr ) { return ptr; }
+  void * operator new( size_t /* sz */, void *ptr ) { return ptr; }
   SYS_OPS( SHA256Ctx );
   SHA256Ctx() {}
   virtual ~SHA256Ctx() {}
@@ -2658,7 +2658,7 @@ struct SHA512Ctx : public RSA_Hash<512, 1024/8, false, ullong> {
     return true;
   }
 
-  void * operator new( size_t sz, void *ptr ) { return ptr; }
+  void * operator new( size_t /* sz */, void *ptr ) { return ptr; }
   SYS_OPS( SHA512Ctx );
   SHA512Ctx() {}
   virtual ~SHA512Ctx() {}
@@ -2768,7 +2768,7 @@ struct HMACCtx : public HashContext {
       delete this->ctx;
   }
 
-  void * operator new( size_t sz, void *ptr ) { return ptr; }
+  void * operator new( size_t /* sz */, void *ptr ) { return ptr; }
   SYS_OPS( HMACCtx );
   HMACCtx( HashContext *c,  const byte *key, unsigned int keyLen, bool isAll ) {
     this->blksz = c->blockSize();

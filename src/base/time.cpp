@@ -623,7 +623,9 @@ static struct TimeData {
   double       cyclesPerNanosec,
                cyclesPerMillisec;
   llong        adjustmentNS;
-} td = { 3 }, td2 = { 3 }, tdsave[ 128 ];
+} td   = { 3, 0, 0, 0, 0, 0, 0, 0, 0.0, 0.0, 0 },  /* sampleShift = 3 */
+  td2  = { 3, 0, 0, 0, 0, 0, 0, 0, 0.0, 0.0, 0 },
+  tdsave[ 128 ];
 
 static unsigned int tdsaveCount; /* index into tdsave[] */
 
@@ -2610,7 +2612,8 @@ NanoSleep::sleep( double ms )
 
       delta += (TimeHires) ( ms * cpms );
       while ( this->last < delta ) {
-        ::read( fd, &data, sizeof( data ) );
+        if ( ::read( fd, &data, sizeof( data ) ) < 0 )
+          break; /* timerfd error, don't spin */
         this->last += (TimeHires) ( this->rateMSec * cpms );
       }
       this->last = Time::getHiresTime();

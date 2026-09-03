@@ -486,7 +486,8 @@ static char *conv_10_quad(widest_int num, register bool_int is_unsigned,
      * number against the largest long value it can be. If <=, we
      * punt to the quicker version.
      */
-    if ((num <= ULONG_MAX && is_unsigned) || (num <= LONG_MAX && !is_unsigned))
+    if ((is_unsigned && (u_widest_int) num <= ULONG_MAX) ||
+        (!is_unsigned && num <= LONG_MAX))
     	return(conv_10( (wide_int)num, is_unsigned, is_negative,
 	       buf_end, len));
 
@@ -1217,7 +1218,7 @@ int rai_vformatter(int (*flush_func)(rai_vformatter_buff *),
 }
 
 
-static int snprintf_flush(rai_vformatter_buff *vbuff)
+static int snprintf_flush(rai_vformatter_buff */* vbuff */)
 {
     /* if the buffer fills we have to abort immediately, there is no way
      * to "flush" an rai_snprintf... there's nowhere to flush it to.
@@ -1242,7 +1243,7 @@ int rai_snprintf(char *buf, size_t len, const char *format,...)
     cc = rai_vformatter(snprintf_flush, &vbuff, format, ap);
     va_end(ap);
     *vbuff.curpos = '\0';
-    return (cc == -1) ? len : cc;
+    return (cc == -1) ? (int) len : cc;
 }
 
 
@@ -1260,5 +1261,5 @@ int rai_vsnprintf(char *buf, size_t len, const char *format,
     vbuff.endpos = buf + len - 1;
     cc = rai_vformatter(snprintf_flush, &vbuff, format, ap);
     *vbuff.curpos = '\0';
-    return (cc == -1) ? len : cc;
+    return (cc == -1) ? (int) len : cc;
 }

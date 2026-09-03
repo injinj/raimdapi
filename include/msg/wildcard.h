@@ -30,7 +30,7 @@ struct RAIMSG_DLL_EXP WildEndState {
   virtual ~WildEndState() {};
 
   /*! Test wether this end state is no longer valid (i.e. has no subscribers) */
-  virtual bool prunable( void *closure ) { return false; };
+  virtual bool prunable( void */* closure */ ) { return false; };
 
   /*! If start->copy() is used, this should be defined */
   virtual WildEndState *copy( void ) { return NULL; };

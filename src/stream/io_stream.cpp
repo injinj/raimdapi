@@ -800,7 +800,7 @@ OutputStream::doEmptyBuf( void )
 
 unsigned int
 OutputStream::emptyBuf2( const byte *buf1,  unsigned int bufLen1,
-                         const byte *buf2,  unsigned int bufLen2 )
+                         const byte */* buf2 */,  unsigned int /* bufLen2 */ )
 
 {
   unsigned int n, off = 0;

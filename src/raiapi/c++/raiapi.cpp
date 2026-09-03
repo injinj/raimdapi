@@ -22,7 +22,7 @@ using namespace rai;
  *
  *****************************************************************************/
 
-RaiTimerImpl::RaiTimerImpl( RaiTimer * timer, RaiSession * session, RaiTimerCallback callback,
+RaiTimerImpl::RaiTimerImpl( RaiTimer * /* timer */, RaiSession * session, RaiTimerCallback callback,
                             TimeMSecs interval, void * closure ) {
   tibrv_f64       rv_interval;
   tibrv_status    status;
@@ -55,7 +55,7 @@ RaiTimerImpl::AddTimer( RaiSession * session, RaiTimerCallback callback, void * 
 
 // don't think I can use the rvId I for the session anymore here ---dna
 void 
-RaiTimerImpl::RV_callback( tibrvId I, tibrvMsg msg, void *cl){
+RaiTimerImpl::RV_callback( tibrvId /* I */, tibrvMsg /* msg */, void *cl){
   TimerHandle           * handle;
   RaiTimerCallback        callback;
   void                  * closure;
@@ -134,7 +134,7 @@ RaiTimer::~RaiTimer(){
 Mutex * RaiEntImpl::lock = NULL;
 
 void
-RaiEntImpl::EntAnnOnMsg( tibrvId I, tibrvMsg msg, void *cl) {
+RaiEntImpl::EntAnnOnMsg( tibrvId /* I */, tibrvMsg /* msg */, void *cl) {
   RaiEntImpl    * impl = ( RaiEntImpl * ) cl;
 
   logDebug( LDEBUG, "Received callback for entitle announce " );
@@ -155,7 +155,7 @@ RaiEntImpl::EntAnnOnMsg( tibrvId I, tibrvMsg msg, void *cl) {
 }
 
 void 
-RaiEntImpl::EntOnMsg( tibrvId I, tibrvMsg msg, void *cl) {
+RaiEntImpl::EntOnMsg( tibrvId /* I */, tibrvMsg msg, void *cl) {
   RaiMsg          raiMsg;
   tibrv_status    status;
   RaiField        field;
@@ -244,7 +244,7 @@ RaiEntImpl::Load( RaiSession *session, char *loginDetails )
 }
 
 void 
-RaiEntImpl::TCPLoad( RaiSession *session, char *loginDetails ) {
+RaiEntImpl::TCPLoad( RaiSession */* session */, char */* loginDetails */ ) {
 
 };
 
@@ -401,7 +401,7 @@ RaiDict::RaiDict() {
 Mutex * RaiDictImpl::lock = NULL;
 
 void 
-RaiDictImpl::DictOnMsg( tibrvId I, tibrvMsg msg, void *cl) {
+RaiDictImpl::DictOnMsg( tibrvId /* I */, tibrvMsg msg, void *cl) {
   RaiMsg          raiMsg;
   tibrv_u32       msgSize;
   const void    * bufp;
@@ -479,7 +479,7 @@ RaiDict::Load( RaiSession *session, char *dictSubject ) {
 }
 
 void 
-RaiDictImpl::TCPLoad( RaiSession *session, char *dictSubject ) {
+RaiDictImpl::TCPLoad( RaiSession */* session */, char */* dictSubject */ ) {
 
 };
 
@@ -597,7 +597,7 @@ RaiSessionImpl::RaiSessionImpl( RaiSession * session, const char *svcname, const
 }
 
 void
-RaiSessionImpl::onMsg( tibrvId rvI, tibrvMsg msg, void *cl )
+RaiSessionImpl::onMsg( tibrvId /* rvI */, tibrvMsg msg, void *cl )
 {
   tibrv_status    status;
   RaiMsg          raiMsg;
@@ -961,7 +961,7 @@ static const unsigned int RAI_API_VERBOSITY =
 
 static unsigned int openCount;
 void
-RaiApi::RaiOpen( RaiTransport transport, RaiProto protocol)
+RaiApi::RaiOpen( RaiTransport /* transport */, RaiProto /* protocol */)
 {
   tibrv_status  status;
 

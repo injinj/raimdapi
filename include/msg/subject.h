@@ -307,7 +307,7 @@ class RAIMSG_DLL_EXP RaiSubject : public rai::Subject {
     static unsigned int layout( const char **segments,  unsigned int *lens,
                                 unsigned int segCount,  byte *toBuf );
   public:
-    void * operator new( size_t sz, void *ptr ) { return ptr; }
+    void * operator new( size_t /* sz */, void *ptr ) { return ptr; }
 
     SYS_OPS( RaiSubject );
     RaiSubject() {}

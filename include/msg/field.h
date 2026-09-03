@@ -63,7 +63,7 @@ struct RAIMSG_DLL_EXP RaiField {
                    when converting floats to string */
   void ReUse( void );
 
-  void * operator new( size_t sz, void *ptr ) { return ptr; }
+  void * operator new( size_t /* sz */, void *ptr ) { return ptr; }
 
   SYS_OPS( RaiField );
   RaiField() {

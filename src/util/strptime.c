@@ -273,7 +273,7 @@ rai_strptime(const char *buf, const char *fmt, struct tm *tm)
 
                 case 'A':
                 case 'a':
-                        for (i = 0; i < asizeof(rai_En_US.weekday_names); i++) {
+                        for (i = 0; i < (int) asizeof(rai_En_US.weekday_names); i++) {
                                 len = strlen(rai_En_US.weekday_names[i]);
                                 if (strncasecmp(buf,
                                                 rai_En_US.weekday_names[i],
@@ -315,7 +315,7 @@ rai_strptime(const char *buf, const char *fmt, struct tm *tm)
                 case 'B':
                 case 'b':
                 case 'h':
-                        for (i = 0; i < asizeof(rai_En_US.month_names); i++) {
+                        for (i = 0; i < (int) asizeof(rai_En_US.month_names); i++) {
                                 len = strlen(rai_En_US.month_names[i]);
                                 if (strncasecmp(buf,
                                                 rai_En_US.month_names[i],

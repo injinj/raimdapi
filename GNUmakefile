@@ -77,7 +77,7 @@ CXX         ?= g++
 cc          := $(CC) -std=c11
 cpp         := $(CXX)
 arch_cflags := -mavx -fno-omit-frame-pointer
-gcc_wflags  := -Wall -Wextra -Wno-deprecated -Wno-unused-result -Wno-unused-parameter -Wno-implicit-fallthrough -Wno-stringop-overflow -Wno-stringop-truncation
+gcc_wflags  := -Wall -Wextra
 #-Werror
 # if windows cross compile
 ifeq (true,$(mingw))
@@ -106,7 +106,7 @@ CFLAGS ?= $(build_cflags) $(default_cflags)
 #CFLAGS ?= $(RPM_OPT_FLAGS)
 #endif
 cflags := $(gcc_wflags) $(CFLAGS) $(arch_cflags)
-lflags := -Wno-stringop-overflow
+lflags :=
 
 INCLUDES   ?= -Iinclude
 DEFINES    ?=

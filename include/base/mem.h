@@ -131,7 +131,7 @@ static inline void initialize( void ) {};
 
 static inline void terminate( void ) {};
 
-static inline void dumpAllocSummary( OutputStream *out ) {};
+static inline void dumpAllocSummary( OutputStream */* out */ ) {};
 
 #define MALLOC( N, P )  rai::Mem::doMalloc( N, P )
 #define REALLOC( N, P ) rai::Mem::doRealloc( N, P )
