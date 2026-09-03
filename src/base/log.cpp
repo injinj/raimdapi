@@ -183,8 +183,8 @@ class FileList : public HeapSortArray<FileTime *>
     FileTime * addFile( const char * directory, const char * fileName ) {
       char path[1024];
       TimeMSecs modTime;
-      ::strncpy( path, directory, sizeof(path) );
-      ::strncat( path, fileName, sizeof(path) );
+      str_copy( path, directory, sizeof( path ) );
+      str_cat( path, fileName, sizeof( path ) );
       modTime = File::fileModifiedTime( path );
       FileTime * fileTime = NEW FileTime( fileName, modTime );
       push( fileTime );
@@ -654,17 +654,27 @@ log_write_stack( byte *tos, char *buf,
 static int rai_log_fd = 2;
 static bool rai_handler_installed;
 
+/* async-signal-safe write for the crash handler: finish partial writes,
+ * nothing useful can be done about errors here so they are dropped */
+static void log_write_bytes( const char *buf,  unsigned int len ) {
+  while ( len > 0 ) {
+    ssize_t n = ::write( rai_log_fd, buf, len );
+    if ( n <= 0 ) {
+      if ( n < 0 && errno == EINTR )
+        continue;
+      return;
+    }
+    buf = &buf[ n ]; len -= (unsigned int) n;
+  }
+}
+
 static void log_write_seperator( char *buf ) {
   ::memset( buf, '-', 78 ); buf[ 78 ] = '\n';
-  (void ) ::write( rai_log_fd, buf, 79 );
+  log_write_bytes( buf, 79 );
 }
 
 static void log_write_string( const char *buf ) {
-  (void ) ::write( rai_log_fd, buf, ::strlen( buf ) );
-}
-
-static void log_write_bytes( const char *buf,  unsigned int len ) {
-  (void ) ::write( rai_log_fd, buf, len );
+  log_write_bytes( buf, ::strlen( buf ) );
 }
 
 static void
@@ -702,7 +712,7 @@ rai_log_crash_handler( int sig,  siginfo_t *nfo,  void *uctx )
     buf[ k++ ] = hc[ (((unsigned long) (void *) x) >> (PTR_BITS - (j*8+4))) & 0xf ]; \
     buf[ k++ ] = hc[ (((unsigned long) (void *) x) >> (PTR_BITS - (j*8+8))) & 0xf ]; \
   } \
-  (void) ::write( rai_log_fd, buf, k )
+  log_write_bytes( buf, k )
 
   static volatile int already_crashed;
   void *array[ 40 ];
@@ -733,7 +743,7 @@ rai_log_crash_handler( int sig,  siginfo_t *nfo,  void *uctx )
   if ( sig == SIGSEGV ) {
     log_write_string( "Fault address: " );
     write_register( "ptr", nfo->si_addr );
-    (void) ::write( rai_log_fd, "\n", 1 );
+    log_write_bytes( "\n", 1 );
   }
 #if defined( __amd64__ ) || defined( __i386 )
   ucontext_t *uc = (ucontext_t *) uctx;
@@ -742,10 +752,10 @@ rai_log_crash_handler( int sig,  siginfo_t *nfo,  void *uctx )
   for ( unsigned int r = 1; r < sizeof( uc->uc_mcontext.gregs ) /
                                 sizeof( uc->uc_mcontext.gregs[ 0 ] ); r++ ) {
     if ( regnm[ r ] == NULL ) break;
-    (void) ::write( rai_log_fd, " ", 1 );
+    log_write_bytes( " ", 1 );
     write_register( regnm[ r ], uc->uc_mcontext.gregs[ r ] );
   }
-  (void) ::write( rai_log_fd, "\n", 1 );
+  log_write_bytes( "\n", 1 );
   log_write_seperator( buf );
 #elif defined( __arm__ )
   ucontext_t *uc = (ucontext_t *) uctx;
@@ -754,10 +764,10 @@ rai_log_crash_handler( int sig,  siginfo_t *nfo,  void *uctx )
   for ( unsigned int r = 1; r < sizeof( uc->uc_mcontext ) /
                                 sizeof( uc->uc_mcontext.trap_no ); r++ ) {
     if ( regnm[ r ] == NULL ) break;
-    (void) ::write( rai_log_fd, " ", 1 );
+    log_write_bytes( " ", 1 );
     write_register( regnm[ r ], (&uc->uc_mcontext.trap_no)[ r ] );
   }
-  (void) ::write( rai_log_fd, "\n", 1 );
+  log_write_bytes( "\n", 1 );
   log_write_seperator( buf );
 #endif
 
@@ -765,7 +775,7 @@ rai_log_crash_handler( int sig,  siginfo_t *nfo,  void *uctx )
   log_write_seperator( buf );
   if ( (fd = ::open( "/proc/self/maps", O_RDONLY )) >= 0 ) {
     while ( ( n = ::read( fd, buf, sizeof( buf ) ) ) > 0 )
-      (void) ::write( rai_log_fd, buf, n );
+      log_write_bytes( buf, (unsigned int) n );
   }
   log_write_seperator( buf );
 
@@ -1106,7 +1116,7 @@ rai_open_log_file( const char *path )
     struct sigaction sa;
     rai_handler_installed = true;
 
-    sa.sa_handler = (void (*)(int)) rai_log_crash_handler;
+    sa.sa_sigaction = rai_log_crash_handler;
     ::sigemptyset( &sa.sa_mask );
     sa.sa_flags = SA_RESTART | SA_SIGINFO;
 
@@ -2276,8 +2286,10 @@ Log::vprintSyslog2( TimeMSecs stamp,  LogLevel level,  const char *file,
                           (addrlen_t) sizeof( struct sockaddr_in ) );
               else {
             #if ! defined( _WIN32 ) && ! defined( _WIN64 )
-                ::write( el->syslogSock, (send_arg_t) &tmpBuf[ off ],
-                         len + OFF - off );
+                /* best effort, like the sendto() above */
+                if ( ::write( el->syslogSock, (send_arg_t) &tmpBuf[ off ],
+                              len + OFF - off ) < 0 ) {
+                }
 	    #else
                 _write( el->syslogSock, (send_arg_t) &tmpBuf[ off ],
                         len + OFF - off );

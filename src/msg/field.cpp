@@ -3864,7 +3864,7 @@ RaiField::Overlaps( const RaiMsg_data p2,  RaiMsg_size s2 ) const
 {
   const RaiMsg * msg;
 
-  if ( RaiMsg::Overlaps( (const RaiMsg_data) this->name, this->nameLen, p2, s2))
+  if ( RaiMsg::Overlaps( (RaiMsg_data) this->name, this->nameLen, p2, s2 ) )
     return true;
 
   switch ( this->type ) {

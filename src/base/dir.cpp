@@ -21,6 +21,7 @@
 
 #include "base/mem.h"
 #include "base/dir.h"
+#include "util/str_util.h"
 
 using namespace rai;
 
@@ -256,34 +257,17 @@ SysDir::read( char *path,  unsigned int pathLen,  unsigned int *usedLen )
 
   return true;
 #else
-/* f*cking header files, monkeys typing randomly */
-#if defined( __ICC ) && defined ( _FILE_OFFSET_BITS ) && _FILE_OFFSET_BITS == 64
-#define dirent dirent64
-#define readdir_r readdir64_r
-#endif
-  char entBuffer[ sizeof( struct dirent ) + 1024 /* PATH_MAX */ ];
-  struct dirent * ent,
-                * entBuf = ( struct dirent * ) &entBuffer[ 0 ];
+  struct dirent * ent;
   unsigned int    len;
 
-#if 0
   errno = 0;
-  if ( (ent = readdir( this->dir )) == NULL ) {
+  if ( (ent = ::readdir( this->dir )) == NULL ) {
     if ( errno != 0 )
       throw DirErr::getErr( DirErr::READ_FAILED );
     return false;
   }
-#endif
-  if ( readdir_r( this->dir, entBuf, &ent ) != 0 )
-    throw DirErr::getErr( DirErr::READ_FAILED );
-  if ( ent == NULL )
-    return false;
 
-  len = ::strlen( ent->d_name );
-  if ( len >= pathLen )
-    ::strncpy( path, ent->d_name, pathLen );
-  else
-    ::strcpy( path, ent->d_name );
+  len = str_copy( path, ent->d_name, pathLen );
 
   if ( usedLen != NULL )
     *usedLen = len;

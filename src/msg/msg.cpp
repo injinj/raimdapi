@@ -3079,7 +3079,7 @@ RaiMsg::SubMsgOff( void ) const
 }
 
 
-const RaiMsg_data
+RaiMsg_data
 RaiMsg::Packed( void ) const
 {
   if ( this->msgBuf == NULL )

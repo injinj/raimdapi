@@ -45,7 +45,7 @@ static inline byte nocase( byte c )
 #define HASH_FUNCTION2( KEY_TYPE, HASH_NAME, ROUND ) \
   static KEY_TYPE \
   HASH_NAME( const byte *buf,  unsigned int bufLen,  KEY_TYPE key ) { \
-    register byte c; \
+    byte c; \
     while ( bufLen >= 4 ) { \
       c = nocase( buf[ 0 ] ); ROUND( key, c ); \
       c = nocase( buf[ 1 ] ); ROUND( key, c ); \
@@ -140,7 +140,7 @@ Hash16::djbs( const char *buf,  bool noCase,  unsigned int key )
 static inline unsigned int
 le_word32_nocase( const byte *w )
 {
-  register unsigned int wd;
+  unsigned int wd;
   
   wd  = (unsigned int) nocase( w[ 0 ] );
   wd |= (unsigned int) nocase( w[ 1 ] ) << 8;
@@ -182,7 +182,7 @@ Hash32::bjHashInt( unsigned int a )
 unsigned int
 Hash32::newhash( const byte *buf,  unsigned int bufLen,  unsigned int c )
 {
-  register unsigned int i;
+  unsigned int i;
   unsigned int j, k, a, b, x, y, z;
 
   i = 0;
@@ -398,7 +398,7 @@ Hash64::newhashs( const char *buf,  bool noCase,  ullong keyInit )
  *
  * Thanks to Rodney Brown <rbrown64@csc.com.au> for his contribution of faster
  * CRC methods: exclusive-oring 32 bits of data at a time, and pre-computing
- * tables for updating the shift register in one step with three exclusive-ors
+ * tables for updating the shift in one step with three exclusive-ors
  * instead of four steps with four exclusive-ors.  This results in more than a
  * factor-of-two increase in speed on a Power PC using gcc -O3.
  */
@@ -846,7 +846,7 @@ static const unsigned int crc32tab_be[4][256] = /* big endian */
 unsigned int
 Hash32::crc( const byte *buf,  unsigned int bufLen,  unsigned int key )
 {
-  register const byte * endBuf = &buf[ bufLen ];
+  const byte * endBuf = &buf[ bufLen ];
   key = ~key;
 
   if ( Aligned::isLittleEndian ) {
@@ -2370,7 +2370,7 @@ struct SHA256Ctx : public RSA_Hash<256, 512/8, false, unsigned int> {
                         unsigned int &d, unsigned int e, unsigned int f,
                         unsigned int g, unsigned int &h, unsigned int x,
                         unsigned int K ) {
-    register unsigned int t1 = h + S1( e ) + CH( e, f, g ) + K + x,
+    unsigned int t1 = h + S1( e ) + CH( e, f, g ) + K + x,
                           t2 = S0( a ) + MAJ( a, b, c );
     d += t1;
     h  = t1 + t2;
@@ -3532,7 +3532,7 @@ static unsigned int
 crc_c_tbl_nocase( const byte *buf,  unsigned int bufLen,
                   unsigned int key )
 {
-  register const byte * endBuf = &buf[ bufLen ];
+  const byte * endBuf = &buf[ bufLen ];
   for ( ; buf < endBuf; buf++ ) {
     key = sctp_crc_tableil8_o32[ (byte) key ^ nocase( buf[ 0 ] ) ] ^
           ( key >> 8 );
@@ -3552,10 +3552,10 @@ Hash32::crc_c_tbl_hashInt( unsigned int key )
 unsigned int
 Hash32::crc_c_tbl_hashLong( unsigned long a )
 {
-  register unsigned int key = (unsigned int) a;
+  unsigned int key = (unsigned int) a;
 #if ! defined( __i386 )
   if ( sizeof( a ) == 8 ) {
-    register unsigned int tmp = (unsigned int) ( a >> 32 );
+    unsigned int tmp = (unsigned int) ( a >> 32 );
     return sctp_crc_tableil8_o88[ (byte) key ] ^
            sctp_crc_tableil8_o80[ (byte) ( key >> 8 ) ] ^
            sctp_crc_tableil8_o72[ (byte) ( key >> 16 ) ] ^
@@ -3575,7 +3575,7 @@ Hash32::crc_c_tbl_hashLong( unsigned long a )
 unsigned int
 Hash32::crc_c_tbl_hashULLong( ullong a )
 {
-  register unsigned int key = (unsigned int) a,
+  unsigned int key = (unsigned int) a,
                         tmp = (unsigned int) ( a >> 32 );
   return sctp_crc_tableil8_o88[ (byte) key ] ^
          sctp_crc_tableil8_o80[ (byte) ( key >> 8 ) ] ^
@@ -3590,8 +3590,8 @@ Hash32::crc_c_tbl_hashULLong( ullong a )
 unsigned int
 Hash32::crc_c_tbl( const byte *buf,  unsigned int bufLen,  unsigned int key )
 {
-  register const byte * endBuf = &buf[ bufLen ];
-  register unsigned int tmp, tmp2;
+  const byte * endBuf = &buf[ bufLen ];
+  unsigned int tmp, tmp2;
 
 #if ! defined( __amd64__ ) && ! defined( __i386 )
   if ( buf == endBuf )
@@ -3731,9 +3731,9 @@ crc_c_sse4_nocase( const byte *buf,  unsigned int bufLen,  unsigned int key )
 {
 #define crc32b( crc, x ) \
   __asm__ __volatile__ ( "crc32b %1, %0" : "+r" (crc) : "m" (x) : )
-  register const byte * endBuf = &buf[ bufLen ];
+  const byte * endBuf = &buf[ bufLen ];
   for ( ; buf < endBuf; buf++ ) {
-    register byte c = nocase( buf[ 0 ] );
+    byte c = nocase( buf[ 0 ] );
     crc32b( key, c );
   }
   return key;
@@ -3750,7 +3750,7 @@ crc_c_sse4( const byte *buf,  unsigned int bufLen,  unsigned int key )
 #define crc32w( crc, x ) \
   __asm__ __volatile__ ( "crc32w %1, %0" : "+r" (crc) : "m" (x) : )
 
-  register const byte * endBuf = &buf[ bufLen ];
+  const byte * endBuf = &buf[ bufLen ];
 
 #ifndef __amd64__
   /* calc ints */
@@ -3759,7 +3759,7 @@ crc_c_sse4( const byte *buf,  unsigned int bufLen,  unsigned int key )
     buf  = (const byte *) &((const unsigned int *) buf)[ 1 ];
   }
 #else
-  register ullong key64 = key;
+  ullong key64 = key;
   while ( endBuf >= &buf[ sizeof( unsigned int ) * 2 ] ) {
     crc32q( key64, ((const ullong *) buf)[ 0 ] );
     buf = (const byte *) &((const ullong *) buf)[ 1 ];
@@ -3804,7 +3804,7 @@ unsigned int
 Hash32::bswap_mul128( const byte *p,  unsigned int len,
                       unsigned int keyInit )
 {
-  register unsigned long long r8  = 0x1591aefa5e7e5a17ULL,
+  unsigned long long r8  = 0x1591aefa5e7e5a17ULL,
                               r9  = 0x2bb6863566c4e761ULL,
                               rax = keyInit ^ r8,
                               rcx = r9,

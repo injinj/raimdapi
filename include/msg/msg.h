@@ -532,7 +532,7 @@ struct RAIMSG_DLL_EXP RaiMsg {
     RaiMsg_size SubMsgOff( void ) const;
 
     /* return a pointer to packed message */
-    const RaiMsg_data Packed( void ) const;
+    RaiMsg_data Packed( void ) const;
 
     /* always packed */
     bool NeedPack( void ) const {
