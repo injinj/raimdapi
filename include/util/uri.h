@@ -30,9 +30,9 @@ class RAIBASE_DLL_EXP URI {
   public:
     virtual ~URI() {};
     /** Return complete URI */
-    virtual char * getUri( bool encoded = false )          throw( Error ) = 0;
+    virtual char * getUri( bool encoded = false ) = 0;
     /** Return opaque, as in mailto:<opaque> */
-    virtual char * getOpaque( bool encoded = false )       throw( Error ) = 0;
+    virtual char * getOpaque( bool encoded = false ) = 0;
     /** Return scheme, "http", "ftp", "telnet", "mailto", etc */
     virtual char * getScheme( void )                                      = 0;
     /** Return user:passwd as in ftp://<user:passwd>@host/ */
@@ -42,19 +42,19 @@ class RAIBASE_DLL_EXP URI {
     /** Return hostname part as in http://host:<port>/ */
     virtual char * getPort( void )                                        = 0;
     /** Return both host:port part as in http://<host:port>/ */
-    virtual char * getHostPort( unsigned int defaultPort = 0 ) throw( Error )=0;
+    virtual char * getHostPort( unsigned int defaultPort = 0 )=0;
     /** Return path part as in http://host:port/<path> */
-    virtual char * getPath( bool encoded = false )         throw( Error ) = 0;
+    virtual char * getPath( bool encoded = false ) = 0;
     /** Return query part as in http://host:port/path?<query> */
-    virtual char * getQuery( bool encoded = false )        throw( Error ) = 0;
+    virtual char * getQuery( bool encoded = false ) = 0;
     /** Return both path and query part as in http://host:port/<path?query> */
-    virtual char * getPathQuery( bool encoded = false )    throw( Error ) = 0;
+    virtual char * getPathQuery( bool encoded = false ) = 0;
     /** Return reference part as in http://host:port/path?query#<reference> */
-    virtual char * getReference( bool encoded = false )    throw( Error ) = 0;
+    virtual char * getReference( bool encoded = false ) = 0;
     /** Remove reference part from URI */
-    virtual void   stripReference( void )                  throw( Error ) = 0;
+    virtual void   stripReference( void ) = 0;
     /** Make a complete copy */
-    virtual URI  * copy( void )                            throw( Error ) = 0;
+    virtual URI  * copy( void ) = 0;
     /** Return base: scheme + host + port (http://host:port) */
     virtual char * getBase( void )                                        = 0;
 
@@ -62,13 +62,13 @@ class RAIBASE_DLL_EXP URI {
      *  related is not null, then uri can be relative.  Ex: if uri="/index.html"
      *  and related="http://www.x.net/path?query", then resulting uri will be
      *  "http://www.x.net/index.html" */
-    static URI * create( const char *uri,  URI *related = NULL ) throw( Error );
+    static URI * create( const char *uri,  URI *related = NULL );
     /** Use working directory as the anchor for uri */
-    static URI * createWorkingDir( const char *uri )             throw( Error );
+    static URI * createWorkingDir( const char *uri );
     /** Allow wildcardsfor parts of URI */
-    static URI * createWild( const char *uri )                   throw( Error );
+    static URI * createWild( const char *uri );
     /** Make a valid http URI from host and uri parts */
-    static URI * fixupHttp( const char *host,  const char *uri ) throw( Error );
+    static URI * fixupHttp( const char *host,  const char *uri );
     /** Determine the escaped length of a URI after making %HH substitutions */
     static unsigned int escapeStringLen( const char *s,  bool isQuery );
     /** Copy the escaped version to buf by making %HH substitutions, if ampOk

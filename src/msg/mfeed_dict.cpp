@@ -267,7 +267,7 @@ RaiMfeed_dict::nextEnumList( Rai_u32 &i ) const
 
 void
 RaiMfeed_dict::printAppendix( OutputStream *appendixOut ) const
-               throw( RaiMsgException )
+
 {
   const RaiMfeed_entry * e;
   Rai_u32            i,
@@ -303,7 +303,7 @@ RaiMfeed_dict::printAppendix( OutputStream *appendixOut ) const
 
 void
 RaiMfeed_dict::printEnumtype( OutputStream *enumtypeOut ) const
-               throw( RaiMsgException )
+
 {
   const RaiMfeed_enumList  * l;
   const RaiMfeed_entry     * e;
@@ -542,7 +542,7 @@ struct MfeedTmpBlock {
                   size;
 
   static MfeedTmpBlock *allocElem( MfeedTmpBlock *block,  unsigned int len,
-                                   void *ptr ) throw( Error );
+                                   void *ptr );
   static void release( MfeedTmpBlock *block );
 };
 
@@ -614,7 +614,7 @@ struct MfeedTmpEnumList2 {
 
 MfeedTmpBlock *
 MfeedTmpBlock::allocElem( MfeedTmpBlock *block,  unsigned int len,
-                          void *ptr ) throw( Error )
+                          void *ptr )
 {
   unsigned int left;
   len = ( len + 7U ) & ~7U;
@@ -654,7 +654,7 @@ RaiMfeed_dict *
 RaiMfeed_dict::parseDictionary( const char *appendix_a,
                                 const char *enumtype_def,
                                 const char *cfile_path,  char path_sep,
-                                CFileLocator *locator ) throw( RaiMsgException )
+                                CFileLocator *locator )
 {
   return RaiMfeed_dict::parseDictionary2( appendix_a, enumtype_def,
                                           cfile_path, path_sep, locator,
@@ -667,7 +667,7 @@ RaiMfeed_dict::parseDictionary2( const char *appendix_a,
                                  const char *enumtype_def,
                                  const char *cfile_path,  char path_sep,
                                  CFileLocator *locator,
-                                 int logLvl ) throw( RaiMsgException )
+                                 int logLvl )
 {
   return RaiMfeed_dict::parseDictionary3( appendix_a, enumtype_def, NULL, NULL,
                                         cfile_path, path_sep, locator, logLvl );
@@ -681,7 +681,7 @@ RaiMfeed_dict::parseDictionary3( const char *appendix_a,
                                  const char *fidMap,
                                  const char *cfile_path,  char path_sep,
                                  CFileLocator *locator,
-                                 int logLvl ) throw( RaiMsgException )
+                                 int logLvl )
 {
   CFileLoc        loc;
   char            appPath[ 1024 ],
@@ -834,7 +834,7 @@ u16cmp( Rai_u16 *x,  Rai_u16 *y )
 
 RaiMfeed_dict *
 RaiMfeed_dict::parse( InputStream *appendixIn,  InputStream *enumtypeIn,
-            InputStream *flistIn,  InputStream *fidIn ) throw( RaiMsgException )
+            InputStream *flistIn,  InputStream *fidIn )
 {
   RaiMfeed_dict    * d;
   char               line[ 1024 ],
@@ -1318,7 +1318,7 @@ RaiMfeed_dict::addMfeedFidMap( RaiMfeed_mapEntry *e )
 
 
 void
-RaiMfeed_dict::addMfeedEntry( RaiMfeed_entry *entry ) throw( RaiMsgException )
+RaiMfeed_dict::addMfeedEntry( RaiMfeed_entry *entry )
 {
   unsigned int h;
 
@@ -1401,7 +1401,7 @@ RaiMfeed_dict::allocMfeedDict( unsigned int entryCount,
                                unsigned int enumListSize,
                                unsigned int enumAcroElemCount,
                                int maxFid,
-                            unsigned int rwfTypeCount ) throw( RaiMsgException )
+                            unsigned int rwfTypeCount )
 {
   RaiMfeed_dict * d;
   byte          * endPtr;
@@ -1599,7 +1599,7 @@ static const char entry_count_f[]          = "entry-count",
                   rwf_f[]                  = "w";
 
 void
-RaiMfeed_dict::packDataDictionary2( RaiMsg &msg ) const throw( RaiMsgException )
+RaiMfeed_dict::packDataDictionary2( RaiMsg &msg ) const
 {
   byte         pak[ 8 * 1024 ];
   unsigned int i, j, k;
@@ -1717,7 +1717,7 @@ RaiMfeed_dict::packDataDictionary2( RaiMsg &msg ) const throw( RaiMsgException )
 
 
 RaiMfeed_dict *
-RaiMfeed_dict::unpackDataDictionary2( RaiMsg &msg ) throw( RaiMsgException )
+RaiMfeed_dict::unpackDataDictionary2( RaiMsg &msg )
 {
   RaiMfeed_dict * d;
   RaiField     field,
@@ -1923,7 +1923,7 @@ RaiMfeed_dict::unpackDataDictionary2( RaiMsg &msg ) throw( RaiMsgException )
 
 void
 RaiMfeed_dict::packDataDictionary( RaiMsg &msg,  bool full ) const
-               throw( RaiMsgException )
+
 {
   const RaiMfeed_entry     * entry;
   const RaiMfeed_enumList  * l;
@@ -2193,7 +2193,7 @@ RaiMfeed_dict::packDataDictionary( RaiMsg &msg,  bool full ) const
 
 
 bool
-RaiMfeed_dict::isMfeedPackedDict( RaiMsg &msg ) throw( RaiMsgException )
+RaiMfeed_dict::isMfeedPackedDict( RaiMsg &msg )
 {
   RaiField f;
   unsigned int count = 0;
@@ -2230,7 +2230,7 @@ RaiMfeed_dict::isMfeedPackedDict( RaiMsg &msg ) throw( RaiMsgException )
 
 
 RaiMfeed_dict *
-RaiMfeed_dict::unpackDataDictionary( RaiMsg &msg ) throw( RaiMsgException )
+RaiMfeed_dict::unpackDataDictionary( RaiMsg &msg )
 {
   RaiField         f, f2;
   MfeedTmpBlock  * block             = NULL;

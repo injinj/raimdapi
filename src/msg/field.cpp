@@ -65,7 +65,7 @@ RaiField::RaiField( RaiMsg_name name,  RaiMsg_type type,  RaiMsg_size size,
 
 RaiMsg_size
 RaiField::MakeFidName( RaiMsg_name fname,  Rai_u16 fid,  char buf[ 256 ] )
-          throw( RaiMsgException )
+
 {
   unsigned int len;
 
@@ -89,7 +89,7 @@ RaiField::MakeFidName( RaiMsg_name fname,  Rai_u16 fid,  char buf[ 256 ] )
 
 
 RaiMsg_data
-RaiField::Data( void ) throw( RaiMsgException )
+RaiField::Data( void )
 {
   RaiMsg_data array;
 
@@ -117,7 +117,7 @@ RaiField::Data( void ) throw( RaiMsgException )
 
 
 void
-RaiField::Get( RaiMsg &msg ) throw( RaiException )
+RaiField::Get( RaiMsg &msg )
 {
   if ( this->type == RAIMSG_MESSAGE ) {
     if ( this->tempMsg.proto == RV_PROTO )
@@ -143,7 +143,7 @@ RaiField::Get( RaiMsg &msg ) throw( RaiException )
 
 
 RaiMsg_size
-RaiField::PackSize( RaiMsg_protocol proto ) throw( RaiMsgException )
+RaiField::PackSize( RaiMsg_protocol proto )
 {
   RaiMsg_size         packSize;
   const RaiMsg_dict * entry;
@@ -251,7 +251,7 @@ RaiField::PackSize( RaiMsg_protocol proto ) throw( RaiMsgException )
 
 void
 RaiField::Pack( RaiMsg_protocol proto,  Rai_u8 *to_ptr )
-          throw( RaiMsgException )
+
 {
   RaiMsg            * msg;
   Rai_u8              type;
@@ -718,7 +718,7 @@ RaiField::Pack( RaiMsg_protocol proto,  Rai_u8 *to_ptr )
 
 
 void
-RaiField::UnPack( Rai_u8 *from_ptr ) throw( RaiMsgException )
+RaiField::UnPack( Rai_u8 *from_ptr )
 {
 #if defined( __ICC ) && __ICC == 600
   /* disable: invalid type conversion: "unsigned long" to "char *" */
@@ -730,7 +730,7 @@ RaiField::UnPack( Rai_u8 *from_ptr ) throw( RaiMsgException )
 
 Rai_u8 *
 RaiField::UnPack( RaiMsg_protocol proto,  Rai_u8 *from_ptr,
-                  unsigned int length ) throw( RaiMsgException )
+                  unsigned int length )
 {
   static Rai_u8 subjectType   = (Rai_u8) RAI_RV_SUBJECT;
   static Rai_u8 encryptedType = (Rai_u8) RAI_RV_ENCRYPTED;
@@ -1165,7 +1165,7 @@ RaiField::UnPack( RaiMsg_protocol proto,  Rai_u8 *from_ptr,
 
 
 void
-RaiField::Update( RaiField *field_ptr ) throw( RaiMsgException )
+RaiField::Update( RaiField *field_ptr )
 {
   this->name    = field_ptr->name;
   this->nameLen = field_ptr->nameLen;
@@ -1406,7 +1406,7 @@ RaiField::UpdateEx( RaiMsg_name fname,  RaiMsg_size fnameLen,  const char *str )
 
 void
 RaiField::UpdateEx( RaiMsg_name fname,  RaiMsg_size fnameLen,  RaiMsg *msg_ptr )
-          throw( RaiMsgException )
+
 {
   RaiMsg_size msgSize;
   Rai_u32     u32;
@@ -1497,7 +1497,7 @@ RaiField::UpdateEx( RaiMsg_name fname,  RaiMsg_size fnameLen,
 void
 RaiField::Update( RaiMsg_name fname,  RaiMsg_data array_data,
                   RaiMsg_size num_entries,  RaiMsg_type entry_type,
-                  RaiMsg_size entry_size ) throw( RaiMsgException )
+                  RaiMsg_size entry_size )
 {
   this->UpdateEx( fname,  FNAME_LEN( fname ), array_data,
                   num_entries,  entry_type, entry_size );
@@ -1508,7 +1508,7 @@ void
 RaiField::UpdateEx( RaiMsg_name fname,  RaiMsg_size fnameLen,
                     RaiMsg_data array_data,  RaiMsg_size num_entries,
                     RaiMsg_type entry_type,  RaiMsg_size entry_size )
-          throw( RaiMsgException )
+
 {
   this->name     = fname;
   this->nameLen  = fnameLen;
@@ -1526,7 +1526,7 @@ RaiField::UpdateEx( RaiMsg_name fname,  RaiMsg_size fnameLen,
 void
 RaiField::Update( RaiMsg_name fname,  RaiMsg_type ftype,
                   RaiMsg_size fsize,  RaiMsg_data fdata )
-          throw( RaiMsgException )
+
 {
   this->name     = fname;
   this->nameLen  = FNAME_LEN( fname );
@@ -1546,7 +1546,7 @@ RaiField::Update( RaiMsg_name fname,  RaiMsg_type ftype,
 void
 RaiField::UpdateEx( RaiMsg_name fname,  RaiMsg_size fnameLen, RaiMsg_type ftype,
                     RaiMsg_size fsize,  RaiMsg_data fdata )
-          throw( RaiMsgException )
+
 {
   this->name     = fname;
   this->nameLen  = fnameLen;
@@ -1566,7 +1566,7 @@ RaiField::UpdateEx( RaiMsg_name fname,  RaiMsg_size fnameLen, RaiMsg_type ftype,
 void
 RaiField::UpdateRaw( RaiMsg_name fname,  RaiMsg_size fnameLen,
                      RaiMsg_type ftype,  RaiMsg_size fsize,
-                     RaiMsg_data fdata ) throw( RaiMsgException )
+                     RaiMsg_data fdata )
 {
   this->name     = fname;
   this->nameLen  = fnameLen;
@@ -1586,7 +1586,7 @@ void
 RaiField::Update( RaiMsg_name fname,  RaiMsg_type ftype,
                   RaiMsg_size fsize,  RaiMsg_data fdata,
                   RaiMsg_type hint_type,  RaiMsg_size hint_size,
-                  RaiMsg_data hint_data ) throw( RaiMsgException )
+                  RaiMsg_data hint_data )
 {
   this->UpdateEx( fname, FNAME_LEN( fname ), ftype, fsize, fdata,
                   hint_type, hint_size, hint_data );
@@ -1597,7 +1597,7 @@ RaiField::UpdateEx( RaiMsg_name fname,  RaiMsg_size fnameLen,
                     RaiMsg_type ftype,  RaiMsg_size fsize,
                     RaiMsg_data fdata,  RaiMsg_type hint_type,
                     RaiMsg_size hint_size,  RaiMsg_data hint_data )
-          throw( RaiMsgException )
+
 {
   this->name     = fname;
   this->nameLen  = fnameLen;
@@ -1626,7 +1626,7 @@ void
 RaiField::UpdateRaw( RaiMsg_name fname,  RaiMsg_size fnameLen,
                      RaiMsg_type ftype,  RaiMsg_size fsize,  RaiMsg_data fdata,
                      RaiMsg_type hint_type,  RaiMsg_size hint_size,
-                     RaiMsg_data hint_data ) throw( RaiMsgException )
+                     RaiMsg_data hint_data )
 {
   this->name     = fname;
   this->nameLen  = fnameLen;
@@ -1652,7 +1652,7 @@ RaiField::UpdateRaw( RaiMsg_name fname,  RaiMsg_size fnameLen,
 
 bool
 RaiField::FindEx( RaiMsg *msg,  RaiMsg_name fname,  RaiMsg_size fnameLen )
-          throw( RaiMsgException )
+
 {
   RaiMsg_name name;
   RaiMsg_size nameSize;
@@ -1701,7 +1701,7 @@ RaiField::FindEx( RaiMsg *msg,  RaiMsg_name fname,  RaiMsg_size fnameLen )
 
 
 bool
-RaiField::FindFid( RaiMsg *msg,  Rai_u16 fid ) throw( RaiMsgException )
+RaiField::FindFid( RaiMsg *msg,  Rai_u16 fid )
 {
   Rai_u16 myFid;
 
@@ -1718,7 +1718,7 @@ RaiField::FindFid( RaiMsg *msg,  Rai_u16 fid ) throw( RaiMsgException )
 
 bool
 RaiField::Find( RaiMsg *msg,  const RaiMsg_dict *entry )
-          throw( RaiMsgException )
+
 {
   const RaiMsg_dict * curEntry;
   Rai_u8            * fromPtr,
@@ -1801,7 +1801,7 @@ null_dict_fid:;
 
 bool
 RaiField::First( RaiMsg *msg,  const RaiMsg_dict *&entry )
-          throw( RaiMsgException )
+
 {
   Rai_u8 * fromPtr,
          * endPtr;
@@ -1855,7 +1855,7 @@ null_dict_fid:;
 
 
 bool
-RaiField::Next( const RaiMsg_dict *&entry ) throw( RaiMsgException )
+RaiField::Next( const RaiMsg_dict *&entry )
 {
   RaiMsg * msg;
   Rai_u8 * fromPtr,
@@ -1907,7 +1907,7 @@ null_dict_fid:;
 
 bool
 RaiField::First( RaiMsg *msg,  const RaiMsg_form *form,
-                 const RaiMsg_dict *&entry ) throw( RaiMsgException )
+                 const RaiMsg_dict *&entry )
 {
   Rai_u8 * fromPtr,
          * endPtr;
@@ -1952,7 +1952,7 @@ null_dict_fid:;
 
 bool
 RaiField::Next( const RaiMsg_form *form,
-                const RaiMsg_dict *&entry ) throw( RaiMsgException )
+                const RaiMsg_dict *&entry )
 {
   RaiMsg * msg;
   Rai_u8 * fromPtr,
@@ -1993,7 +1993,7 @@ null_dict_fid:;
 
 
 bool
-RaiField::First( RaiMsg *msg ) throw( RaiMsgException )
+RaiField::First( RaiMsg *msg )
 {
   Rai_u8 * endPtr;
 
@@ -2026,7 +2026,7 @@ RaiField::First( RaiMsg *msg ) throw( RaiMsgException )
 
 
 bool
-RaiField::Next( void ) throw( RaiMsgException )
+RaiField::Next( void )
 {
   RaiMsg * msg;
   Rai_u8 * endPtr;
@@ -2056,7 +2056,7 @@ RaiField::Next( void ) throw( RaiMsgException )
 
 void
 RaiField::SetPointer( RaiMsg *msg,  RaiMsg_size fieldStart )
-          throw( RaiMsgException )
+
 {
   Rai_u8 * endPtr;
 
@@ -2072,14 +2072,14 @@ RaiField::SetPointer( RaiMsg *msg,  RaiMsg_size fieldStart )
 
 #if 0
 bool
-RaiField::FirstRaw( RaiMsg *msg ) throw( RaiMsgException )
+RaiField::FirstRaw( RaiMsg *msg )
 {
   return this->First( msg );
 }
 
 
 bool
-RaiField::NextRaw( void ) throw( RaiMsgException )
+RaiField::NextRaw( void )
 {
   return this->Next();
 }
@@ -2087,7 +2087,7 @@ RaiField::NextRaw( void ) throw( RaiMsgException )
 
 #if 0
 RaiMsg_data
-RaiField::RawData( RaiMsg_size *dataLen ) throw( RaiMsgException )
+RaiField::RawData( RaiMsg_size *dataLen )
 {
   if ( this->iterMsg == NULL )
     throw RaiMsgErr::getErr( RaiMsgErr::NOT_FOUND );
@@ -2099,7 +2099,7 @@ RaiField::RawData( RaiMsg_size *dataLen ) throw( RaiMsgException )
 
 #if 0
 RaiMsg_data
-RaiField::RawHintData( void ) throw( RaiMsgException )
+RaiField::RawHintData( void )
 {
   RaiMsg_size hintSize;
 
@@ -2121,7 +2121,7 @@ void
 RaiField::Print( OutputStream *output_file,  Rai_u32 field_newlines,
                  const char *fname_format,  Rai_u32 print_opaques,
                  const char *debug_format,  const char *debug_hformat )
-          throw( RaiMsgException )
+
 {
   RaiField_data  val;
   RaiMsg_data    ar;
@@ -2394,7 +2394,7 @@ writeXmlData( OutputStream *output_file,  const char *data, unsigned int len )
 
 void
 RaiField::PrintXML( OutputStream *output_file,  Rai_u32 attr_flags,
-                    Rai_u32 field_newlines ) throw( RaiMsgException )
+                    Rai_u32 field_newlines )
 {
   RaiField_data  val;
   RaiMsg_data    ar;
@@ -2673,7 +2673,7 @@ realToStringPrecision( unsigned int hint )
 
 
 void
-RaiField::Convert( ConvertCtx &ctx ) throw( RaiMsgException )
+RaiField::Convert( ConvertCtx &ctx )
 {
   RaiMsg_type dtype = ctx.destType;
   RaiMsg_size dsize = ctx.destSize;
@@ -3554,7 +3554,7 @@ RaiField::AlignHintData( RaiField_data &val )
 
 
 void
-RaiField::Convert( bool &b ) throw( RaiMsgException )
+RaiField::Convert( bool &b )
 {
   RaiField_data data;
   Rai_u8        u8;
@@ -3565,7 +3565,7 @@ RaiField::Convert( bool &b ) throw( RaiMsgException )
 
 
 void
-RaiField::Convert( Rai_i8 &i8 ) throw( RaiMsgException )
+RaiField::Convert( Rai_i8 &i8 )
 {
   RaiField_data data;
   RaiField::Convert( RAIMSG_INT, 1, (RaiMsg_data) &i8, this->type, this->size,
@@ -3574,7 +3574,7 @@ RaiField::Convert( Rai_i8 &i8 ) throw( RaiMsgException )
 
 
 void
-RaiField::Convert( Rai_u8 &u8 ) throw( RaiMsgException )
+RaiField::Convert( Rai_u8 &u8 )
 {
   RaiField_data data;
   RaiField::Convert( RAIMSG_UINT, 1, (RaiMsg_data) &u8, this->type, this->size,
@@ -3583,7 +3583,7 @@ RaiField::Convert( Rai_u8 &u8 ) throw( RaiMsgException )
 
 
 void
-RaiField::Convert( Rai_i16 &i16 ) throw( RaiMsgException )
+RaiField::Convert( Rai_i16 &i16 )
 {
   RaiField_data data;
   RaiField::Convert( RAIMSG_INT, 2, (RaiMsg_data) &i16, this->type, this->size,
@@ -3592,7 +3592,7 @@ RaiField::Convert( Rai_i16 &i16 ) throw( RaiMsgException )
 
 
 void
-RaiField::Convert( Rai_u16 &u16 ) throw( RaiMsgException )
+RaiField::Convert( Rai_u16 &u16 )
 {
   RaiField_data data;
   RaiField::Convert( RAIMSG_UINT, 2, (RaiMsg_data) &u16, this->type, this->size,
@@ -3601,7 +3601,7 @@ RaiField::Convert( Rai_u16 &u16 ) throw( RaiMsgException )
 
 
 void
-RaiField::Convert( Rai_i32 &i32 ) throw( RaiMsgException )
+RaiField::Convert( Rai_i32 &i32 )
 {
   RaiField_data data;
   RaiField::Convert( RAIMSG_INT, 4, (RaiMsg_data) &i32, this->type, this->size,
@@ -3610,7 +3610,7 @@ RaiField::Convert( Rai_i32 &i32 ) throw( RaiMsgException )
 
 
 void
-RaiField::Convert( Rai_u32 &u32 ) throw( RaiMsgException )
+RaiField::Convert( Rai_u32 &u32 )
 {
   RaiField_data data;
   RaiField::Convert( RAIMSG_UINT, 4, (RaiMsg_data) &u32, this->type, this->size,
@@ -3619,7 +3619,7 @@ RaiField::Convert( Rai_u32 &u32 ) throw( RaiMsgException )
 
 
 void
-RaiField::Convert( Rai_i64 &i64 ) throw( RaiMsgException )
+RaiField::Convert( Rai_i64 &i64 )
 {
   RaiField_data data;
   RaiField::Convert( RAIMSG_INT, 8, (RaiMsg_data) &i64, this->type, this->size,
@@ -3628,7 +3628,7 @@ RaiField::Convert( Rai_i64 &i64 ) throw( RaiMsgException )
 
 
 void
-RaiField::Convert( Rai_u64 &u64 ) throw( RaiMsgException )
+RaiField::Convert( Rai_u64 &u64 )
 {
   RaiField_data data;
   RaiField::Convert( RAIMSG_UINT, 8, (RaiMsg_data) &u64, this->type, this->size,
@@ -3637,7 +3637,7 @@ RaiField::Convert( Rai_u64 &u64 ) throw( RaiMsgException )
 
 
 void
-RaiField::Convert( Rai_f32 &f32 ) throw( RaiMsgException )
+RaiField::Convert( Rai_f32 &f32 )
 {
   RaiField_data data;
   RaiField::Convert( RAIMSG_REAL, 4, (RaiMsg_data) &f32, this->type, this->size,
@@ -3646,7 +3646,7 @@ RaiField::Convert( Rai_f32 &f32 ) throw( RaiMsgException )
 
 
 void
-RaiField::Convert( Rai_f64 &f64 ) throw( RaiMsgException )
+RaiField::Convert( Rai_f64 &f64 )
 {
   RaiField_data data;
   RaiField::Convert( RAIMSG_REAL, 8, (RaiMsg_data) &f64, this->type, this->size,
@@ -3655,7 +3655,7 @@ RaiField::Convert( Rai_f64 &f64 ) throw( RaiMsgException )
 
 
 void
-RaiField::Convert( Rai_f32 &f32,  ConvertCtx &ctx ) throw( RaiMsgException )
+RaiField::Convert( Rai_f32 &f32,  ConvertCtx &ctx )
 {
   RaiField_data data;
 
@@ -3670,7 +3670,7 @@ RaiField::Convert( Rai_f32 &f32,  ConvertCtx &ctx ) throw( RaiMsgException )
 
 
 void
-RaiField::Convert( Rai_f64 &f64,  ConvertCtx &ctx ) throw( RaiMsgException )
+RaiField::Convert( Rai_f64 &f64,  ConvertCtx &ctx )
 {
   RaiField_data data;
 
@@ -3685,7 +3685,7 @@ RaiField::Convert( Rai_f64 &f64,  ConvertCtx &ctx ) throw( RaiMsgException )
 
 
 void
-RaiField::Convert( char *str,  RaiMsg_size limit ) throw( RaiMsgException )
+RaiField::Convert( char *str,  RaiMsg_size limit )
 {
   ConvertCtx    ctx;
   RaiField_data data;
@@ -3707,7 +3707,7 @@ RaiField::Convert( char *str,  RaiMsg_size limit ) throw( RaiMsgException )
 
 
 void
-RaiField::HintConvert( bool &b ) throw( RaiMsgException )
+RaiField::HintConvert( bool &b )
 {
   RaiField_data data;
   Rai_u8        u8;
@@ -3720,7 +3720,7 @@ RaiField::HintConvert( bool &b ) throw( RaiMsgException )
 
 
 void
-RaiField::HintConvert( Rai_i8 &i8 ) throw( RaiMsgException )
+RaiField::HintConvert( Rai_i8 &i8 )
 {
   RaiField_data data;
   if ( this->type == RAIMSG_ARRAY || this->type == RAIMSG_PARTIAL )
@@ -3731,7 +3731,7 @@ RaiField::HintConvert( Rai_i8 &i8 ) throw( RaiMsgException )
 
 
 void
-RaiField::HintConvert( Rai_u8 &u8 ) throw( RaiMsgException )
+RaiField::HintConvert( Rai_u8 &u8 )
 {
   RaiField_data data;
   if ( this->type == RAIMSG_ARRAY || this->type == RAIMSG_PARTIAL )
@@ -3742,7 +3742,7 @@ RaiField::HintConvert( Rai_u8 &u8 ) throw( RaiMsgException )
 
 
 void
-RaiField::HintConvert( Rai_i16 &i16 ) throw( RaiMsgException )
+RaiField::HintConvert( Rai_i16 &i16 )
 {
   RaiField_data data;
   if ( this->type == RAIMSG_ARRAY || this->type == RAIMSG_PARTIAL )
@@ -3753,7 +3753,7 @@ RaiField::HintConvert( Rai_i16 &i16 ) throw( RaiMsgException )
 
 
 void
-RaiField::HintConvert( Rai_u16 &u16 ) throw( RaiMsgException )
+RaiField::HintConvert( Rai_u16 &u16 )
 {
   RaiField_data data;
   if ( this->type == RAIMSG_ARRAY || this->type == RAIMSG_PARTIAL )
@@ -3764,7 +3764,7 @@ RaiField::HintConvert( Rai_u16 &u16 ) throw( RaiMsgException )
 
 
 void
-RaiField::HintConvert( Rai_i32 &i32 ) throw( RaiMsgException )
+RaiField::HintConvert( Rai_i32 &i32 )
 {
   RaiField_data data;
   if ( this->type == RAIMSG_ARRAY || this->type == RAIMSG_PARTIAL )
@@ -3775,7 +3775,7 @@ RaiField::HintConvert( Rai_i32 &i32 ) throw( RaiMsgException )
 
 
 void
-RaiField::HintConvert( Rai_u32 &u32 ) throw( RaiMsgException )
+RaiField::HintConvert( Rai_u32 &u32 )
 {
   RaiField_data data;
   if ( this->type == RAIMSG_ARRAY || this->type == RAIMSG_PARTIAL )
@@ -3786,7 +3786,7 @@ RaiField::HintConvert( Rai_u32 &u32 ) throw( RaiMsgException )
 
 
 void
-RaiField::HintConvert( Rai_i64 &i64 ) throw( RaiMsgException )
+RaiField::HintConvert( Rai_i64 &i64 )
 {
   RaiField_data data;
   if ( this->type == RAIMSG_ARRAY || this->type == RAIMSG_PARTIAL )
@@ -3797,7 +3797,7 @@ RaiField::HintConvert( Rai_i64 &i64 ) throw( RaiMsgException )
 
 
 void
-RaiField::HintConvert( Rai_u64 &u64 ) throw( RaiMsgException )
+RaiField::HintConvert( Rai_u64 &u64 )
 {
   RaiField_data data;
   if ( this->type == RAIMSG_ARRAY || this->type == RAIMSG_PARTIAL )
@@ -3808,7 +3808,7 @@ RaiField::HintConvert( Rai_u64 &u64 ) throw( RaiMsgException )
 
 
 void
-RaiField::HintConvert( Rai_f32 &f32 ) throw( RaiMsgException )
+RaiField::HintConvert( Rai_f32 &f32 )
 {
   RaiField_data data;
   if ( this->type == RAIMSG_ARRAY || this->type == RAIMSG_PARTIAL )
@@ -3819,7 +3819,7 @@ RaiField::HintConvert( Rai_f32 &f32 ) throw( RaiMsgException )
 
 
 void
-RaiField::HintConvert( Rai_f64 &f64 ) throw( RaiMsgException )
+RaiField::HintConvert( Rai_f64 &f64 )
 {
   RaiField_data data;
   if ( this->type == RAIMSG_ARRAY || this->type == RAIMSG_PARTIAL )
@@ -3830,7 +3830,7 @@ RaiField::HintConvert( Rai_f64 &f64 ) throw( RaiMsgException )
 
 
 void
-RaiField::HintConvert( char *str,  RaiMsg_size limit ) throw( RaiMsgException )
+RaiField::HintConvert( char *str,  RaiMsg_size limit )
 {
   RaiField_data data;
   if ( this->type == RAIMSG_ARRAY || this->type == RAIMSG_PARTIAL )
@@ -3842,7 +3842,7 @@ RaiField::HintConvert( char *str,  RaiMsg_size limit ) throw( RaiMsgException )
 
 void
 RaiField::HintConvert( RaiMsg_type dest_type,  RaiMsg_size dest_size,
-                       RaiMsg_data dest_data ) throw( RaiMsgException )
+                       RaiMsg_data dest_data )
 {
   RaiField_data data;
   if ( this->type == RAIMSG_ARRAY || this->type == RAIMSG_PARTIAL )
@@ -3920,7 +3920,7 @@ RaiField::CopySize( const RaiMsg_dict *entry )
 
 RaiMsg_data
 RaiField::CopyTo( RaiField &toFld,  Rai_u8 *buf,  RaiMsg_size bufSize,
-                  const RaiMsg_dict *entry ) throw( RaiMsgException )
+                  const RaiMsg_dict *entry )
 {
   RaiMsg_data ptr = NULL;
   RaiMsg_size off = this->CopySize( entry );
@@ -3939,7 +3939,7 @@ RaiField::CopyTo( RaiField &toFld,  Rai_u8 *buf,  RaiMsg_size bufSize,
 
 RaiField *
 RaiField::Copy( Rai_u8 *buf,  RaiMsg_size bufSize,
-                const RaiMsg_dict *entry ) throw( RaiMsgException )
+                const RaiMsg_dict *entry )
 {
   RaiField  * toFld;
   void      * ptr = (void *) buf;
@@ -3962,7 +3962,7 @@ RaiField::Copy( Rai_u8 *buf,  RaiMsg_size bufSize,
 
 RaiField *
 RaiField::CopyTo( RaiField &toFld,  Rai_u8 *buf,
-                  const RaiMsg_dict *entry ) throw( RaiMsgException )
+                  const RaiMsg_dict *entry )
 {
   RaiMsg    * msg;
   RaiMsg_size off;

@@ -53,16 +53,16 @@ struct RaiEntImpl {
     this->session = NULL;
   };
 
-  static void EntAnnOnMsg( tibrvId I, tibrvMsg msg, void *cl )  throw( RaiException );
-  static void EntOnMsg( tibrvId I, tibrvMsg msg, void *cl )  throw( RaiException );
-  void Login( RaiSession *session, char *entSubject )        throw( RaiException );
-  void Load( RaiSession *session, char *entSubject )         throw( RaiException );
-  void TCPLoad( RaiSession *session, char *entSubject )      throw( RaiException );
-  void RVLoad( RaiSession *session, char *entSubject )       throw( RaiException );
-  void WaitForEnt(RaiSession *session )                      throw( RaiException );
+  static void EntAnnOnMsg( tibrvId I, tibrvMsg msg, void *cl );
+  static void EntOnMsg( tibrvId I, tibrvMsg msg, void *cl );
+  void Login( RaiSession *session, char *entSubject );
+  void Load( RaiSession *session, char *entSubject );
+  void TCPLoad( RaiSession *session, char *entSubject );
+  void RVLoad( RaiSession *session, char *entSubject );
+  void WaitForEnt(RaiSession *session );
   bool match( const char *subject );
-  bool canPublish( const char *subject )                     throw( RaiException );
-  bool canSubscribe( const char *subject )                   throw( RaiException );
+  bool canPublish( const char *subject );
+  bool canSubscribe( const char *subject );
   SYS_OPS( RaiEntImpl );
   //RaiEntImpl() {};
 };
@@ -80,11 +80,11 @@ struct RaiDictImpl {
     }
   };
 
-  static void DictOnMsg( tibrvId I, tibrvMsg msg, void *cl )  throw( RaiException );
-  void Load( RaiSession *session, char *dictSubject )         throw( RaiException );
-  void TCPLoad( RaiSession *session, char *dictSubject )      throw( RaiException );
-  void RVLoad( RaiSession *session, char *dictSubject )       throw( RaiException );
-  void WaitForDict(RaiSession *session )                      throw( RaiException );
+  static void DictOnMsg( tibrvId I, tibrvMsg msg, void *cl );
+  void Load( RaiSession *session, char *dictSubject );
+  void TCPLoad( RaiSession *session, char *dictSubject );
+  void RVLoad( RaiSession *session, char *dictSubject );
+  void WaitForDict(RaiSession *session );
   SYS_OPS( RaiDictImpl );
   RaiDictImpl() {};
 };
@@ -105,11 +105,11 @@ struct RaiTimerImpl {
   RaiTimerCallback        callback;
 
   RaiTimerImpl( RaiTimer * timer, RaiSession * session, RaiTimerCallback callback,
-                TimeMSecs interval, void * closure )            throw( RaiException );
+                TimeMSecs interval, void * closure );
 
   static void RV_callback( tibrvId I, tibrvMsg msg, void *cl );
   TimerHandle * AddTimer( RaiSession * session, RaiTimerCallback callback,
-                          void * closure)                       throw( RaiException );
+                          void * closure);
   SYS_OPS( RaiTimerImpl );
   RaiTimerImpl() {};
   ~RaiTimerImpl();
@@ -163,9 +163,9 @@ struct RaiSessionImpl {
   public:
   SYS_OPS( RaiSessionImpl );
   RaiSessionImpl( RaiSession * session, const char *svcname, const char *netname,
-                  const char *dmnname )                         throw( RaiException );
+                  const char *dmnname );
   static void onMsg( tibrvId rvI, tibrvMsg msg, void * closure );
-  SubHandle * AddSubscriber(RaiCallback callback, void *closure )      throw( RaiException );
+  SubHandle * AddSubscriber(RaiCallback callback, void *closure );
 
   ~RaiSessionImpl();
 };

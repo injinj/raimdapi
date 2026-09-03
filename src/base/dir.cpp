@@ -36,7 +36,7 @@ using namespace rai;
 
 
 bool
-Dir::dirExists( const char *path ) throw( Error )
+Dir::dirExists( const char *path )
 {
 #if defined( _WIN32 ) || defined( _WIN64 )
   DWORD attributes;
@@ -63,7 +63,7 @@ Dir::dirExists( const char *path ) throw( Error )
 
 
 void
-Dir::workingDirectory( char *path,  unsigned int pathLen ) throw( Error )
+Dir::workingDirectory( char *path,  unsigned int pathLen )
 {
   unsigned int len;
 
@@ -94,7 +94,7 @@ Dir::workingDirectory( char *path,  unsigned int pathLen ) throw( Error )
 
 
 void
-Dir::changeDirectory( const char *path ) throw( Error )
+Dir::changeDirectory( const char *path )
 {
 #if defined( _WIN32 ) || defined( _WIN64 )
   if ( ! ::SetCurrentDirectory( path ) )
@@ -107,7 +107,7 @@ Dir::changeDirectory( const char *path ) throw( Error )
 
 
 void
-Dir::makeDir( const char *path ) throw( Error )
+Dir::makeDir( const char *path )
 {
 #if defined( _WIN32 ) || defined( _WIN64 )
   if ( ! ::CreateDirectory( path, NULL ) )
@@ -135,11 +135,11 @@ class SysDir : public Dir {
 
     virtual ~SysDir( void );
 
-    virtual void close( void )                                throw( Error );
+    virtual void close( void );
 
     virtual bool read( char *path,  unsigned int pathLen,
-                       unsigned int *usedLen )                throw( Error );
-    virtual void rewind( void )                               throw( Error );
+                       unsigned int *usedLen );
+    virtual void rewind( void );
 };
 } // namespace rai
 
@@ -155,7 +155,7 @@ SysDir::~SysDir()
 
 
 Dir *
-Dir::openDir( const char *path ) throw( Error )
+Dir::openDir( const char *path )
 {
 #if defined( _WIN32 ) || defined( _WIN64 )
   dirptr_t        h;
@@ -209,7 +209,7 @@ Dir::openDir( const char *path ) throw( Error )
 
 
 void
-SysDir::close( void ) throw( Error )
+SysDir::close( void )
 {
 #if defined( _WIN32 ) || defined( _WIN64 )
   if ( this->dir != INVALID_DIRPTR ) {
@@ -234,7 +234,7 @@ SysDir::close( void ) throw( Error )
 
 bool
 SysDir::read( char *path,  unsigned int pathLen,  unsigned int *usedLen )
-        throw( Error )
+
 {
 #if defined( _WIN32 ) || defined( _WIN64 )
   unsigned int len;
@@ -294,7 +294,7 @@ SysDir::read( char *path,  unsigned int pathLen,  unsigned int *usedLen )
 
 
 void
-SysDir::rewind( void ) throw( Error )
+SysDir::rewind( void )
 {
 #if defined( _WIN32 ) || defined( _WIN64 )
   if ( this->dir != INVALID_DIRPTR )

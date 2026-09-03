@@ -150,7 +150,7 @@ class PubTest {
 
   void init( const char *svcname, const char *netname,
              const char *dmnname, bool isComplex, 
-             const char *username ) throw( RaiException ){
+             const char *username ){
 
     char    dictSubject[80];
     RaiDict * dataDict;

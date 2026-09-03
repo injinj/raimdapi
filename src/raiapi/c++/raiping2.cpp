@@ -59,7 +59,7 @@ struct RaiPing2Args {
     timeSource_arg( "ts", defaultSrc, "<source>", availDescr ) {}
 
   void getArgs( rai::Args &args,
-                bool cmdLine = false ) throw( RaiException ) {
+                bool cmdLine = false ) {
     args.add( &perSec_arg );
     args.add( &msgCount_arg );
     args.add( &prefix_arg );
@@ -165,7 +165,7 @@ class RaiPing2 : public RaiTimerCallback, public RaiMsgCallback,
       FREE( this->prefix );
   }
 
-  void close( void ) throw( RaiException ) {
+  void close( void ) {
     this->final();
     this->quit = true;
     this->pubThread.signalDone();
@@ -579,7 +579,7 @@ class RaiPing2 : public RaiTimerCallback, public RaiMsgCallback,
                            lock( 0 ), cond( 0 ) {}
     ~PubThread() { if ( this->lock ) delete this->lock;
                    if ( this->cond ) delete this->cond; }
-    void init( void ) throw( RaiException ) {
+    void init( void ) {
       Thread *me = Thread::self();
       if ( me != NULL )
         this->Thread::setName( me->name, this->Thread::name );
@@ -638,7 +638,7 @@ class RaiPing2 : public RaiTimerCallback, public RaiMsgCallback,
 
 /* dll entry point, determined by service file name: rai_service_raiping2.so*/
 extern "C" RAI_DLL_EXPORT void
-RAIPING2_ServiceInitialize( void ) throw( RaiException )
+RAIPING2_ServiceInitialize( void )
 {
   rai::ServiceFactory * fact = NEW
     T_RaiApiServiceFactory< RaiPing2Args,

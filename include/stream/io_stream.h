@@ -47,32 +47,32 @@ class RAIBASE_DLL_EXP InputStream {
     Mutex      * lock;
 
     virtual unsigned int fillBuf( byte *buf,  unsigned int bufLen )
-                                                             throw( Error ) = 0;
+ = 0;
   public:
     InputStream( unsigned int bufLen       = BUF_LEN,
                  bool closePipe            = false,
                  StreamOffset streamOffset = (StreamOffset) 0UL );
     virtual ~InputStream();
 
-    virtual void close( void )                                  throw( Error );
+    virtual void close( void );
 
-    void initThreadAccess( bool multithreaded )                 throw( Error );
+    void initThreadAccess( bool multithreaded );
 
-    unsigned int gets( char *line,  unsigned int nBytes )       throw( Error );
+    unsigned int gets( char *line,  unsigned int nBytes );
 
-    unsigned int readBytes( byte *data,  unsigned int nBytes )  throw( Error );
+    unsigned int readBytes( byte *data,  unsigned int nBytes );
 
-    virtual bool available( void )                              throw( Error );
+    virtual bool available( void );
 
     bool available( unsigned int nBytes ) {
       return this->offset + nBytes <= this->length;
     };
 
-    virtual bool isEof( void )                                  throw( Error );
+    virtual bool isEof( void );
 
     virtual StreamOffset seekSet( StreamSeekOffset offset,  int whence )
-                                                                throw( Error );
-    StreamOffset getStreamOffset( void )                        throw( Error );
+;
+    StreamOffset getStreamOffset( void );
 };
 
 class RAIBASE_DLL_EXP OutputStream {
@@ -89,18 +89,18 @@ class RAIBASE_DLL_EXP OutputStream {
                  lineBuffered;
     Mutex      * lock;
 
-    void tryEmptyLines( void )                                  throw( Error );
+    void tryEmptyLines( void );
 
-    void doEmptyBuf( void )                                     throw( Error );
+    void doEmptyBuf( void );
 
     unsigned int doEmptyBuf2( const byte *buf2,  unsigned int bufLen2 )
-                                                                throw( Error );
+;
     virtual unsigned int emptyBuf( const byte *buf,  unsigned int bufLen )
-                                                             throw( Error ) = 0;
+ = 0;
     /* this function does emptyBuf() by default, could be overriden */
     virtual unsigned int emptyBuf2( const byte *buf,  unsigned int bufLen,
                                     const byte *buf2,  unsigned int bufLen2 )
-                                                             throw( Error );
+;
   public:
     OutputStream( unsigned int bufLen       = BUF_LEN,
                   bool lineBuffered         = false,
@@ -108,27 +108,27 @@ class RAIBASE_DLL_EXP OutputStream {
                   StreamOffset streamOffset = (StreamOffset) 0UL );
     virtual ~OutputStream();
 
-    virtual void close( void )                                  throw( Error );
+    virtual void close( void );
 
-    void initThreadAccess( bool multithreaded )                 throw( Error );
+    void initThreadAccess( bool multithreaded );
 
-    unsigned int puts( const char *s )                          throw( Error );
+    unsigned int puts( const char *s );
 
-    unsigned int printf( const char *fmt,  ... )                throw( Error )
+    unsigned int printf( const char *fmt,  ... )
 #if defined( __GNUC__ )
       __attribute__((format(printf,2,3)));
 #else
       ;
 #endif
-    unsigned int vprintf( const char *fmt,  va_list ap )        throw( Error );
+    unsigned int vprintf( const char *fmt,  va_list ap );
 
     unsigned int writeBytes( const byte *data,  unsigned int nBytes )
-                                                                throw( Error );
-    virtual void flush( void )                                  throw( Error );
+;
+    virtual void flush( void );
 
     virtual StreamOffset seekSet( StreamSeekOffset offset,  int whence )
-                                                                throw( Error );
-    StreamOffset getStreamOffset( void )                        throw( Error );
+;
+    StreamOffset getStreamOffset( void );
 
     unsigned int getBufLen( void ) { return this->bufLen; };
 

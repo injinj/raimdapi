@@ -51,7 +51,7 @@ struct RaiReplay2Args {
     addNaE_arg(      "addNaE", false, NULL,
                      "Add .NaE to subjects with less than three '.'" ) {}
 
-  void getArgs( rai::Args &args ) const throw( RaiException ) {
+  void getArgs( rai::Args &args ) const {
     args.add( &fileName_arg, rai::COMMAND_ARG | rai::RESOURCE_ARG |
                               rai::LIST_ARG );
     args.add( &perSec_arg );
@@ -150,7 +150,7 @@ struct RaiReplay2 : public RaiTimerCallback {
       delete this->api;
   }
 
-  void close( void ) throw( RaiException ) {
+  void close( void ) {
     this->quit = true;
     if ( this->pubTimer != NULL )
       this->pubTimer->Stop();
@@ -288,7 +288,7 @@ struct RaiReplay2 : public RaiTimerCallback {
     return t;
   }
 
-  bool readMsg( void ) throw( RaiException ) {
+  bool readMsg( void ) {
     unsigned int len,
                  size,
                  dot;
@@ -401,7 +401,7 @@ struct RaiReplay2 : public RaiTimerCallback {
     }
   }
 
-  void doPub( void ) throw( RaiException ) {
+  void doPub( void ) {
     try {
       /* replay at realtime rate */
       if ( this->realtimeSpeed != 0.0 ) {
@@ -450,7 +450,7 @@ struct RaiReplay2 : public RaiTimerCallback {
     }
   }
 
-  void publishMsg( void ) throw( RaiException ) {
+  void publishMsg( void ) {
     this->pub->Publish( this->subjectBuf, this->msgBuf, this->msgSize );
     this->msgsSent++;
     this->bytesSent += this->msgSize;
@@ -462,7 +462,7 @@ struct RaiReplay2 : public RaiTimerCallback {
     }
   }
 
-  void rotateInput( void ) throw( RaiException ) {
+  void rotateInput( void ) {
     if ( this->fileCount == 1 && ! this->publishOnce ) {
       this->foff = 0;
       this->baseTime = rai::Time::getHiresTime();
@@ -486,7 +486,7 @@ struct RaiReplay2 : public RaiTimerCallback {
     }
   }
 
-  void openInput( void ) throw( RaiException ) {
+  void openInput( void ) {
     this->fin  = rai::File::openFile(
                   this->files[ this->fileNum ], rai::File::FILE_RDONLY );
     this->fsz  = this->fin->length();
@@ -500,7 +500,7 @@ struct RaiReplay2 : public RaiTimerCallback {
         this->api->PrintLog( LMINOR, "File: %s", this->files[ this->fileNum ] );
   }
 
-  void closeInput( void ) throw( RaiException ) {
+  void closeInput( void ) {
     if ( this->fptr != NULL ) {
       this->fin->unmap( this->fptr, this->fsz, 1024 * 1024 );
       this->fptr = NULL;
@@ -559,7 +559,7 @@ struct RaiReplay2 : public RaiTimerCallback {
 
 /* dll entry point, determined by service file name: rai_service_raireplay2.so*/
 extern "C" RAI_DLL_EXPORT void
-RAIREPLAY2_ServiceInitialize( void ) throw( RaiException )
+RAIREPLAY2_ServiceInitialize( void )
 {
   rai::ServiceFactory * fact = NEW
     T_RaiApiServiceFactory< RaiReplay2Args,

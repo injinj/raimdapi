@@ -63,7 +63,7 @@ struct RaiPub2Args {
                  "Publish a message without adding the SASS header, "
                  "without MSG_TYPE, REC_TYPE, SEQ_NO, REC_STATUS fields" ) {}
 
-  void getArgs( rai::Args &args ) const throw( RaiException ) {
+  void getArgs( rai::Args &args ) const {
     args.add( &subject_arg, rai::COMMAND_ARG | rai::RESOURCE_ARG |
                             rai::LIST_ARG );
     args.add( &prefix_arg );
@@ -357,7 +357,7 @@ struct RaiPub2 {
   }
 
   /* thread from service for dispatch loop */
-  void serviceRun( void ) throw( RaiException ) {
+  void serviceRun( void ) {
     this->dispatchLoop();
   }
 
@@ -407,7 +407,7 @@ struct RaiPub2 {
 
 /* dll entry point, determined by service file name: rai_service_raipub2.so */
 extern "C" RAI_DLL_EXPORT void
-RAIPUB2_ServiceInitialize( void ) throw( RaiException )
+RAIPUB2_ServiceInitialize( void )
 {
   rai::ServiceFactory * fact = NEW
     T_RaiApiServiceFactory< RaiPub2Args, 

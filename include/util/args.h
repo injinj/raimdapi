@@ -172,12 +172,12 @@ class RAIBASE_DLL_EXP Args {
       } val, *vals; /* if list, vals[0] contains item 1, vals[1] item 2... */
 
       bool defaultToString( char *buf,  unsigned int bufLen ) const
-                                                                throw( Error );
-      unsigned int parseUInt( const char *arg )                 throw( Error );
+;
+      unsigned int parseUInt( const char *arg );
 
-      ullong parseULLong( const char *arg )                     throw( Error );
+      ullong parseULLong( const char *arg );
 
-      double parseDouble( const char *arg )                     throw( Error );
+      double parseDouble( const char *arg );
     };
     friend struct Arg;
 
@@ -202,19 +202,19 @@ class RAIBASE_DLL_EXP Args {
 
     TmpArgList *allocArg( ArgType t,  const char *name,  const char *example,
                           const char *description,  const char *defVal )
-                                                                throw( Error );
+;
     bool getExpansion( const char *name,  char *buf,  unsigned int bufLen )
-                                                                throw( Error );
+;
     void matchArgs( const char *name,  unsigned int argc,  char **argv,
                     unsigned int *numMatched,  const char *source )
-                                                                throw( Error );
+;
     Arg * getArg( const char *name );
 
     const char * getName( ArgFlags flags );
 
     Arg * addType( ArgType type,  const char *name,  const char *example,
                    const char *description,  unsigned int flags )
-                                                                throw( Error );
+;
   public:
     SYS_OPS( Args );
     Args();
@@ -262,49 +262,49 @@ class RAIBASE_DLL_EXP Args {
     /* sets the arguments in command line format: -subject TEST,
      * then tests whether -help or -rcFile, or -version is specified and
      * performs the action.  If program should continue, this returns true */
-    bool processArgs( unsigned int argc,  char **argv )         throw( Error );
+    bool processArgs( unsigned int argc,  char **argv );
     /* sets the arguments in parms[] array with the values in parmVals[],
      * example: parms[] = { "subject" }; parmVals[] = { "TEST" };
      * args.processParms( parms, parmVals, 1, "program" ) */
     void processParms( const char * const parms[],  char *parmVals[],
                        unsigned int numParms,  const char *source )
-    /* examines the string values and expands environment */    throw( Error );
+    /* examines the string values and expands environment */;
     /* values specified by ${ENV_VAR} */
-    void expandArgs( void )                                     throw( Error );
+    void expandArgs( void );
     /* parse command line style arguments, which have one or two '-' prefixes
      * indicating the start of an arg list, as in -subject TEST */
-    void addArgs( unsigned int argc,  char **argv )             throw( Error );
+    void addArgs( unsigned int argc,  char **argv );
     /* parse an "rc" file, which is a file which specifies arg values
      * separated by '=', as in subject=TEST */
-    void addRCFile( const char *path )                          throw( Error );
+    void addRCFile( const char *path );
     /* parse an "rc" input stream, same as above */
-    void addRCInput( InputStream *in,  const char *src )        throw( Error );
+    void addRCInput( InputStream *in,  const char *src );
     /* do getenv() on all the args with prefix specified in addDefaults(),
      * so if prefix == "rai", and arg subject exists, then
      * addEnv will getenv( "rai_subject" ) and parse the result*/
-    void addEnv( void )                                         throw( Error );
+    void addEnv( void );
     /* add arg types */
     void add( const StringArg *arg,
-              unsigned int flags = COMMAND_ARG | RESOURCE_ARG ) throw( Error );
+              unsigned int flags = COMMAND_ARG | RESOURCE_ARG );
     void add( const UIntArg *arg,
-              unsigned int flags = COMMAND_ARG | RESOURCE_ARG ) throw( Error );
+              unsigned int flags = COMMAND_ARG | RESOURCE_ARG );
     void add( const ULLongArg *arg,
-              unsigned int flags = COMMAND_ARG | RESOURCE_ARG ) throw( Error );
+              unsigned int flags = COMMAND_ARG | RESOURCE_ARG );
     void add( const BoolArg *arg,
-              unsigned int flags = COMMAND_ARG | RESOURCE_ARG ) throw( Error );
+              unsigned int flags = COMMAND_ARG | RESOURCE_ARG );
     void add( const DoubleArg *arg,
-              unsigned int flags = COMMAND_ARG | RESOURCE_ARG ) throw( Error );
+              unsigned int flags = COMMAND_ARG | RESOURCE_ARG );
     /* copy arg types, above just uses the pointers, this copies the strings */
     void copy( const StringArg &arg,
-              unsigned int flags = COMMAND_ARG | RESOURCE_ARG ) throw( Error );
+              unsigned int flags = COMMAND_ARG | RESOURCE_ARG );
     void copy( const UIntArg &arg,
-              unsigned int flags = COMMAND_ARG | RESOURCE_ARG ) throw( Error );
+              unsigned int flags = COMMAND_ARG | RESOURCE_ARG );
     void copy( const ULLongArg &arg,
-              unsigned int flags = COMMAND_ARG | RESOURCE_ARG ) throw( Error );
+              unsigned int flags = COMMAND_ARG | RESOURCE_ARG );
     void copy( const BoolArg &arg,
-              unsigned int flags = COMMAND_ARG | RESOURCE_ARG ) throw( Error );
+              unsigned int flags = COMMAND_ARG | RESOURCE_ARG );
     void copy( const DoubleArg &arg,
-              unsigned int flags = COMMAND_ARG | RESOURCE_ARG ) throw( Error );
+              unsigned int flags = COMMAND_ARG | RESOURCE_ARG );
     /* if arg exists, remove it */
     bool removeArg( const char *name );
     /* the following arguments are added by addDefaults() */
@@ -322,65 +322,65 @@ class RAIBASE_DLL_EXP Args {
     static const StringArg * rcFile;
     /* add version (set as vers arg), log, help, version, rc arguments */
     void addDefaults( const char *vers,  const char *pref,
-                      OutputStream *out,  const char *argv0 )   throw( Error );
+                      OutputStream *out,  const char *argv0 );
     void addDefaults( const char *vers,  const char *pref,
                       OutputStream *out,  const char *argv0,
-                      bool addLogRoll )                         throw( Error );
+                      bool addLogRoll );
     /* pretty print args with '-' arg prefix, as on cmd line */
-    void printHelp( OutputStream *o = NULL ) const              throw( Error );
+    void printHelp( OutputStream *o = NULL ) const;
     /* pretty print args with '=' separator */
-    void printOptions( OutputStream *o = NULL ) const           throw( Error );
+    void printOptions( OutputStream *o = NULL ) const;
     /* used by printHelp and printOptions */
     void printHelp2( char optChar1,  char optChar2,
-                     OutputStream *o = NULL ) const             throw( Error );
+                     OutputStream *o = NULL ) const;
     /* prints the version, to OutputStream set in addDefaults() or stderr */
-    void printVersion( OutputStream *o = NULL ) const           throw( Error );
+    void printVersion( OutputStream *o = NULL ) const;
     /* prints all of the args, help, default values to OutputStream in "RC",
      * format.  Sys::out is usually stdout, if null uses the addDefaults()
      * stream.  RC format can be loaded and parsed with addRCFile() */
-    void printRC( OutputStream *rcOut = NULL ) const            throw( Error );
+    void printRC( OutputStream *rcOut = NULL ) const;
     /* return whether an arg is known */
     bool exists( const char *name ) const;
     /* return a bit mask of ArgFlags associated with arg */
-    unsigned int getArgFlags( const char *name ) const          throw( Error );
+    unsigned int getArgFlags( const char *name ) const;
     /* return the type of arg "name" */
-    ArgType getArgType( const char *name ) const                throw( Error );
+    ArgType getArgType( const char *name ) const;
     /* return the number of items associated with arg "name", will be 0
      * if arg has no value, 1 if arg has a value, N if arg has flags
      * LIST_ARG set and more than 1 value associated with it */
-    unsigned int getNumValues( const char *name ) const         throw( Error );
+    unsigned int getNumValues( const char *name ) const;
     /* get the string value, if n > 0, then get the nth item, use
      * getNumValues() to determine the number of items, the type of arg
      * must be a string, the getType() functions don't convert args to type */
     const char *getString( const char *name,  unsigned int n = 0 ) const
-                                                                throw( Error);
+;
     /* set the value of arg "name", this allocates storage for string which
      * is freed by clear().  If arg is not a string type, then this function
      * attepts to parse the argument and convert it to uint, ullong, double */
-    void setString( const char *name,  const char *val )        throw( Error );
+    void setString( const char *name,  const char *val );
     /* get the uint value of arg "name", if n > 0, then get the nth item, use
      * getNumValues() to determine the number of items */
     unsigned int getUInt( const char *name,  unsigned int n = 0 ) const
-    /* set the uint value of arg "name", type must be UINT_ARG */throw( Error );
-    void setUInt( const char *name,  unsigned int val )         throw( Error );
+    /* set the uint value of arg "name", type must be UINT_ARG */;
+    void setUInt( const char *name,  unsigned int val );
     /* get the ullong value of arg "name", type must be ULLONG_ARG */
     ullong getULLong( const char *name,  unsigned int n = 0 ) const
-                                                                throw( Error );
+;
     /* set the ullong value of arg "name", type must be ULLONG_ARG */
-    void setULLong( const char *name,  ullong val )             throw( Error );
+    void setULLong( const char *name,  ullong val );
     /* get the boolean value of arg "name", type must be BOOL_ARG */
     bool getBoolean( const char *name,  unsigned int n = 0 ) const
-                                                                throw( Error );
+;
     /* set the boolean value of arg "name", type must be BOOL_ARG */
-    void setBoolean( const char *name,  bool val )              throw( Error );
+    void setBoolean( const char *name,  bool val );
     /* get the double value of arg "name", type must be DOUBLE_ARG */
     double getDouble( const char *name,  unsigned int n = 0 ) const
-                                                                throw( Error );
+;
     /* set the double value of arg "name", type must be DOUBLE_ARG */
-    void setDouble( const char *name,  double val )             throw( Error );
+    void setDouble( const char *name,  double val );
     /* if arg has a value, or a default value and orHasDefVal == true */
     bool isSet( const char *name,  bool orHasDefVal = false ) const
-                                                                throw( Error );
+;
 };
 
 

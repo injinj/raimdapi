@@ -100,11 +100,11 @@ struct RAIMSG_DLL_EXP RaiMsg {
 
     /* return how many bytes are added to message body for proto */
     static RaiMsg_size HeaderSize( RaiMsg_protocol proto )
-                                                       throw( RaiMsgException );
+;
     /* setup a static or dynamic message buffer for msg construction */
     void InitBuffer( RaiMsg_data msg_buffer,  RaiMsg_size msg_off,
                      RaiMsg_size msg_buffer_size,  RaiMsg_protocol proto,
-                     RaiMsg_memory is_dynamic )        throw( RaiMsgException );
+                     RaiMsg_memory is_dynamic );
 
     ~RaiMsg() {
       if ( this->msgBuf != NULL )
@@ -213,10 +213,10 @@ struct RAIMSG_DLL_EXP RaiMsg {
     }
 
     /* reinitialize msgBuf without freeing it */
-    void ReUse( void )                                 throw( RaiMsgException );
+    void ReUse( void );
 
     /* ReUse and switch protos */
-    void ReUse( RaiMsg_protocol proto )                throw( RaiMsgException );
+    void ReUse( RaiMsg_protocol proto );
 
     /* clear all alloced memory, can be reused afterwards */
     void Release( void );
@@ -259,56 +259,56 @@ struct RAIMSG_DLL_EXP RaiMsg {
                          RaiMsg_memory isDynamic );
   public:
     /* zero all fields in a form, allocating buffer if necessary */
-    void ClearForm( const RaiMsg_form *form )          throw( RaiMsgException );
+    void ClearForm( const RaiMsg_form *form );
 
     /* check that elements are in form order */
     bool CheckIsForm( const RaiMsg_form *form,  bool inFormOrder )
-                                                       throw( RaiMsgException );
+;
     /* allocate buf space and copy message to this message */
-    void Copy( RaiMsg *msg_ptr )                       throw( RaiMsgException );
+    void Copy( RaiMsg *msg_ptr );
 
     /* locate field fname and setup a RaiField */
-    bool Get( RaiMsg_name fname,  RaiField &field )    throw( RaiMsgException );
+    bool Get( RaiMsg_name fname,  RaiField &field );
 
     /* locate field fname and setup a RaiField, with rv style fid */
     bool GetEx( RaiMsg_name fname,  Rai_u16 fid,  RaiField &field )
-                                                       throw( RaiMsgException );
+;
     /* get field fname's contents */
-    template<class T> bool Get( RaiMsg_name fname,  T &arg ) throw( RaiMsgException );
+    template<class T> bool Get( RaiMsg_name fname,  T &arg );
     /* get field fname's contents, with rv style fid */
     template<class T> bool GetEx( RaiMsg_name fname,  Rai_u16 fid,  T &arg )
-                                                       throw( RaiMsgException );
+;
     /* copy or convert field's contents to a string */
     bool Get( RaiMsg_name fname,  char *str,  RaiMsg_size limit )
-                                                       throw( RaiMsgException );
+;
     /* copy or convert field's contents to a string, with rv style fid */
     bool GetEx( RaiMsg_name fname,  Rai_u16 fid,  char *str,
-                RaiMsg_size limit )                    throw( RaiMsgException );
+                RaiMsg_size limit );
 #if 0
     /* return a pointer to field's string data */
-    bool Get( RaiMsg_name fname,  char *&str )         throw( RaiMsgException );
+    bool Get( RaiMsg_name fname,  char *&str );
 #endif
     /* copy or convert field's contents to fdata */
     bool Get( RaiMsg_name fname,  RaiMsg_type ftype,
-              RaiMsg_size fsize,  RaiMsg_data fdata )  throw( RaiMsgException );
+              RaiMsg_size fsize,  RaiMsg_data fdata );
     /* copy or convert field's contents to fdata, with rv style fid */
     bool GetEx( RaiMsg_name fname,  Rai_u16 fid,  RaiMsg_type ftype,
-                RaiMsg_size fsize,  RaiMsg_data fdata )throw( RaiMsgException );
+                RaiMsg_size fsize,  RaiMsg_data fdata );
     /* locate field by dictionary fid */
     bool Get( const RaiMsg_dict *entry,  RaiField &field )
-                                                       throw( RaiMsgException );
+;
     /* copy or convert field to arg */
     template<class T> bool Get( const RaiMsg_dict *entry, T &arg )
-                                                       throw( RaiMsgException );
+;
     /* copy or convert field's contents to a string */
     bool Get( const RaiMsg_dict *entry,  char *str,  RaiMsg_size limit )
-                                                       throw( RaiMsgException );
+;
     /* return a pointer to field's string data */
-    bool Get( const RaiMsg_dict *entry,  char *&str )  throw( RaiMsgException );
+    bool Get( const RaiMsg_dict *entry,  char *&str );
 
     /* copy or convert field's contents to fdata */
     bool Get( const RaiMsg_dict *entry,  RaiMsg_type ftype,
-              RaiMsg_size fsize,  RaiMsg_data fdata )  throw( RaiMsgException );
+              RaiMsg_size fsize,  RaiMsg_data fdata );
     enum {
       HAVE_MSG_TYPE   = 1,
       HAVE_REC_TYPE   = 2,
@@ -320,191 +320,191 @@ struct RAIMSG_DLL_EXP RaiMsg {
     byte GetSassHeader( Rai_u16 &msgType,  Rai_u16 &recType,
                         Rai_u16 &seqNo,  Rai_u16 &recStatus,
                         Rai_u8 needFlds = 15 /* all HAVE_ field bits above */)
-                                                       throw( RaiMsgException );
+;
     byte GetSassHeaderFields( RaiField &msgTypeF,  RaiField &recTypeF,
                               RaiField &seqNoF,  RaiField &recStatusF,
                               Rai_u16 &msgType,  Rai_u16 &recType,
                               Rai_u16 &seqNo,  Rai_u16 &recStatus )
-                                                       throw( RaiMsgException );
+;
   private:
     /* used by RaiField to get array data, which sets up a RaiMsg_extra element
      * to cache decoded array and byteswaps the array */
     void GetDecodedArray( RaiMsg_data array,  RaiMsg_type elem_type,
                           RaiMsg_size elem_size,  RaiMsg_size num_elems,
-                          RaiMsg_data &decodedArray )  throw( RaiMsgException );
+                          RaiMsg_data &decodedArray );
     /* not used, null terminates string */
     void GetDecodedString( RaiMsg_data string,  RaiMsg_size string_size,
                            RaiMsg_data &decodedString )
-                                                       throw( RaiMsgException );
+;
   public:
     /* for each field of message call callback_function() */
     void Apply( RaiMsg_name fname,  RaiMsg_apply_cb callback_function,
-                void *closure = NULL )                 throw( RaiMsgException );
+                void *closure = NULL );
     /* separator for accessing sub components of message, defaults to '.' */
     static void SetNameSeparator( char sep_char );
   private:
     /* used to initialize a dynamically allocated message */
-    void AppendHeader( void )                          throw( RaiMsgException );
+    void AppendHeader( void );
 
     /* makes space for new field */
     Rai_u8 *Adjust( RaiMsg_size field_offset,  RaiMsg_size new_size,
-                    RaiMsg_size old_size )             throw( RaiMsgException );
+                    RaiMsg_size old_size );
   public:
     /* append field data, doesn't look at data being appended */
     RaiMsg_data AppendRaw( RaiMsg_data field_data,  RaiMsg_size field_size )
-                                                       throw( RaiMsgException );
+;
     /* return pointer to message start, skipping over the header */
     RaiMsg_data RawData( RaiMsg_size *dataSize = NULL );
     /* append new field to message */
-    void Append( RaiField *field_ptr )                 throw( RaiMsgException );
+    void Append( RaiField *field_ptr );
     /* append field with different name */
     void Append( RaiMsg_name fname,  RaiField *field_ptr )
-                                                       throw( RaiMsgException );
+;
     /* append field with different name and fid */
     void AppendEx( RaiMsg_name fname,  Rai_u16 fid,  RaiField *field_ptr )
-                                                       throw( RaiMsgException );
+;
     /* encode arg into field and append */
     template<class T> void Append( RaiMsg_name fname, T arg )
-                                                       throw( RaiMsgException );
+;
     /* encode arg into field and append using RV style fid */
     template<class T> void AppendEx( RaiMsg_name fname,  Rai_u16 fid,  T arg )
-                                                       throw( RaiMsgException );
+;
     /* encode a field with a message type and append it */
-    void Append( RaiMsg_name fname,  RaiMsg *msg_ptr ) throw( RaiMsgException );
+    void Append( RaiMsg_name fname,  RaiMsg *msg_ptr );
     /* append a partial data type, which is an opaque with an offset  */
     void Append( RaiMsg_name fname,  RaiMsg_data partial_data,
                  RaiMsg_size partial_size,  RaiMsg_size offset )
-                                                       throw( RaiMsgException );
+;
     /* append an array of primary types */
     void Append( RaiMsg_name fname,  RaiMsg_data array_data,
                  RaiMsg_size num_entries,  RaiMsg_type entry_type,
-                 RaiMsg_size entry_size )              throw( RaiMsgException );
+                 RaiMsg_size entry_size );
     /* append an fdata pointer of any type except array and partial */
     void Append( RaiMsg_name fname,  RaiMsg_type ftype,
                  RaiMsg_size fsize,  RaiMsg_data fdata )
-                                                       throw( RaiMsgException );
+;
     /* append fdata and hint_data of any type except array and partial */
     void Append( RaiMsg_name fname,  RaiMsg_type ftype,
                  RaiMsg_size fsize,  RaiMsg_data fdata,
                  RaiMsg_type hint_type,  RaiMsg_size hint_size,
-                 RaiMsg_data hint_data )               throw( RaiMsgException );
+                 RaiMsg_data hint_data );
     /* append new field by fid */
     void Append( const RaiMsg_dict *entry, RaiField *field_ptr )
-                                                       throw( RaiMsgException );
+;
     /* encode arg into field and append */
     template<class T> void Append( const RaiMsg_dict *entry,  T arg )
-                                                       throw( RaiMsgException );
+;
     /* append a partial data type, which is an opaque with an offset  */
     void Append( const RaiMsg_dict *entry,  RaiMsg_data partial_data,
                  RaiMsg_size partial_size,  RaiMsg_size offset ) 
-                                                       throw( RaiMsgException );
+;
     /* append an array of primary types */
     void Append( const RaiMsg_dict *entry,  RaiMsg_data array_data,
                  RaiMsg_size num_entries,  RaiMsg_type entry_type,
-                 RaiMsg_size entry_size )              throw( RaiMsgException );
+                 RaiMsg_size entry_size );
     /* append an fdata pointer of any type except array and partial */
     void Append( const RaiMsg_dict *entry,  RaiMsg_type ftype,
                  RaiMsg_size fsize,  RaiMsg_data fdata )
-                                                       throw( RaiMsgException );
+;
     /* append fdata and hint_data of any type except array and partial */
     void Append( const RaiMsg_dict *entry,  RaiMsg_type ftype,
                  RaiMsg_size fsize,  RaiMsg_data fdata,
                  RaiMsg_type hint_type,  RaiMsg_size hint_size,
-                 RaiMsg_data hint_data )               throw( RaiMsgException );
+                 RaiMsg_data hint_data );
     /* try to locate field and replace it with new data, appended if not found */
-    void Update( RaiField *field_ptr )                 throw( RaiMsgException );
+    void Update( RaiField *field_ptr );
     /* replace one field with another, the old_field should reference a field
      * within the message */
     void Replace( RaiField *old_field,  RaiField *new_field )
-                                                       throw( RaiMsgException );
+;
   protected:
     /* used by the above for non-sass type msessages */
     void Replace_SD( RaiField &field,  RaiField &new_field )
-                                                       throw( RaiMsgException );
+;
     /* used by the above for non-sass type msessages */
     void Replace_SASS( const RaiMsg_dict *entry,  RaiField &field,
-                       RaiField &new_field )           throw( RaiMsgException );
+                       RaiField &new_field );
   public:
     /* replace field with arg */
     template<class T> void Update( RaiMsg_name fname,  T arg )
-                                                       throw( RaiMsgException );
+;
     /* replace field with arg using RV style fid */
     template<class T> void UpdateEx( RaiMsg_name fname,  Rai_u16 fid,  T arg )
-                                                       throw( RaiMsgException );
+;
     /* replace field with message */
-    void Update( RaiMsg_name fname,  RaiMsg *msg_ptr ) throw( RaiMsgException );
+    void Update( RaiMsg_name fname,  RaiMsg *msg_ptr );
 
     /* replace field with partial data, which is an opaque with an offset */
     void Update( RaiMsg_name fname,  RaiMsg_data partial_data,
                  RaiMsg_size partial_size,  RaiMsg_size offset )
-                                                       throw( RaiMsgException );
+;
     /* replace field with an array */
     void Update( RaiMsg_name fname,  RaiMsg_data array_data,
                  RaiMsg_size num_entries,  RaiMsg_type entry_type,
-                 RaiMsg_size entry_size )              throw( RaiMsgException );
+                 RaiMsg_size entry_size );
     /* replace field with an fdata pointer of any type except array and partial */
     void Update( RaiMsg_name fname,  RaiMsg_type ftype,
                  RaiMsg_size fsize,  RaiMsg_data fdata )
-                                                       throw( RaiMsgException );
+;
     /* replace field fdata and hint_data of any type except array and partial */
     void Update( RaiMsg_name fname,  RaiMsg_type ftype,
                  RaiMsg_size fsize,  RaiMsg_data fdata,
                  RaiMsg_type hint_type,  RaiMsg_size hint_size,
-                 RaiMsg_data hint_data )               throw( RaiMsgException );
+                 RaiMsg_data hint_data );
     /* try to locate field by dictionary fid and replace it */
     void Update( const RaiMsg_dict *entry, RaiField *field_ptr )
-                                                       throw( RaiMsgException );
+;
     /* append field with different name */
     void Update( RaiMsg_name fname,  RaiField *field_ptr )
-                                                       throw( RaiMsgException );
+;
     /* replace field with arg */
     template<class T> void Update( const RaiMsg_dict *entry,  T arg )
-                                                       throw( RaiMsgException );
+;
     /* replace field with partial data, which is an opaque with an offset */
     void Update( const RaiMsg_dict *entry,  RaiMsg_data partial_data,
                  RaiMsg_size partial_size,  RaiMsg_size offset )
-                                                       throw( RaiMsgException );
+;
     /* replace field with an array */
     void Update( const RaiMsg_dict *entry,  RaiMsg_data array_data,
                  RaiMsg_size num_entries,  RaiMsg_type entry_type,
-                 RaiMsg_size entry_size )              throw( RaiMsgException );
+                 RaiMsg_size entry_size );
     /* replace field with an fdata pointer of any type except array and partial */
     void Update( const RaiMsg_dict *entry,  RaiMsg_type ftype,
                  RaiMsg_size fsize,  RaiMsg_data fdata )
-                                                       throw( RaiMsgException );
+;
     /* replace field fdata and hint_data of any type except array and partial */
     void Update( const RaiMsg_dict *entry,  RaiMsg_type ftype,
                  RaiMsg_size fsize,  RaiMsg_data fdata,
                  RaiMsg_type hint_type,  RaiMsg_size hint_size,
-                 RaiMsg_data hint_data )               throw( RaiMsgException );
+                 RaiMsg_data hint_data );
     /* setup message for accessing and updating field of type message */
-    bool Activate( RaiMsg_name msg_field_name = NULL ) throw( RaiMsgException );
+    bool Activate( RaiMsg_name msg_field_name = NULL );
   private:
     /* used by Activate to locate sub messages by name */
     bool GetMsgOffset( RaiMsg_name msg_field_name,  RaiMsg_size *offset_stack,
                        Rai_u32 &offset_top,  RaiMsg *msgBase )
-                                                       throw( RaiMsgException );
+;
   public:
     /* update field name */
     bool Rename( RaiMsg_name old_fname, RaiMsg_name new_fname )
-                                                       throw( RaiMsgException );
+;
     /* remove field by name */
-    bool Remove( RaiMsg_name fname )                   throw( RaiMsgException );
+    bool Remove( RaiMsg_name fname );
 
     /* setup message to access encoded static memory */
-    void UnPack( RaiMsg_data from_ptr )                throw( RaiMsgException );
+    void UnPack( RaiMsg_data from_ptr );
 
     /* setup message limited by size */
     void UnPack( RaiMsg_data from_ptr,  RaiMsg_size from_size )
-                                                       throw( RaiMsgException );
+;
     /* setup message limited by size and protocol */
     void UnPack( RaiMsg_protocol proto,  RaiMsg_data from_ptr,
                  RaiMsg_size from_size,  RaiMsg_memory memKind )
-                                                       throw( RaiMsgException );
+;
     /* setup message at offset limited by size and protocol */
     void UnPack( RaiMsg_protocol proto,  RaiMsg_data from_ptr,
                  RaiMsg_size from_size,  RaiMsg_memory memKind,
-                 RaiMsg_size from_off )                throw( RaiMsgException );
+                 RaiMsg_size from_off );
     /* look at message header to determine the type of message */
     static bool ExtractProtocol( RaiMsg_data from_ptr,  RaiMsg_size from_size,
                                  RaiMsg_protocol &proto );
@@ -517,13 +517,13 @@ struct RAIMSG_DLL_EXP RaiMsg {
      * identifying the encapsulation of the message: _TIBMSG, _QFORM
      * this is useful for Tibrv version 6+, since they must use RV_PROTO
      * messages in the transport */
-    void TibrvEncapsulate( void )                      throw( RaiMsgException );
+    void TibrvEncapsulate( void );
 
     /* copy encoded message */
-    void Pack( RaiMsg_data to_ptr ) const              throw( RaiMsgException );
+    void Pack( RaiMsg_data to_ptr ) const;
 
     /* length of encoded message */
-    RaiMsg_size PackSize( void ) const                 throw( RaiMsgException );
+    RaiMsg_size PackSize( void ) const;
 
     /* length of currently activated message or toplevel without header */
     RaiMsg_size SubMsgSize( void ) const;
@@ -544,7 +544,7 @@ struct RAIMSG_DLL_EXP RaiMsg {
                 const char  * fname_format   = "%-14s : ",
                 Rai_u32 print_opaques        = 1,
                 const char  * debug_format   = "%-7s %3d : ",
-                const char  * debug_hformat  = NULL )  throw( RaiMsgException );
+                const char  * debug_hformat  = NULL );
     /* format message in xml */
     enum {
       ADD_TYPE_ATTR         = 0x1,
@@ -563,20 +563,20 @@ struct RAIMSG_DLL_EXP RaiMsg {
                    Rai_u32 attr_flags = 0,
                    Rai_u32 field_newlines = 1,
                    const char *msg_name   = "MSG",
-                   const char **msg_atts  = NULL )     throw( RaiMsgException );
+                   const char **msg_atts  = NULL );
 
     /* dump message buffer in hex */
-    void PrintHex( rai::OutputStream *output_file )    throw( RaiMsgException );
+    void PrintHex( rai::OutputStream *output_file );
     /* dump message buffer in hex */
     static void PrintHex( rai::OutputStream *output_file,  Rai_u8 *msg,
                           RaiMsg_size msgSize,  RaiMsg_size offset = 0 )
-                                                       throw( RaiMsgException );
+;
     /* read message data */
     void Read( rai::InputStream *f,  rai::OutputStream *err )
-                                                       throw( RaiMsgException );
+;
     /* read message data from file */
     void Read( const char *filename,  rai::OutputStream *err )
-                                                       throw( RaiMsgException );
+;
     /* convert string to RaiMsg_type */
     static RaiMsg_type StrType( const char *type_str );
 
@@ -592,7 +592,7 @@ struct RAIMSG_DLL_EXP RaiMsg {
     /* read dictionary from cfile formated files */
     static void ReadDataDictionary( const char *tss_fields_fname,
                                     const char *tss_records_fname )
-                                                       throw( RaiMsgException );
+;
     /* get dictionary entry by field class name */
     static bool GetDictEntry( const char *fname,  const RaiMsg_dict *&entry );
 

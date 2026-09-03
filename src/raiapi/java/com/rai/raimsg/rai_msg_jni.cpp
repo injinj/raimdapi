@@ -241,7 +241,7 @@ throwError( JNIEnv *env,  RaiException e )
 
 
 jobject
-boxField( JNIEnv *env,  RaiField &field ) throw( RaiException )
+boxField( JNIEnv *env,  RaiField &field )
 {
   jobject     obj = NULL;
   RaiMsg_data fdata;
@@ -484,7 +484,7 @@ boxField( JNIEnv *env,  RaiField &field ) throw( RaiException )
 
 
 jobject
-boxFieldHint( JNIEnv *env,  RaiField &field ) throw( RaiException )
+boxFieldHint( JNIEnv *env,  RaiField &field )
 {
   jobject     obj = NULL;
   RaiMsg_data fdata;
@@ -2859,7 +2859,7 @@ struct RaiMsgJOutputStream : public rai::OutputStream {
     jobject   out;
 
     virtual unsigned int emptyBuf( const byte *buf,
-                                   unsigned int bufLen ) throw( RaiException ) {
+                                   unsigned int bufLen ) {
       RaiException e = NULL;
       jbyteArray   barr;
 
@@ -3393,7 +3393,7 @@ JaRaiField( GetLong )( JNIEnv *env, jclass cls, jlong fld )
 }
 
 void
-bad_gcc_my_getf32( RaiField &field, Rai_f32 &val ) throw( RaiException )
+bad_gcc_my_getf32( RaiField &field, Rai_f32 &val )
 {
   field.Get( val );
 }
@@ -3418,7 +3418,7 @@ JaRaiField( GetFloat )( JNIEnv *env, jclass cls, jlong fld )
 }
 
 void
-bad_gcc_my_getf64( RaiField &field, Rai_f64 &val ) throw( RaiException )
+bad_gcc_my_getf64( RaiField &field, Rai_f64 &val )
 {
   field.Get( val );
 }

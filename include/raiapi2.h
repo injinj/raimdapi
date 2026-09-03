@@ -94,7 +94,7 @@ class RAIAPI_DLL_EXP RaiApi {
   /* Load api class, if apiname = NULL, the default (capr) will be used unless
      -api is an argment in argc/argv[] */
   static RaiApi *RaiOpen( const char *apiname,  int argc,  char *argv[] )
-  /* Get the name of the api name of the protocol */  throw( RaiException );
+  /* Get the name of the api name of the protocol */;
   virtual const char *GetApiName( void ) = 0;
   /* Rai API Version */
   static const char *RaiVersion( void );
@@ -103,14 +103,14 @@ class RAIAPI_DLL_EXP RaiApi {
   /* AppId */
   const char *GetAppId( void ) const { return this->appid; }
   /* Get the api Args, for example:  daemon, network, service */
-  virtual void GetArgs( rai::Args &args )             throw( RaiException );
+  virtual void GetArgs( rai::Args &args );
   /* Get the SASS dictionary args:  cfilePath, tssRecords, tssFields... */
-  static void GetDictArgs( rai::Args &args )          throw( RaiException );
+  static void GetDictArgs( rai::Args &args );
   /* Parse api Args, use after args.processArgs( argc, argv ) is called */
-  virtual void ParseArgs( rai::Args &args )           throw( RaiException ) = 0;
+  virtual void ParseArgs( rai::Args &args ) = 0;
   /* If has log, logLevel, logVerb, logXml args, then open the log file,
    * otherwise return false */
-  static bool OpenLog( rai::Args &args )              throw( RaiException );
+  static bool OpenLog( rai::Args &args );
   /* Prints to log file if level >= Log::minLevel, using the log above */
   virtual void PrintLog( rai::Log::LogLevel level,  const char *where, int line,
                          RaiException err,  const char *fmt,  ... )
@@ -122,34 +122,34 @@ class RAIAPI_DLL_EXP RaiApi {
   /* If has cfilePath, tssRecords, tssFIelds, appendixA, enumtypeDef,
    * then open the SASS dictionary and marketfeed dictionary, otherwise
    * return false */
-  static bool OpenDict( rai::Args &args )             throw( RaiException );
+  static bool OpenDict( rai::Args &args );
   /* Create a new session */
-  virtual RaiSession *CreateSession( void )           throw( RaiException ) = 0;
+  virtual RaiSession *CreateSession( void ) = 0;
 
   /* Create a SASS Qform class message, which is RaiMsg sass qform with 4
    * fields */
   static RaiMsg * NewSASSMsg( Rai_u16 MsgType, Rai_u16 RecType, Rai_u16 SeqNo=0,
                               Rai_u16 RecStatus = rai::SassConst::STATUS_OK )
-                                                      throw( RaiException ) {
+ {
     return NewRaiMsg( TIB_SASS_PROTO, MsgType, RecType, SeqNo, RecStatus );
   }
   static RaiMsg * NewSASSMsg( Rai_u16 MsgType, const char * FormType,
                               Rai_u16 SeqNo = 0,
                               Rai_u16 RecStatus = rai::SassConst::STATUS_OK )
-                                                      throw( RaiException ) {
+ {
     return NewRaiMsg( TIB_SASS_PROTO, MsgType, FormType, SeqNo, RecStatus );
   }
   /* Create a SASS RaiMsg class message, which is a RaiMsg self describing
    * format with 4 fields */
   static RaiMsg * NewRaiMsg( short MsgType, Rai_u16 RecType, Rai_u16 SeqNo = 0,
                              Rai_u16 RecStatus = rai::SassConst::STATUS_OK )
-                                                      throw( RaiException ) {
+ {
     return NewRaiMsg( RAIMSG_PROTO, MsgType, RecType, SeqNo, RecStatus );
   }
   static RaiMsg * NewRaiMsg( Rai_u16 MsgType, const char *FormType, 
                              Rai_u16 SeqNo = 0,
                              Rai_u16 RecStatus = rai::SassConst::STATUS_OK )
-                                                      throw( RaiException ) {
+ {
     return NewRaiMsg( RAIMSG_PROTO, MsgType, FormType, SeqNo, RecStatus );
   }
   /* Convenience function to create a message with 4 header fields, usually for
@@ -157,17 +157,17 @@ class RAIAPI_DLL_EXP RaiApi {
   static RaiMsg * NewRaiMsg( RaiMsg_protocol proto,  Rai_u16 MsgType,
                              Rai_u16 RecType,  Rai_u16 SeqNo = 0,
                              Rai_u16 RecStatus = rai::SassConst::STATUS_OK )
-                                                      throw( RaiException );
+;
   /* Convenience function to create a message and lookup a form type name,
    * using the current dictionary loaded */
   static RaiMsg * NewRaiMsg( RaiMsg_protocol proto,  Rai_u16 MsgType,
                              const char *FormType,  Rai_u16 SeqNo = 0,
                              Rai_u16 RecStatus = rai::SassConst::STATUS_OK ) 
-  /* Close the api, should close sessions first */    throw( RaiException );
+  /* Close the api, should close sessions first */;
   virtual void Close( void ) = 0;
   /* Set parameters for controlling the api */
   virtual bool SetIoctl( const char *parameter,  const void *value )
-  /* Get parameters for controlling the api */        throw( RaiException );
+  /* Get parameters for controlling the api */;
   virtual bool GetIoctl( const char *parameter,  void *value );
 
   /* entitlements set/check interface convenience methods */
@@ -238,7 +238,7 @@ class RAIAPI_DLL_EXP RaiAppCallback {
 class RAIAPI_DLL_EXP RaiSession {
  public:
    /* Start the session by initializing the transports */
-   virtual void Start( void )                         throw( RaiException );
+   virtual void Start( void );
   /* Create a queue.  Passing direct = true causes recv threads to dispatch
    * message callbacks, and passing direct = false causes the queue thread to
    * dispatch.  This feature is only available in protocols where this can be
@@ -246,24 +246,24 @@ class RAIAPI_DLL_EXP RaiSession {
    * context switches, but if callbacks are compute heavy, then multiple queues
    * and direct = false will be better because cpu will be offloaded onto queue
    * threads. */
-  virtual RaiQueue *CreateQueue( bool direct = false )throw( RaiException ) = 0;
+  virtual RaiQueue *CreateQueue( bool direct = false ) = 0;
   /* A publisher, passing audoInc = true causes a msg sequence number update 
    * when Publish() is called:
    * RaiMsg::Update( "SEQ_NO", RaiPublish::nextSeqno++ ) */
   virtual RaiPublish *CreatePublish( bool autoInc = false )
-  /* A dictionary loader */                           throw( RaiException ) = 0;
-  virtual RaiDict *CreateDict( void )                 throw( RaiException ) = 0;
+  /* A dictionary loader */ = 0;
+  virtual RaiDict *CreateDict( void ) = 0;
   /* Stop the session event processing */
   virtual void Destroy( void ) = 0;
   /* Login to entitlements facility, if user NULL, use RaiApi::userid */
   virtual RaiEntitlement *Login( const char *user = NULL )
-  /* Data loss errors */                              throw( RaiException ) = 0;
+  /* Data loss errors */ = 0;
   virtual void SetDataLossCB( RaiDataLossCallback *cb,  void *closure = NULL )
-                                                      throw( RaiException ) = 0;
+ = 0;
   /* Notify subscription state by sending a message to each subscription */
   virtual void NotifyStatus( Rai_u16 msgType = rai::SassConst::TRANSIENT,
                         Rai_u16 recStatus = rai::SassConst::STATUS_STALE_VALUE )
-                                                      throw( RaiException ) = 0;
+ = 0;
   /* Get the api interface this session was created from */
   virtual RaiApi *GetApi( void ) = 0;
 
@@ -286,16 +286,16 @@ class RAIAPI_DLL_EXP RaiQueue {
   /* A subscription */
   virtual RaiSubscribe *CreateSubscribe( RaiMsgCallback *cb,
                                          void *closure = NULL )
-  /* A timer event */                                 throw( RaiException ) = 0;
+  /* A timer event */ = 0;
   virtual RaiTimer *CreateTimer( RaiTimerCallback *cb, void *closure = NULL )
-  /* An interactive publisher */                      throw( RaiException ) = 0;
+  /* An interactive publisher */ = 0;
   virtual RaiInteractivePublish *CreateInteractivePublish(
                                RaiSubscribeCallback *cb,
-                               void *closure = NULL ) throw( RaiException ) = 0;
+                               void *closure = NULL ) = 0;
   /* Notify subscription state by sending a message to each sub on this queue */
   virtual void NotifyStatus( Rai_u16 msgType = rai::SassConst::TRANSIENT,
                        Rai_u16 recStatus = rai::SassConst::STATUS_STALE_VALUE )
-                                                      throw( RaiException ) = 0;
+ = 0;
   /* An application event, posts an event to a queue and dispatches to
    * RaiAppCallback; eventData and eventEnum are any values the application
    * defines;  eventPriority is 0->4, 0 is highest, timers use priority 2;
@@ -311,13 +311,13 @@ class RAIAPI_DLL_EXP RaiQueue {
   #define EV_PRIO_NORM EV_PRIO_2
   virtual void QueueEvent( RaiAppCallback *cb,  void *eventData,
                            Rai_i32 eventEnum, Rai_u8 eventPriority = EV_PRIO_2,
-                           Rai_u32 expireMSecs = 0 )  throw( RaiException ) = 0;
+                           Rai_u32 expireMSecs = 0 ) = 0;
   /* Dispatch forever, don't return */
-  virtual void Mainloop( void )                       throw( RaiException ) = 0;
+  virtual void Mainloop( void ) = 0;
   /* Return if dispatched one event or intervalMSecs is timed out */
-  virtual void TimedDispatch( Rai_u32 ivalMSecs )     throw( RaiException ) = 0;
+  virtual void TimedDispatch( Rai_u32 ivalMSecs ) = 0;
   /* Return after dispatching one event */
-  virtual void Dispatch( void )                       throw( RaiException ) = 0;
+  virtual void Dispatch( void ) = 0;
   /* Return number of items in queue */
   virtual Rai_u32 GetDepth( void ) = 0;
   /* Get session of queue */
@@ -333,13 +333,13 @@ class RAIAPI_DLL_EXP RaiQueue {
 class RAIAPI_DLL_EXP RaiTimer {
  public:
   /* Start the timer at the current interval setting */
-  virtual void Start( void )                          throw( RaiException ) = 0;
+  virtual void Start( void ) = 0;
   /* Stop the timer processing */
   virtual void Stop( void ) = 0;
   /* Get the current timer interval setting in milliseconds */
-  virtual rai::TimeMSecs GetInterval( void )          throw( RaiException ) = 0;
+  virtual rai::TimeMSecs GetInterval( void ) = 0;
   /* Set the interval in milliseconds */
-  virtual void SetInterval( rai::TimeMSecs interval ) throw( RaiException ) = 0;
+  virtual void SetInterval( rai::TimeMSecs interval ) = 0;
   /* Get the queue which this timer is on */
   virtual RaiQueue *GetQueue( void ) = 0;
 
@@ -352,7 +352,7 @@ class RAIAPI_DLL_EXP RaiDict {
   /* Load dictionary, if dictSubject is NULL, the protocol will use the
    * default name for the dictionary, if loadWait true then wait for dict */
   virtual void Load( Rai_u32 timeoutSecs = 3,  const char *dictSubject = 0,
-                     bool loadWait = true )           throw( RaiException ) = 0;
+                     bool loadWait = true ) = 0;
   /* If the dictionary has been loaded */
   virtual bool HaveDict( void ) = 0;
   /* If the dictionary hasn't timed out and hasn't been loaded yet */
@@ -369,7 +369,7 @@ class RAIAPI_DLL_EXP RaiEntitlement {
     /* Load entitlements, if called with no userId then use default Id.
      *  once entitlement object created then all pub and sub will check for 
      *  permissions */
-    virtual void Load( RaiSession *session, const char *userDetails ) throw( RaiException ) = 0;
+    virtual void Load( RaiSession *session, const char *userDetails ) = 0;
     /* Load entitlement data from local filesystem */
     virtual bool LoadLocal( const char *userDetails ) = 0;
     /* If the entitlement has been loaded */
@@ -521,11 +521,11 @@ Z(
   /* Start subscription or snapshot on subject */
   //virtual void Start( const char *subject,  RaiSubParameter parm = BOTH,
   virtual void Start( const char *subject,  RaiSubParameter parm = BOTH,
-                      Rai_u32 timeoutMSecs = 0 )      throw( RaiException ) = 0;
+                      Rai_u32 timeoutMSecs = 0 ) = 0;
   /* Cancel subscription or snapshot */
-  virtual void Cancel( void )                         throw( RaiException ) = 0;
+  virtual void Cancel( void ) = 0;
   /* Refresh subscription by requesting initial or snapshot */
-  virtual void Refresh( Rai_u32 timeoutMSecs = 0 )    throw( RaiException ) = 0;
+  virtual void Refresh( Rai_u32 timeoutMSecs = 0 ) = 0;
   /* The name of subject that is subscribed passed in Start() */
   virtual const char *Subject( void ) = 0;
   /* Whether started sub/snap hasn't been canceled or finished */
@@ -533,7 +533,7 @@ Z(
   /* Get queue subscription is on */
   virtual RaiQueue *GetQueue( void ) = 0;
   /* Set extra parameters passed with subscription at Start(), null erases */
-  virtual void SetExtra( RaiMsg *ex )                 throw( RaiException ) = 0;
+  virtual void SetExtra( RaiMsg *ex ) = 0;
 
   RaiSubscribe( RaiSubState init = STATE_NO_MSG ) : state( init ) {}
   virtual ~RaiSubscribe() {}
@@ -557,13 +557,13 @@ class RAIAPI_DLL_EXP RaiPublish {
     * Will update SEQ_NO field when autoInc is true, otherwise RaiMsg is a
     * const value */
    virtual void Publish( const char *subject,  RaiMsg &raiMsg,
-                         rai::TimeNSecs stamp = 0 ) throw( RaiException );
+                         rai::TimeNSecs stamp = 0 );
 
    /* Publish a message on subject - takes ownership and will delete the
     * raiMsg.  TimeNSecs stamp can be used by receivers to calculate latency.
     * Will update SEQ_NO field when autoInc is true. */
    virtual void Publish( const char *subject,  RaiMsg* raiMsg,
-                         rai::TimeNSecs stamp = 0 ) throw( RaiException );
+                         rai::TimeNSecs stamp = 0 );
 
    /* Publish a message buffer on subject - assumes buffer is only
     * valid for the duration of the call.  MsgTypeId identifies the message,
@@ -572,9 +572,9 @@ class RAIAPI_DLL_EXP RaiPublish {
     * an opaque const). */
    virtual void Publish( const char *subject,  const void *buffer, Rai_u32 size,
                          rai::TimeNSecs stamp = 0,  Rai_u32 msgTypeId = 0 )
-                                                    throw( RaiException ) = 0;
+ = 0;
   /* On publish, add prefix to subject with this, sass2/rv often uses "_TIC." */
-  virtual void SetPrefix( const char *prefix = NULL ) throw( RaiException );
+  virtual void SetPrefix( const char *prefix = NULL );
   /* Get the prefix value */
   virtual const char *GetPrefix( void );
   /* Get the nextSeqno value, when using SASS SEQ_NO field definition, it will
@@ -595,7 +595,7 @@ class RAIAPI_DLL_EXP RaiPublish {
 class RAIAPI_DLL_EXP RaiInteractivePublish : public RaiPublish {
  public:
   /* Start interactive publish, listen for requests on subject */
-  virtual void InteractiveStart( const char *subject ) throw( RaiException ) = 0;
+  virtual void InteractiveStart( const char *subject ) = 0;
   /* Cancel interactive publish */
   virtual void InteractiveCancel( void ) = 0;
   /* Whether interactive publisher is in progress */

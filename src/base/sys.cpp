@@ -29,7 +29,7 @@ static AtomicUInt initLck, spinLck;
 
 
 void
-Sys::initialize( const char *vers ) throw( Error )
+Sys::initialize( const char *vers )
 {
   while ( spinLck.xchg( 1 ) == 1 )
     Thread::sleep( 1 );

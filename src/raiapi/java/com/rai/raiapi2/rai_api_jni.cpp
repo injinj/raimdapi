@@ -745,7 +745,7 @@ struct RaiApiJArgv {
 
 
 static RaiApiJArgv *
-getArgv( JNIEnv *env,  jobjectArray argv ) throw( RaiException )
+getArgv( JNIEnv *env,  jobjectArray argv )
 {
   RaiApiJArgv * args;
   jstring       s;
@@ -1319,7 +1319,7 @@ struct RaiApiJOutputStream : public rai::OutputStream {
   jobject out;
 
   virtual unsigned int emptyBuf( const byte *buf,
-                                 unsigned int bufLen ) throw( RaiException ) {
+                                 unsigned int bufLen ) {
     if ( this->out == NULL )
       return bufLen;
 
@@ -1875,7 +1875,7 @@ struct RaiApiJOutputStream2 : public rai::OutputStream {
     jobject   out;
 
     virtual unsigned int emptyBuf( const byte *buf,
-                                   unsigned int bufLen ) throw( RaiException ) {
+                                   unsigned int bufLen ) {
       RaiException e = NULL;
       jbyteArray   barr;
 

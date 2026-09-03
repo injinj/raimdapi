@@ -54,7 +54,7 @@ class LinearHashTable {
 
     virtual bool equals( ValType key,  ElemType ptr ) = 0;
 
-    void resize( void ) throw( Error ) {
+    void resize( void ) {
       unsigned int oldSize,
                    newSize,
                    hashVal,
@@ -141,7 +141,7 @@ class LinearHashTable {
       }
     };
 
-    void insert( ElemType ptr ) throw( Error ) {
+    void insert( ElemType ptr ) {
       unsigned int i,
                    hashVal;
 
@@ -158,7 +158,7 @@ class LinearHashTable {
     };
 
     // Insert using supplied hash
-    void insertWithHash( ElemType ptr, unsigned int hashVal ) throw( Error ) {
+    void insertWithHash( ElemType ptr, unsigned int hashVal ) {
       unsigned int i;
       
       if ( this->tab == NULL || this->elemCount >= this->loadThresh )
@@ -228,7 +228,7 @@ class LinearHashTable {
       this->tab[ i ].hashVal = hashVal;
     };
 
-    ElemType insertUnique( ElemType ptr ) throw( Error ) {
+    ElemType insertUnique( ElemType ptr ) {
       unsigned int i, hashVal;
       ElemType     ptr2;
 

@@ -118,7 +118,7 @@ class RAIMSG_DLL_EXP CFileExpr {
     };
 
     void print( OutputStream *out,  bool siblings = true,  bool children = true,
-                unsigned int indent = 0 )                       throw( Error );
+                unsigned int indent = 0 );
 
     ExprType getType( void ) const {
       return this->type;
@@ -176,11 +176,11 @@ class RAIMSG_DLL_EXP CFileExprIter {
       this->tos = 0;
     };
 
-    CFileExpr *push( CFileExpr *node )                          throw( Error );
+    CFileExpr *push( CFileExpr *node );
 
-    CFileExpr *find( const char *identName )                    throw( Error );
+    CFileExpr *find( const char *identName );
 
-    CFileExpr *findNext( const char *identName )                throw( Error );
+    CFileExpr *findNext( const char *identName );
 
     CFileExpr *parent( unsigned int grand = 0 ) {
       if ( this->tos >= 2 + grand )
@@ -188,7 +188,7 @@ class RAIMSG_DLL_EXP CFileExprIter {
       return NULL;
     };
 
-    CFileExpr *child( void ) throw( Error ) {
+    CFileExpr *child( void ) {
       CFileExpr * node;
       if ( (node = this->top()) != NULL &&
            node->type == CFileExpr::SUBEXPR_TYPE &&
@@ -222,12 +222,12 @@ class RAIMSG_DLL_EXP CFileLocator {
   public:
     virtual ~CFileLocator() {};
 
-    virtual InputStream *openFile( const char *fileName )   throw( Error ) = 0;
+    virtual InputStream *openFile( const char *fileName ) = 0;
 
     virtual InputStream *openFile( const char *fileName,
                                    const char *searchPath,  char pathSep,
                                    char *path,  unsigned int maxPathLen )
-                                                            throw( Error ) = 0;
+ = 0;
 };
 
 
@@ -235,12 +235,12 @@ class RAIMSG_DLL_EXP CFileLoc : public CFileLocator {
   public:
     virtual ~CFileLoc() {};
 
-    virtual InputStream *openFile( const char *fileName )   throw( Error );
+    virtual InputStream *openFile( const char *fileName );
 
     virtual InputStream *openFile( const char *fileName,
                                    const char *searchPath,  char pathSep,
                                    char *path,  unsigned int maxPathLen )
-                                                            throw( Error );
+;
 };
 
 
@@ -279,18 +279,18 @@ class RAIMSG_DLL_EXP CFileParser {
 
     static bool findFile( const char *fileName,  const char *searchPath,
                           char pathSep,  char fileSep,  char *path,
-                          unsigned int maxPathLen )             throw( Error );
-    CFileExpr *parseNode( void )                                throw( Error );
+                          unsigned int maxPathLen );
+    CFileExpr *parseNode( void );
 
-    void parseValue( CFileExpr *node )                          throw( Error );
+    void parseValue( CFileExpr *node );
 
     CFileExpr *createNode( const char *ident,  unsigned int len,
-                           unsigned int off )                   throw( Error );
+                           unsigned int off );
     TokenType getToken( unsigned int &off,  unsigned int &len,
-                        unsigned int &lineNo )                  throw( Error );
-    bool fillBuf( unsigned int &off )                           throw( Error );
+                        unsigned int &lineNo );
+    bool fillBuf( unsigned int &off );
 
-    TokenType getLookahead( void )                              throw( Error );
+    TokenType getLookahead( void );
 
     void nextToken( void );
 
@@ -307,7 +307,7 @@ class RAIMSG_DLL_EXP CFileParser {
     CFileParser( CFileStrings *strings );
     ~CFileParser();
 
-    static CFileStrings *createStrings( void )                  throw( Error );
+    static CFileStrings *createStrings( void );
 
     static void releaseStrings( CFileStrings *strings );
 
@@ -321,9 +321,9 @@ class RAIMSG_DLL_EXP CFileParser {
     CFileExpr *parsePath( CFileLocator *locator,  const char *fileName,
                           const char *searchPath = NULL,
                           char pathSep = PATH_SEP,
-                          bool expandIncludes = true )          throw( Error );
+                          bool expandIncludes = true );
     CFileExpr *parseStream( InputStream *in,  const char *path = "<input>" )
-                                                                throw( Error );
+;
 };
 
 

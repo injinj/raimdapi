@@ -88,33 +88,33 @@ class SysFile : public File {
 
     void setFD( fildes_t fild ) { this->fd = fild; }
 
-    virtual void close( void )                                throw( Error );
+    virtual void close( void );
 
     virtual unsigned int read( void *ptr,  unsigned int nBytes )
-                                                              throw( Error );
+;
     virtual unsigned int write( const void *ptr,  unsigned int nBytes )
-                                                              throw( Error );
+;
     virtual unsigned int readAt( void *ptr,  unsigned int nBytes,
-                                 FileOffset seekPos )         throw( Error );
+                                 FileOffset seekPos );
     virtual unsigned int writeAt( const void *ptr,  unsigned int nBytes,
-                                  FileOffset seekPos )        throw( Error );
+                                  FileOffset seekPos );
     virtual FileOffset seekSet( SeekOffset seekPos,  int whence )
-                                                              throw( Error );
-    virtual FileOffset length( void )                         throw( Error );
+;
+    virtual FileOffset length( void );
 
-    virtual TimeMSecs modifiedTime( void )                    throw( Error );
+    virtual TimeMSecs modifiedTime( void );
 
-    virtual void truncate( FileOffset eofPos )                throw( Error );
+    virtual void truncate( FileOffset eofPos );
 
-    virtual void sync( void )                                 throw( Error );
+    virtual void sync( void );
 
     virtual void *map( FileOffset mapSize,  int fileMode,
-                       FileOffset alignment )                 throw( Error );
+                       FileOffset alignment );
     virtual void unmap( void *addr,  FileOffset mapSize,  FileOffset alignment )
-                                                              throw( Error );
-    virtual void getFildes( void *fdptr )                     throw( Error );
+;
+    virtual void getFildes( void *fdptr );
 
-    virtual void setAsync( bool mode )                        throw( Error );
+    virtual void setAsync( bool mode );
 
     bool setFlags( int fl,  bool mode );
 };
@@ -130,7 +130,7 @@ class TmpSysFile : public SysFile {
       this->path = p;
     }
 
-    virtual void close( void )                                throw( Error );
+    virtual void close( void );
 };
 } // namespace rai
 
@@ -140,7 +140,7 @@ class TmpSysFile : public SysFile {
 //#include "stream/io_stream.h"
 
 void 
-File::copyFile( const char *srcPath,  const char *dstPath ) throw( Error )
+File::copyFile( const char *srcPath,  const char *dstPath )
 {
   File * srcFile = NULL,
        * dstFile = NULL;
@@ -176,7 +176,7 @@ File::copyFile( const char *srcPath,  const char *dstPath ) throw( Error )
 }
 
 bool
-File::fileExists( const char *path ) throw( Error )
+File::fileExists( const char *path )
 {
 #if defined( _WIN32 ) || defined( _WIN64 )
   DWORD attributes;
@@ -210,7 +210,7 @@ File::fileExists( const char *path ) throw( Error )
 
 
 FileOffset
-File::fileLength( const char *path ) throw( Error )
+File::fileLength( const char *path )
 {
 #if defined( _WIN32 ) || defined( _WIN64 )
   DWORD  fileSizeLo,
@@ -241,7 +241,7 @@ File::fileLength( const char *path ) throw( Error )
 
 
 TimeMSecs
-File::fileModifiedTime( const char *path ) throw( Error )
+File::fileModifiedTime( const char *path )
 {
 #if defined( _WIN32 ) || defined( _WIN64 )
   HANDLE                     fd;
@@ -285,7 +285,7 @@ File::fileModifiedTime( const char *path ) throw( Error )
 
 
 void
-File::setModifiedTime( const char *path,  TimeMSecs mtime ) throw( Error )
+File::setModifiedTime( const char *path,  TimeMSecs mtime )
 {
 #if defined( _WIN32 ) || defined( _WIN64 )
 #else
@@ -312,7 +312,7 @@ File::setModifiedTime( const char *path,  TimeMSecs mtime ) throw( Error )
 
 // Move file by renaming it. If that fails, try copy and remove original
 void 
-File::moveFile( const char *oldPath,  const char *newPath ) throw( Error )
+File::moveFile( const char *oldPath,  const char *newPath )
 {
   // Rename can fail when renaming across file systems.
   try {
@@ -328,7 +328,7 @@ File::moveFile( const char *oldPath,  const char *newPath ) throw( Error )
 }
 
 void
-File::removeFile( const char *path ) throw( Error )
+File::removeFile( const char *path )
 {
 #if defined( _WIN32 ) || defined( _WIN64 )
   if ( ! ::DeleteFile( path ) )
@@ -341,7 +341,7 @@ File::removeFile( const char *path ) throw( Error )
 
 
 void
-File::renameFile( const char *oldPath,  const char *newPath ) throw( Error )
+File::renameFile( const char *oldPath,  const char *newPath )
 {
 #if defined( _WIN32 ) || defined( _WIN64 )
   if ( ! ::MoveFile( oldPath, newPath ) )
@@ -354,7 +354,7 @@ File::renameFile( const char *oldPath,  const char *newPath ) throw( Error )
 
 
 File *
-File::openFile( const char *path,  int fileMode ) throw( Error )
+File::openFile( const char *path,  int fileMode )
 {
   SysFile    * sysFile;
   fildes_t     fd;
@@ -432,7 +432,7 @@ File::openFile( const char *path,  int fileMode ) throw( Error )
 
 
 File *
-File::openFD( fildes_t fd ) throw( Error )
+File::openFD( fildes_t fd )
 {
   SysFile    * sysFile;
 
@@ -447,7 +447,7 @@ File::openFD( fildes_t fd ) throw( Error )
 
 
 void
-SysFile::getFildes( void *fdptr ) throw( Error )
+SysFile::getFildes( void *fdptr )
 {
   if ( this->fd == INVALID_FILDES )
     throw FileErr::getErr( FileErr::NOT_OPEN );
@@ -456,7 +456,7 @@ SysFile::getFildes( void *fdptr ) throw( Error )
 
 
 void
-SysFile::setAsync( bool mode ) throw( Error )
+SysFile::setAsync( bool mode )
 {
 #if ! defined( _WIN32 ) && ! defined( _WIN64 )
   if ( ! this->setFlags( O_NONBLOCK, mode ) )
@@ -485,7 +485,7 @@ SysFile::setFlags( int fl,  bool mode )
 
 
 File *
-File::openTempFile( const char *tmpdir,  const char *prefix ) throw( Error )
+File::openTempFile( const char *tmpdir,  const char *prefix )
 {
   static unsigned int tmpCounter;
 
@@ -664,7 +664,7 @@ SysFile::~SysFile()
 
 
 void
-SysFile::close( void ) throw( Error )
+SysFile::close( void )
 {
   int status;
 
@@ -689,7 +689,7 @@ SysFile::close( void ) throw( Error )
 
 
 void
-TmpSysFile::close( void ) throw( Error )
+TmpSysFile::close( void )
 {
   Error e2;
 
@@ -737,7 +737,7 @@ rai_file_test_would_block( int e )
 }
 
 unsigned int
-SysFile::read( void *ptr,  unsigned int nBytes ) throw( Error )
+SysFile::read( void *ptr,  unsigned int nBytes )
 {
 #if defined( _WIN32 ) || defined( _WIN64 )
   DWORD size;
@@ -765,7 +765,7 @@ SysFile::read( void *ptr,  unsigned int nBytes ) throw( Error )
 
 unsigned int
 SysFile::readAt( void *ptr,  unsigned int nBytes,  FileOffset seekPos )
-                                                                throw( Error )
+
 {
 #if defined( _WIN32 ) || defined( _WIN64 )
   #if defined( USE_OVERLAPPED )
@@ -837,7 +837,7 @@ SysFile::readAt( void *ptr,  unsigned int nBytes,  FileOffset seekPos )
 
 
 unsigned int
-SysFile::write( const void *ptr,  unsigned int nBytes ) throw( Error )
+SysFile::write( const void *ptr,  unsigned int nBytes )
 {
 #if defined( _WIN32 ) || defined( _WIN64 )
   DWORD size;
@@ -870,7 +870,7 @@ SysFile::write( const void *ptr,  unsigned int nBytes ) throw( Error )
 
 unsigned int
 SysFile::writeAt( const void *ptr,  unsigned int nBytes,  FileOffset seekPos )
-                                                                throw( Error )
+
 {
 #if defined( _WIN32 ) || defined( _WIN64 )
   #if defined( USE_OVERLAPPED )
@@ -948,7 +948,7 @@ SysFile::writeAt( const void *ptr,  unsigned int nBytes,  FileOffset seekPos )
 
 
 FileOffset
-SysFile::seekSet( SeekOffset seekPos,  int whence ) throw( Error )
+SysFile::seekSet( SeekOffset seekPos,  int whence )
 {
 #if defined( _WIN32 ) || defined( _WIN64 )
   LONG  posLo,
@@ -990,7 +990,7 @@ SysFile::seekSet( SeekOffset seekPos,  int whence ) throw( Error )
 
 
 FileOffset
-SysFile::length( void ) throw( Error )
+SysFile::length( void )
 {
 #if defined( _WIN32 ) || defined( _WIN64 )
   DWORD fileSizeLo,
@@ -1014,7 +1014,7 @@ SysFile::length( void ) throw( Error )
 
 
 TimeMSecs
-SysFile::modifiedTime( void ) throw( Error )
+SysFile::modifiedTime( void )
 {
 #if defined( _WIN32 ) || defined( _WIN64 )
   BY_HANDLE_FILE_INFORMATION fileInfo;
@@ -1049,7 +1049,7 @@ SysFile::modifiedTime( void ) throw( Error )
 
 
 void
-SysFile::truncate( FileOffset eofPos ) throw( Error )
+SysFile::truncate( FileOffset eofPos )
 {
 #if defined( _WIN32 ) || defined( _WIN64 )
   LONG sizeLo,
@@ -1074,7 +1074,7 @@ SysFile::truncate( FileOffset eofPos ) throw( Error )
 
 
 void
-SysFile::sync( void ) throw( Error )
+SysFile::sync( void )
 {
 #if defined( _WIN32 ) || defined( _WIN64 )
   if ( ! ::FlushFileBuffers( this->fd ) )
@@ -1088,7 +1088,7 @@ SysFile::sync( void ) throw( Error )
 
 void *
 SysFile::map( FileOffset mapSize,  int fileMode,
-              FileOffset alignment ) throw( Error )
+              FileOffset alignment )
 {
 #if defined( _WIN32 ) || defined( _WIN64 )
   HANDLE  fm;
@@ -1144,7 +1144,7 @@ SysFile::map( FileOffset mapSize,  int fileMode,
 
 void
 SysFile::unmap( void *addr,  FileOffset mapSize,  FileOffset alignment )
-         throw( Error )
+
 {
 #if defined( _WIN32 ) || defined( _WIN64 )
   if ( ::UnmapViewOfFile( addr ) == 0 )

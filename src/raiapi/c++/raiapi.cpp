@@ -23,7 +23,7 @@ using namespace rai;
  *****************************************************************************/
 
 RaiTimerImpl::RaiTimerImpl( RaiTimer * timer, RaiSession * session, RaiTimerCallback callback,
-                            TimeMSecs interval, void * closure ) throw( RaiException ) {
+                            TimeMSecs interval, void * closure ) {
   tibrv_f64       rv_interval;
   tibrv_status    status;
   void          * cl;
@@ -40,7 +40,7 @@ RaiTimerImpl::RaiTimerImpl( RaiTimer * timer, RaiSession * session, RaiTimerCall
 }
 
 TimerHandle *
-RaiTimerImpl::AddTimer( RaiSession * session, RaiTimerCallback callback, void * closure ) throw( RaiException )
+RaiTimerImpl::AddTimer( RaiSession * session, RaiTimerCallback callback, void * closure )
 {
   TimerHandle * handle;
   
@@ -84,7 +84,7 @@ RaiTimerImpl::~RaiTimerImpl() {
 }
 
 RaiTimer::RaiTimer( RaiSession * session, RaiTimerCallback callback,
-                    TimeMSecs interval, void * closure ) throw( RaiException ){  
+                    TimeMSecs interval, void * closure ){  
   if( ! session ) {
     throw( RaiApiErr::getErr( RaiApiErr::BAD_SESSION ) );
   }
@@ -92,7 +92,7 @@ RaiTimer::RaiTimer( RaiSession * session, RaiTimerCallback callback,
   timerImpl = NEW RaiTimerImpl( this, session, callback, interval, closure );
 }
 
-TimeMSecs RaiTimer::GetInterval( void ) throw( RaiException ){
+TimeMSecs RaiTimer::GetInterval( void ){
   TimeMSecs interval;
   tibrv_f64 rv_interval;
   tibrv_status status;
@@ -107,7 +107,7 @@ TimeMSecs RaiTimer::GetInterval( void ) throw( RaiException ){
   return( interval);
 }
 
-void RaiTimer::SetInterval( TimeMSecs interval )  throw( RaiException ){
+void RaiTimer::SetInterval( TimeMSecs interval ){
   tibrv_f64 rv_interval;
   tibrv_status status;
   
@@ -134,7 +134,7 @@ RaiTimer::~RaiTimer(){
 Mutex * RaiEntImpl::lock = NULL;
 
 void
-RaiEntImpl::EntAnnOnMsg( tibrvId I, tibrvMsg msg, void *cl) throw( RaiException ) {
+RaiEntImpl::EntAnnOnMsg( tibrvId I, tibrvMsg msg, void *cl) {
   RaiEntImpl    * impl = ( RaiEntImpl * ) cl;
 
   logDebug( LDEBUG, "Received callback for entitle announce " );
@@ -155,7 +155,7 @@ RaiEntImpl::EntAnnOnMsg( tibrvId I, tibrvMsg msg, void *cl) throw( RaiException 
 }
 
 void 
-RaiEntImpl::EntOnMsg( tibrvId I, tibrvMsg msg, void *cl) throw( RaiException ) {
+RaiEntImpl::EntOnMsg( tibrvId I, tibrvMsg msg, void *cl) {
   RaiMsg          raiMsg;
   tibrv_status    status;
   RaiField        field;
@@ -191,7 +191,7 @@ RaiEntImpl::EntOnMsg( tibrvId I, tibrvMsg msg, void *cl) throw( RaiException ) {
 }
 
 void
-RaiEntImpl::Login( RaiSession *session, char *userLogin ) throw( RaiException ) 
+RaiEntImpl::Login( RaiSession *session, char *userLogin )
 {
   tibrv_status          status;
 
@@ -219,7 +219,7 @@ RaiEntImpl::Login( RaiSession *session, char *userLogin ) throw( RaiException )
 }
 
 void
-RaiEntImpl::Load( RaiSession *session, char *loginDetails ) throw( RaiException ) 
+RaiEntImpl::Load( RaiSession *session, char *loginDetails )
 {
   if( ! lock->tryLock() ) {
     throw( RaiApiErr::getErr( RaiApiErr::ENT_LOGIN_PENDING ) );
@@ -244,13 +244,13 @@ RaiEntImpl::Load( RaiSession *session, char *loginDetails ) throw( RaiException 
 }
 
 void 
-RaiEntImpl::TCPLoad( RaiSession *session, char *loginDetails ) throw ( RaiException ) {
+RaiEntImpl::TCPLoad( RaiSession *session, char *loginDetails ) {
 
 };
 
 
 void 
-RaiEntImpl::RVLoad( RaiSession *session, char *loginDetails ) throw ( RaiException ) {
+RaiEntImpl::RVLoad( RaiSession *session, char *loginDetails ) {
   tibrv_status          status;
   char                  entInBox[256];
   RaiMsg                raiMsg;
@@ -311,7 +311,7 @@ RaiEntImpl::RVLoad( RaiSession *session, char *loginDetails ) throw ( RaiExcepti
 }
 
 void
-RaiEntImpl::WaitForEnt(RaiSession *session) throw( RaiException ){
+RaiEntImpl::WaitForEnt(RaiSession *session){
 
   tibrv_status status;
 
@@ -357,7 +357,7 @@ RaiEntImpl::match( const char *subject )
 }
 
 bool
-RaiEntImpl::canSubscribe( const char *subject ) throw( RaiException ){
+RaiEntImpl::canSubscribe( const char *subject ){
 
   if( strcmp( subject, "TEST.NOSUB" ) == 0 )
     return false;
@@ -365,7 +365,7 @@ RaiEntImpl::canSubscribe( const char *subject ) throw( RaiException ){
 }
 
 bool
-RaiEntImpl::canPublish( const char *subject ) throw( RaiException ){
+RaiEntImpl::canPublish( const char *subject ){
 
   if( strcmp( subject, "TEST.NOPUB" ) == 0 )
     return false;
@@ -379,7 +379,7 @@ RaiEntImpl::canPublish( const char *subject ) throw( RaiException ){
  *
  *****************************************************************************/
 
-RaiDict::RaiDict() throw( RaiException ) {  
+RaiDict::RaiDict() {  
   RaiMsg_config  *  dict;
 
   this->haveDictionary = false;
@@ -401,7 +401,7 @@ RaiDict::RaiDict() throw( RaiException ) {
 Mutex * RaiDictImpl::lock = NULL;
 
 void 
-RaiDictImpl::DictOnMsg( tibrvId I, tibrvMsg msg, void *cl) throw( RaiException ) {
+RaiDictImpl::DictOnMsg( tibrvId I, tibrvMsg msg, void *cl) {
   RaiMsg          raiMsg;
   tibrv_u32       msgSize;
   const void    * bufp;
@@ -439,7 +439,7 @@ RaiDictImpl::DictOnMsg( tibrvId I, tibrvMsg msg, void *cl) throw( RaiException )
 }
 
 void
-RaiDictImpl::Load( RaiSession *session, char *dictSubject ) throw( RaiException ) 
+RaiDictImpl::Load( RaiSession *session, char *dictSubject )
 {
   if( ! lock->tryLock() ) {
     throw( RaiApiErr::getErr( RaiApiErr::DICT_LOAD_PENDING ) );
@@ -466,7 +466,7 @@ RaiDictImpl::Load( RaiSession *session, char *dictSubject ) throw( RaiException 
 }
 
 void
-RaiDict::Load( RaiSession *session, char *dictSubject ) throw( RaiException ) {
+RaiDict::Load( RaiSession *session, char *dictSubject ) {
 
   if( ! session ) {
     throw( RaiApiErr::getErr( RaiApiErr::BAD_SESSION ) );
@@ -479,12 +479,12 @@ RaiDict::Load( RaiSession *session, char *dictSubject ) throw( RaiException ) {
 }
 
 void 
-RaiDictImpl::TCPLoad( RaiSession *session, char *dictSubject ) throw ( RaiException ) {
+RaiDictImpl::TCPLoad( RaiSession *session, char *dictSubject ) {
 
 };
 
 void 
-RaiDictImpl::RVLoad( RaiSession *session, char *dictSubject ) throw ( RaiException ) {
+RaiDictImpl::RVLoad( RaiSession *session, char *dictSubject ) {
   tibrv_status          status;
   char                  dictInBox[256];
   tibrvMsg              m;
@@ -536,7 +536,7 @@ RaiDictImpl::RVLoad( RaiSession *session, char *dictSubject ) throw ( RaiExcepti
 }
 
 void
-RaiDictImpl::WaitForDict(RaiSession *session) throw( RaiException ){
+RaiDictImpl::WaitForDict(RaiSession *session){
 
   tibrv_status status;
 
@@ -575,7 +575,7 @@ RaiDict::~RaiDict(){
  *****************************************************************************/
 
 RaiSessionImpl::RaiSessionImpl( RaiSession * session, const char *svcname, const char *netname, 
-                                const char *dmnname )                throw( RaiException )
+                                const char *dmnname )
 {
   tibrv_status  status;
   this->me   = session;
@@ -659,7 +659,7 @@ RaiSessionImpl::onMsg( tibrvId rvI, tibrvMsg msg, void *cl )
 // don't set the session in the handle - and use it in the callback - check this --dna
 // set explicitly after making call to AddSubscriber
 SubHandle *
-RaiSessionImpl::AddSubscriber( RaiCallback callback, void * closure ) throw( RaiException )
+RaiSessionImpl::AddSubscriber( RaiCallback callback, void * closure )
 {
   SubHandle * handle;
 
@@ -683,14 +683,14 @@ RaiSessionImpl::~RaiSessionImpl()
 }
 
 RaiSession::RaiSession( const char *svcname, const char *netname, 
-                        const char *dmnname )                throw( RaiException )
+                        const char *dmnname )
 {
 
   this->sessionImpl = NEW RaiSessionImpl( this, svcname, netname, dmnname );
 }
 
 RaiSession::RaiSession( const char *svcname, const char *netname, 
-                        const char *dmnname, bool createDispatcher ) throw( RaiException )
+                        const char *dmnname, bool createDispatcher )
 {
   tibrv_status status;
 
@@ -734,7 +734,7 @@ RaiEvent::~RaiEvent()
  *
  *****************************************************************************/
 
-RaiPublish::RaiPublish( RaiSession * session, bool isComplex ) throw( RaiException )
+RaiPublish::RaiPublish( RaiSession * session, bool isComplex )
 {
   if( ! session ) {
     throw( RaiApiErr::getErr( RaiApiErr::BAD_SESSION ) );
@@ -751,7 +751,7 @@ RaiPublish::RaiPublish( RaiSession * session, bool isComplex ) throw( RaiExcepti
 };
 
 RaiPublish::RaiPublish( RaiSession * session, const char *subject,
-                        bool isComplex )             throw( RaiException )
+                        bool isComplex )
 {
   if( ! session ) {
     throw( RaiApiErr::getErr( RaiApiErr::BAD_SESSION ) );
@@ -774,7 +774,7 @@ RaiPublish::RaiPublish( RaiSession * session, const char *subject,
 };
 
 void 
-RaiPublish::Publish( RaiMsg * raiMsg ) throw( RaiException )
+RaiPublish::Publish( RaiMsg * raiMsg )
 {
   if( ! this->subject ) {
     throw( RaiApiErr::getErr( RaiApiErr::BAD_SUBJECT ) );
@@ -784,7 +784,7 @@ RaiPublish::Publish( RaiMsg * raiMsg ) throw( RaiException )
 };
 
 void
-RaiPublish::Publish(const char * subject, RaiMsg * raiMsg ) throw( RaiException )
+RaiPublish::Publish(const char * subject, RaiMsg * raiMsg )
 {
   char          ticName[256];
   tibrvMsg      m;
@@ -846,7 +846,7 @@ RaiPublish::Publish(const char * subject, RaiMsg * raiMsg ) throw( RaiException 
 };
 
 void
-RaiPublish::Publish( byte * buffer, unsigned int size )    throw( RaiException )
+RaiPublish::Publish( byte * buffer, unsigned int size )
 {
   if( ! this->subject ) {
     throw( RaiApiErr::getErr( RaiApiErr::BAD_SUBJECT ) );
@@ -857,7 +857,7 @@ RaiPublish::Publish( byte * buffer, unsigned int size )    throw( RaiException )
 
 void
 RaiPublish::Publish( const char * subject, 
-                     byte * buffer, unsigned int size )    throw( RaiException )
+                     byte * buffer, unsigned int size )
 {
   tibrvMsg      m;
   tibrv_status  status;
@@ -891,7 +891,7 @@ RaiPublish::Publish( const char * subject,
 };
 
 void
-RaiPublish::Ioctl( IoctlParameter parameter, void *value)  throw( RaiException )
+RaiPublish::Ioctl( IoctlParameter parameter, void *value)
 {
 
   switch ( parameter ) {
@@ -961,7 +961,7 @@ static const unsigned int RAI_API_VERBOSITY =
 
 static unsigned int openCount;
 void
-RaiApi::RaiOpen( RaiTransport transport, RaiProto protocol)               throw( RaiException )
+RaiApi::RaiOpen( RaiTransport transport, RaiProto protocol)
 {
   tibrv_status  status;
 
@@ -1001,7 +1001,7 @@ RaiApi::RaiVersion( void )
 }
 
 void
-RaiApi::RaiClose( void )                                    throw( RaiException )
+RaiApi::RaiClose( void )
 {
   if ( openCount > 0 && --openCount == 0 ) {
     /*
@@ -1015,7 +1015,7 @@ RaiApi::RaiClose( void )                                    throw( RaiException 
 };
 
 void
-RaiApi::RaiMainloop( RaiSession * session )                               throw( RaiException )
+RaiApi::RaiMainloop( RaiSession * session )
 {
   tibrv_status  status;
 
@@ -1033,7 +1033,7 @@ RaiApi::RaiMainloop( RaiSession * session )                               throw(
 
 // how to diferentiate between a successful dispatch and a time out??
 void
-RaiApi::RaiTimedDispatch(RaiSession *session, unsigned int interval )     throw( RaiException )
+RaiApi::RaiTimedDispatch(RaiSession *session, unsigned int interval )
 {
   tibrv_status status;
 
@@ -1107,7 +1107,7 @@ RaiApi::GetLogLevel( void )
 
   RaiMsg *
   RaiApi::NewSASSMsg( Sass::MsgType MsgType, short RecType,
-                      short SeqNo, Sass::RecStatus RecStatus ) throw( RaiException )
+                      short SeqNo, Sass::RecStatus RecStatus )
   {
     RaiMsg * raiMsg = NULL;
 
@@ -1127,7 +1127,7 @@ RaiApi::GetLogLevel( void )
   RaiMsg *
   RaiApi::NewSASSMsg( Sass::MsgType MsgType, const char * FormType,
                       short SeqNo, Sass::RecStatus RecStatus )
-                                                           throw( RaiException )
+
   { 
     RaiMsg * raiMsg = NULL;
 
@@ -1157,7 +1157,7 @@ RaiApi::GetLogLevel( void )
   RaiMsg *
   RaiApi::NewRaiMsg( Sass::MsgType MsgType, short RecType,
                      short SeqNo, Sass::RecStatus RecStatus )
-                                                           throw( RaiException )
+
   {
     RaiMsg * raiMsg = NULL;
 
@@ -1177,7 +1177,7 @@ RaiApi::GetLogLevel( void )
   RaiMsg *
   RaiApi::NewRaiMsg( Sass::MsgType MsgType, const char * RecType,
                      short SeqNo, Sass::RecStatus RecStatus )
-                                                           throw( RaiException )
+
   {
     RaiMsg * raiMsg = NULL;
 
@@ -1213,7 +1213,7 @@ RaiApi::GetLogLevel( void )
 // need to take a property here to determine if we do the initial snap
 RaiSubscribe::RaiSubscribe( RaiSession * session, const char * subject,
                             RaiCallback  callback, void * closure,
-                            SubParameter parm)                      throw( RaiException )
+                            SubParameter parm)
 {
   tibrv_status status;
   char inboxName[256];

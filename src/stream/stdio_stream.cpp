@@ -18,7 +18,7 @@ StdioInputStream::StdioInputStream( File *file,  unsigned int bufLen ) :
 
 unsigned int
 StdioInputStream::fillBuf( byte *buf,  unsigned int bufLen )
-                  throw( Error )
+
 {
   if ( this->file == NULL )
     throw IOStreamErr::getErr( IOStreamErr::NOT_OPEN );
@@ -28,7 +28,7 @@ StdioInputStream::fillBuf( byte *buf,  unsigned int bufLen )
 
 
 bool
-StdioInputStream::available( void ) throw( Error )
+StdioInputStream::available( void )
 {
   if ( this->file == NULL )
     return false;
@@ -38,7 +38,7 @@ StdioInputStream::available( void ) throw( Error )
 
 
 InputStream *
-StdioInputStream::createStdin( unsigned int bufLen ) throw( Error )
+StdioInputStream::createStdin( unsigned int bufLen )
 {
   File * file;
 
@@ -62,7 +62,7 @@ StdioOutputStream::StdioOutputStream( File *file,  unsigned int bufLen,
 
 unsigned int
 StdioOutputStream::emptyBuf( const byte *buf,  unsigned int bufLen )
-                   throw( Error )
+
 {
   if ( this->file == NULL )
     throw IOStreamErr::getErr( IOStreamErr::NOT_OPEN );
@@ -72,7 +72,7 @@ StdioOutputStream::emptyBuf( const byte *buf,  unsigned int bufLen )
 
 
 OutputStream *
-StdioOutputStream::createStdout( unsigned int bufLen ) throw( Error )
+StdioOutputStream::createStdout( unsigned int bufLen )
 {
   File * file;
 
@@ -88,7 +88,7 @@ StdioOutputStream::createStdout( unsigned int bufLen ) throw( Error )
 
 
 OutputStream *
-StdioOutputStream::createStderr( unsigned int bufLen ) throw( Error )
+StdioOutputStream::createStderr( unsigned int bufLen )
 {
   File * file;
 

@@ -29,7 +29,7 @@ CycleOutputStream::reset( byte *data,  unsigned int dataLen )
 
 unsigned int
 CycleOutputStream::emptyBuf( const byte *buf,  unsigned int bufLen )
-                   throw( Error )
+
 {
   unsigned int len, nBytes = bufLen;
 

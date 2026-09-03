@@ -21,21 +21,21 @@ class RAIBASE_DLL_EXP Dir {
   public:
     virtual ~Dir() {};
 
-    virtual void close( void )                              throw( Error ) = 0;
+    virtual void close( void ) = 0;
 
     virtual bool read( char *path,  unsigned int pathLen,
-                       unsigned int *usedLen = NULL )       throw( Error ) = 0;
-    virtual void rewind( void )                             throw( Error ) = 0;
+                       unsigned int *usedLen = NULL ) = 0;
+    virtual void rewind( void ) = 0;
 
-    static Dir *openDir( const char *path )                 throw( Error );
+    static Dir *openDir( const char *path );
 
-    static bool dirExists( const char *path )               throw( Error );
+    static bool dirExists( const char *path );
 
-    static void makeDir( const char *path )                 throw( Error );
+    static void makeDir( const char *path );
 
     static void workingDirectory( char *path,  unsigned int pathLen )
-                                                            throw( Error );
-    static void changeDirectory( const char *path )         throw( Error );
+;
+    static void changeDirectory( const char *path );
 };
 
 

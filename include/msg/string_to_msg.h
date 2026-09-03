@@ -78,7 +78,7 @@ public:
   }
 
   /* Take the data values, break them into fields and and add to the msg */
-  void addFields( RaiMsg &raiMsg,  const char *datavals ) throw( Error ) {
+  void addFields( RaiMsg &raiMsg,  const char *datavals ) {
     const char * ptr = datavals,
                * tmp,
                * nextPtr;

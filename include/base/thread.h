@@ -53,12 +53,12 @@ class RAIBASE_DLL_EXP Mutex {
       RECURSIVE_LOCK = 1
     };
     static Mutex *create( MutexType isRecursiveLock = FAST_LOCK )
-                                                               throw( Error );
-    void lock( void )                                          throw( Error );
+;
+    void lock( void );
 
-    bool tryLock( void )                                       throw( Error );
+    bool tryLock( void );
 
-    void unlock( void )                                        throw( Error );
+    void unlock( void );
 };
 
 class RAIBASE_DLL_EXP RwLock {
@@ -74,17 +74,17 @@ class RAIBASE_DLL_EXP RwLock {
   ~RwLock();
   void operator delete( void *p );
   
-  static RwLock *create( )                                     throw( Error );
+  static RwLock *create( );
   
-  void rdLock( void )                                          throw( Error );
+  void rdLock( void );
   
-  bool tryRdLock( void )                                       throw( Error );
+  bool tryRdLock( void );
   
-  void wrLock( void )                                          throw( Error );
+  void wrLock( void );
   
-  bool tryWrLock( void )                                       throw( Error );
+  bool tryWrLock( void );
   
-  void unlock( void )                                          throw( Error );
+  void unlock( void );
 };
 
 class RAIBASE_DLL_EXP Condition {
@@ -96,24 +96,24 @@ class RAIBASE_DLL_EXP Condition {
     ~Condition();
     void operator delete( void *p );
 
-    static Condition *create( void )                           throw( Error );
+    static Condition *create( void );
 
-    void wait( Mutex *mutex )                                  throw( Error );
+    void wait( Mutex *mutex );
     /* wait for milliseconds */
-    bool timedWait( Mutex *mutex,  TimeMSecs howLong )         throw( Error );
+    bool timedWait( Mutex *mutex,  TimeMSecs howLong );
     /* wait for milliseconds with fractions */
-    bool timedWait( Mutex *mutex,  double howLong )            throw( Error );
+    bool timedWait( Mutex *mutex,  double howLong );
     /* wait for uint milliseconds */
-    bool timedWait( Mutex *mutex,  unsigned int howLong ) throw( Error ) {
+    bool timedWait( Mutex *mutex,  unsigned int howLong ) {
       return this->timedWait( mutex, (TimeMSecs) howLong );
     };
     /* wait for int milliseconds */
-    bool timedWait( Mutex *mutex,  int howLong ) throw( Error ) {
+    bool timedWait( Mutex *mutex,  int howLong ) {
       return this->timedWait( mutex, (TimeMSecs) howLong );
     };
-    void signal( void )                                        throw( Error );
+    void signal( void );
 
-    void broadcast( void )                                     throw( Error );
+    void broadcast( void );
 };
 
 class ThrMBuf;
@@ -240,42 +240,42 @@ class RAIBASE_DLL_EXP Thread {
             SchedPolicy sched_policy = rai::Thread::defaultSched );
     virtual ~Thread();
 
-    void start( void )                                         throw( Error );
+    void start( void );
 
-    void *join( void )                                         throw( Error );
+    void *join( void );
 
-    void kill( void )                                          throw( Error );
+    void kill( void );
 
-    void interrupt( void )                                     throw( Error );
+    void interrupt( void );
 
     void setName( const char *nm1,  const char *nm2 = NULL );
 
-    static bool createExternalThread( const char *name )       throw( Error );
+    static bool createExternalThread( const char *name );
 
-    static void stopExternalThread( void )                     throw( Error );
+    static void stopExternalThread( void );
 
     bool setPriority( int sched_priority,  SchedPolicy sched_policy );
 
     static Thread *self( void );
 
-    ThrMBuf *localThrMBuf( void )                              throw( Error );
+    ThrMBuf *localThrMBuf( void );
 
-    ThrMBuf *createThrMBuf( void )                             throw( Error );
+    ThrMBuf *createThrMBuf( void );
 
     static void localAlloc( size_t sz,  void *ptr,
-                         size_t alignment = sizeof( void * ) ) throw( Error );
+                         size_t alignment = sizeof( void * ) );
     static void heapAlloc( size_t sz,  void *ptr,
-                         size_t alignment = sizeof( void * ) ) throw( Error );
+                         size_t alignment = sizeof( void * ) );
     static void localAlloc( ThrMBuf *mbuf,  size_t sz,  void *ptr,
-                         size_t alignment = sizeof( void * ) ) throw( Error );
+                         size_t alignment = sizeof( void * ) );
     //#define localFree( p ) localFree2( p, __FILE__, __LINE__ )
     static void localFree( void *ptr );
 
-    static unsigned int createSpecificKey( void )              throw( Error );
+    static unsigned int createSpecificKey( void );
 
-    static void putSpecific( unsigned int key,  void *ptr )    throw( Error );
+    static void putSpecific( unsigned int key,  void *ptr );
 
-    static void *getSpecific( unsigned int key )               throw( Error );
+    static void *getSpecific( unsigned int key );
 
     static void sleep( TimeMSecs ms );
 
@@ -326,16 +326,16 @@ class RAIBASE_DLL_EXP Semaphore {
       PROCESS_SHARED	= 1	/** Shared between processes */
     };
     static Semaphore *create( int value = 0, SemaphoreType shared = PROCESS_LOCAL )
-                                                               throw( Error );
+;
 
     /** Return current value of semaphore */
-    int getValue( void )	                               throw( Error );
+    int getValue( void );
     /** Post semaphore */
-    void post( void )                                          throw( Error );
+    void post( void );
     /** Try waiting for semaphore - return true is sucessful */
-    bool tryWait( void )                                       throw( Error );
+    bool tryWait( void );
     /** Block until semaphore is posted - return true is sucessful */
-    bool wait( void )                                          throw( Error );
+    bool wait( void );
 };
 
 class RAIBASE_DLL_EXP CpuAffinity {

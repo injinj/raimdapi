@@ -28,11 +28,11 @@ class CFileStrings : private SortedArray<const char *> {
     CFileStrings();
     ~CFileStrings();
 
-    const char *getFileName( const char *fileName )             throw( Error );
+    const char *getFileName( const char *fileName );
 
-    const char *getString( const char *ptr,  unsigned int len ) throw( Error );
+    const char *getString( const char *ptr,  unsigned int len );
 
-    void *allocMem( unsigned int len )                          throw( Error );
+    void *allocMem( unsigned int len );
 };
 } // namespace rai
 

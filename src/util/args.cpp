@@ -27,12 +27,12 @@ struct ArgsDefaultOutputStream : public OutputStream {
   ArgsDefaultOutputStream() : OutputStream() {}
 
   virtual unsigned int emptyBuf( const byte *buf,
-                                unsigned int bufLen ) throw( Error );
+                                unsigned int bufLen );
 };
 
 unsigned int
 ArgsDefaultOutputStream::emptyBuf( const byte *buf,
-                                  unsigned int bufLen ) throw( Error )
+                                  unsigned int bufLen )
 {
   ::fwrite( buf, 1, bufLen, stderr );
   return bufLen;
@@ -116,7 +116,7 @@ Args::Args()
 
 
 bool
-Args::processArgs( unsigned int argc,  char *argv[] ) throw( Error )
+Args::processArgs( unsigned int argc,  char *argv[] )
 {
   const char *name;
 
@@ -215,7 +215,7 @@ Args::clear( void )
 
 
 void
-Args::printHelp( OutputStream *o ) const throw( Error )
+Args::printHelp( OutputStream *o ) const
 {
   if ( o == NULL ) o = this->out;
   o->puts( "Usage:\n" );
@@ -224,7 +224,7 @@ Args::printHelp( OutputStream *o ) const throw( Error )
 
 
 void
-Args::printOptions( OutputStream *o ) const throw( Error )
+Args::printOptions( OutputStream *o ) const
 {
   this->printHelp2( 0, '=', o );
 }
@@ -232,7 +232,7 @@ Args::printOptions( OutputStream *o ) const throw( Error )
 
 void
 Args::printHelp2( char optChar1,  char optChar2,
-                  OutputStream *o ) const throw( Error )
+                  OutputStream *o ) const
 {
   static unsigned int termWidth;
   const Arg  * p;
@@ -432,7 +432,7 @@ Args::printHelp2( char optChar1,  char optChar2,
 
 bool
 Args::Arg::defaultToString( char *buf,  unsigned int bufLen ) const
-           throw( Error )
+
 {
   const char * s;
   char         num[ 128 ];
@@ -522,7 +522,7 @@ Args::Arg::defaultToString( char *buf,  unsigned int bufLen ) const
 
 
 void
-Args::printVersion( OutputStream *o ) const throw( Error )
+Args::printVersion( OutputStream *o ) const
 {
   if ( o == NULL ) o = this->out;
   o->puts( this->versionInfo );
@@ -531,7 +531,7 @@ Args::printVersion( OutputStream *o ) const throw( Error )
 
 
 void
-Args::printRC( OutputStream *rcOut ) const throw( Error )
+Args::printRC( OutputStream *rcOut ) const
 {
   const Arg    * p;
   unsigned int   len,
@@ -698,7 +698,7 @@ Args::printRC( OutputStream *rcOut ) const throw( Error )
 
 
 void
-Args::expandArgs( void ) throw( Error )
+Args::expandArgs( void )
 {
   const char * oldVal,
              * s;
@@ -760,7 +760,7 @@ Args::expandArgs( void ) throw( Error )
 
 bool
 Args::getExpansion( const char *name,  char *buf,  unsigned int bufLen )
-      throw( Error )
+
 {
   Arg        * p;
   const char * value;
@@ -810,7 +810,7 @@ Args::getExpansion( const char *name,  char *buf,  unsigned int bufLen )
 void
 Args::matchArgs( const char *name,  unsigned int argc,  char **argv,
                  unsigned int *numMatched,  const char *source )
-        throw( Error )
+
 {
   Arg        * p;
   char       * ptr,
@@ -1008,7 +1008,7 @@ Args::matchArgs( const char *name,  unsigned int argc,  char **argv,
 
 
 unsigned int
-Args::Arg::parseUInt( const char *arg ) throw( Error )
+Args::Arg::parseUInt( const char *arg )
 {
   unsigned int i;
 
@@ -1027,7 +1027,7 @@ Args::Arg::parseUInt( const char *arg ) throw( Error )
 
 
 ullong
-Args::Arg::parseULLong( const char *arg ) throw( Error )
+Args::Arg::parseULLong( const char *arg )
 {
   ullong i;
 
@@ -1046,7 +1046,7 @@ Args::Arg::parseULLong( const char *arg ) throw( Error )
 
 
 double
-Args::Arg::parseDouble( const char *arg ) throw( Error )
+Args::Arg::parseDouble( const char *arg )
 {
   double d;
 
@@ -1065,7 +1065,7 @@ Args::Arg::parseDouble( const char *arg ) throw( Error )
 
 
 void
-Args::addArgs( unsigned int argc,  char **argv ) throw( Error )
+Args::addArgs( unsigned int argc,  char **argv )
 {
   const char * name;
   unsigned int i,
@@ -1105,7 +1105,7 @@ Args::addArgs( unsigned int argc,  char **argv ) throw( Error )
 
 void
 Args::processParms( const char * const parms[],  char *parmVals[],
-                    unsigned int numParms,  const char *source ) throw( Error )
+                    unsigned int numParms,  const char *source )
 {
   unsigned int i,
                numMatched;
@@ -1117,7 +1117,7 @@ Args::processParms( const char * const parms[],  char *parmVals[],
 
 
 void
-Args::addRCFile( const char *path ) throw( Error )
+Args::addRCFile( const char *path )
 {
   InputStream * in;
 
@@ -1138,7 +1138,7 @@ Args::addRCFile( const char *path ) throw( Error )
 
 
 void
-Args::addRCInput( InputStream *in,  const char *src ) throw( Error )
+Args::addRCInput( InputStream *in,  const char *src )
 {
   char          line[ 64 * 1024 ],
                 source[ 64 * 1024 ],
@@ -1201,7 +1201,7 @@ Args::addRCInput( InputStream *in,  const char *src ) throw( Error )
 
 
 void
-Args::addEnv( void ) throw( Error )
+Args::addEnv( void )
 {
   Arg        * p;
   char         envVar[ 80 ],
@@ -1255,7 +1255,7 @@ Args::getArgByName( const char *name ) const
 
 
 unsigned int
-Args::getArgFlags( const char *name ) const throw( Error )
+Args::getArgFlags( const char *name ) const
 {
   const Arg * p = this->getArgByName( name );
   if ( p == NULL )
@@ -1266,7 +1266,7 @@ Args::getArgFlags( const char *name ) const throw( Error )
 
 
 Args::ArgType
-Args::getArgType( const char *name ) const throw( Error )
+Args::getArgType( const char *name ) const
 {
   const Arg * p = this->getArgByName( name );
   if ( p == NULL )
@@ -1276,7 +1276,7 @@ Args::getArgType( const char *name ) const throw( Error )
 
 
 unsigned int
-Args::getNumValues( const char *name ) const throw( Error )
+Args::getNumValues( const char *name ) const
 {
   const Arg * p = this->getArgByName( name );
   if ( p == NULL )
@@ -1288,7 +1288,7 @@ Args::getNumValues( const char *name ) const throw( Error )
 
 
 const char *
-Args::getString( const char *name,  unsigned int n ) const throw( Error )
+Args::getString( const char *name,  unsigned int n ) const
 {
   const Arg * p = this->getArgByName( name );
   if ( p == NULL )
@@ -1308,7 +1308,7 @@ Args::getString( const char *name,  unsigned int n ) const throw( Error )
 
 
 void
-Args::setString( const char *name,  const char *val ) throw( Error )
+Args::setString( const char *name,  const char *val )
 {
   const char *p[ 1 ] = { name };
   char *v[ 1 ] = { (char *) val };
@@ -1334,7 +1334,7 @@ Args::setString( const char *name,  const char *val ) throw( Error )
 
 
 unsigned int
-Args::getUInt( const char *name,  unsigned int n ) const throw( Error )
+Args::getUInt( const char *name,  unsigned int n ) const
 {
   const Arg * p = this->getArgByName( name );
   if ( p == NULL )
@@ -1354,7 +1354,7 @@ Args::getUInt( const char *name,  unsigned int n ) const throw( Error )
 
 
 void
-Args::setUInt( const char *name,  unsigned int val ) throw( Error )
+Args::setUInt( const char *name,  unsigned int val )
 {
   Arg * p = this->getArg( name );
   if ( p == NULL )
@@ -1369,7 +1369,7 @@ Args::setUInt( const char *name,  unsigned int val ) throw( Error )
 
 
 ullong
-Args::getULLong( const char *name,  unsigned int n ) const throw( Error )
+Args::getULLong( const char *name,  unsigned int n ) const
 {
   const Arg * p = this->getArgByName( name );
   if ( p == NULL )
@@ -1389,7 +1389,7 @@ Args::getULLong( const char *name,  unsigned int n ) const throw( Error )
 
 
 void
-Args::setULLong( const char *name,  ullong val ) throw( Error )
+Args::setULLong( const char *name,  ullong val )
 {
   Arg * p = this->getArg( name );
   if ( p == NULL )
@@ -1404,7 +1404,7 @@ Args::setULLong( const char *name,  ullong val ) throw( Error )
 
 
 bool
-Args::getBoolean( const char *name,  unsigned int n ) const throw( Error )
+Args::getBoolean( const char *name,  unsigned int n ) const
 {
   const Arg * p = this->getArgByName( name );
   if ( p == NULL )
@@ -1424,7 +1424,7 @@ Args::getBoolean( const char *name,  unsigned int n ) const throw( Error )
 
 
 void
-Args::setBoolean( const char *name,  bool val ) throw( Error )
+Args::setBoolean( const char *name,  bool val )
 {
   Arg * p = this->getArg( name );
   if ( p == NULL )
@@ -1439,7 +1439,7 @@ Args::setBoolean( const char *name,  bool val ) throw( Error )
 
 
 double
-Args::getDouble( const char *name,  unsigned int n ) const throw( Error )
+Args::getDouble( const char *name,  unsigned int n ) const
 {
   const Arg * p = this->getArgByName( name );
   if ( p == NULL )
@@ -1459,7 +1459,7 @@ Args::getDouble( const char *name,  unsigned int n ) const throw( Error )
 
 
 void
-Args::setDouble( const char *name,  double val ) throw( Error )
+Args::setDouble( const char *name,  double val )
 {
   Arg * p = this->getArg( name );
   if ( p == NULL )
@@ -1474,7 +1474,7 @@ Args::setDouble( const char *name,  double val ) throw( Error )
 
 
 bool
-Args::isSet( const char *name,  bool orHasDefVal ) const throw( Error )
+Args::isSet( const char *name,  bool orHasDefVal ) const
 {
   const Arg * p = this->getArgByName( name );
   if ( p == NULL )
@@ -1516,7 +1516,7 @@ Args::removeArg( const char *name )
 
 Args::Arg *
 Args::addType( ArgType type,  const char *name,  const char *example,
-               const char *description,  unsigned int flags ) throw( Error )
+               const char *description,  unsigned int flags )
 {
   Arg * p;
 
@@ -1540,7 +1540,7 @@ Args::addType( ArgType type,  const char *name,  const char *example,
 
 
 void
-Args::add( const StringArg *arg,  unsigned int flags ) throw( Error )
+Args::add( const StringArg *arg,  unsigned int flags )
 {
   Arg * p;
 
@@ -1551,7 +1551,7 @@ Args::add( const StringArg *arg,  unsigned int flags ) throw( Error )
 
 
 void
-Args::add( const UIntArg *arg,  unsigned int flags ) throw( Error )
+Args::add( const UIntArg *arg,  unsigned int flags )
 {
   Arg * p;
 
@@ -1562,7 +1562,7 @@ Args::add( const UIntArg *arg,  unsigned int flags ) throw( Error )
 
 
 void
-Args::add( const ULLongArg *arg,  unsigned int flags ) throw( Error )
+Args::add( const ULLongArg *arg,  unsigned int flags )
 {
   Arg * p;
 
@@ -1573,7 +1573,7 @@ Args::add( const ULLongArg *arg,  unsigned int flags ) throw( Error )
 
 
 void
-Args::add( const BoolArg *arg,  unsigned int flags ) throw( Error )
+Args::add( const BoolArg *arg,  unsigned int flags )
 {
   Arg * p;
 
@@ -1584,7 +1584,7 @@ Args::add( const BoolArg *arg,  unsigned int flags ) throw( Error )
 
 
 void
-Args::add( const DoubleArg *arg,  unsigned int flags ) throw( Error )
+Args::add( const DoubleArg *arg,  unsigned int flags )
 {
   Arg * p;
 
@@ -1596,7 +1596,7 @@ Args::add( const DoubleArg *arg,  unsigned int flags ) throw( Error )
 
 Args::TmpArgList *
 Args::allocArg( ArgType t,  const char *name,  const char *example,
-                const char *descr,  const char *defVal ) throw( Error )
+                const char *descr,  const char *defVal )
 {
   TmpArgList * tmp;
   char       * p, * n, * e, * d, * v;
@@ -1653,7 +1653,7 @@ Args::allocArg( ArgType t,  const char *name,  const char *example,
 
 
 void
-Args::copy( const StringArg &arg,  unsigned int flags ) throw( Error )
+Args::copy( const StringArg &arg,  unsigned int flags )
 {
   TmpArgList * tmp = this->allocArg( STRING_ARG, arg.name, arg.example,
                                      arg.description, arg.defVal );
@@ -1662,7 +1662,7 @@ Args::copy( const StringArg &arg,  unsigned int flags ) throw( Error )
 
 
 void
-Args::copy( const UIntArg &arg,  unsigned int flags ) throw( Error )
+Args::copy( const UIntArg &arg,  unsigned int flags )
 {
   TmpArgList * tmp = this->allocArg( UINT_ARG, arg.name, arg.example,
                                      arg.description, NULL );
@@ -1672,7 +1672,7 @@ Args::copy( const UIntArg &arg,  unsigned int flags ) throw( Error )
 
 
 void
-Args::copy( const ULLongArg &arg,  unsigned int flags ) throw( Error )
+Args::copy( const ULLongArg &arg,  unsigned int flags )
 {
   TmpArgList * tmp = this->allocArg( ULLONG_ARG, arg.name, arg.example,
                                      arg.description, NULL );
@@ -1682,7 +1682,7 @@ Args::copy( const ULLongArg &arg,  unsigned int flags ) throw( Error )
 
 
 void
-Args::copy( const BoolArg &arg,  unsigned int flags ) throw( Error )
+Args::copy( const BoolArg &arg,  unsigned int flags )
 {
   TmpArgList * tmp = this->allocArg( BOOL_ARG, arg.name, arg.example,
                                      arg.description, NULL );
@@ -1692,7 +1692,7 @@ Args::copy( const BoolArg &arg,  unsigned int flags ) throw( Error )
 
 
 void
-Args::copy( const DoubleArg &arg,  unsigned int flags ) throw( Error )
+Args::copy( const DoubleArg &arg,  unsigned int flags )
 {
   TmpArgList * tmp = this->allocArg( DOUBLE_ARG, arg.name, arg.example,
                                      arg.description, NULL );
@@ -1703,14 +1703,14 @@ Args::copy( const DoubleArg &arg,  unsigned int flags ) throw( Error )
 
 void
 Args::addDefaults( const char *vers,  const char *pref,  OutputStream *out,
-                   const char *argv0 ) throw( Error )
+                   const char *argv0 )
 {
   this->addDefaults( vers, pref, out, argv0, false );
 }
 
 void
 Args::addDefaults( const char *vers,  const char *pref,  OutputStream *out,
-                   const char *argv0,  bool addLogRoll ) throw( Error )
+                   const char *argv0,  bool addLogRoll )
 {
   const char * ptr;
   unsigned int i;

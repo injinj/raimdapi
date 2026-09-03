@@ -37,61 +37,61 @@ class RAIBASE_DLL_EXP File {
   public:
     virtual ~File() {};
 
-    virtual void close( void )                              throw( Error ) = 0;
+    virtual void close( void ) = 0;
 
     virtual unsigned int read( void *ptr,  unsigned int nBytes )
-                                                            throw( Error ) = 0;
+ = 0;
     virtual unsigned int write( const void *ptr,  unsigned int nBytes )
-                                                            throw( Error ) = 0;
+ = 0;
     virtual unsigned int readAt( void *ptr,  unsigned int nBytes,
-                                 FileOffset seekPos )       throw( Error ) = 0;
+                                 FileOffset seekPos ) = 0;
     virtual unsigned int writeAt( const void *ptr,  unsigned int nBytes,
-                                  FileOffset seekPos )      throw( Error ) = 0;
+                                  FileOffset seekPos ) = 0;
     virtual FileOffset seekSet( SeekOffset seekPos,  int whence )
-                                                            throw( Error ) = 0;
-    virtual FileOffset length( void )                       throw( Error ) = 0;
+ = 0;
+    virtual FileOffset length( void ) = 0;
 
-    virtual TimeMSecs modifiedTime( void )                  throw( Error ) = 0;
+    virtual TimeMSecs modifiedTime( void ) = 0;
 
-    virtual void truncate( FileOffset eofPos )              throw( Error ) = 0;
+    virtual void truncate( FileOffset eofPos ) = 0;
 
-    virtual void sync( void )                               throw( Error ) = 0;
+    virtual void sync( void ) = 0;
 
     virtual void *map( FileOffset mapSize,  int fileMode,
-                       FileOffset alignment )               throw( Error ) = 0;
+                       FileOffset alignment ) = 0;
     virtual void unmap( void *addr,  FileOffset mapSize,
-                        FileOffset alignment )              throw( Error ) = 0;
+                        FileOffset alignment ) = 0;
 
-    virtual void getFildes( void *fdptr )                   throw( Error ) = 0;
+    virtual void getFildes( void *fdptr ) = 0;
 
-    virtual void setAsync( bool mode )                      throw( Error ) = 0;
+    virtual void setAsync( bool mode ) = 0;
     // Copy file from oldPath to newPath
     static void copyFile( const char *srcPath,  const char *dstPath )
-                                                                throw( Error );
+;
 
-    static bool fileExists( const char *path )                  throw( Error );
+    static bool fileExists( const char *path );
 
-    static FileOffset fileLength( const char *path )            throw( Error );
+    static FileOffset fileLength( const char *path );
 
-    static TimeMSecs fileModifiedTime( const char *path )       throw( Error );
+    static TimeMSecs fileModifiedTime( const char *path );
 
     static void setModifiedTime( const char *path,  TimeMSecs mtime = 0 )
-                                                                throw( Error );
-    static File *openFile( const char *path,  int fileMode )    throw( Error );
+;
+    static File *openFile( const char *path,  int fileMode );
 
-    static File *openFD( fildes_t fd )                          throw( Error );
+    static File *openFD( fildes_t fd );
 
     static File *openTempFile( const char *tmpDir,  const char *prefix )
-                                                                throw( Error );
+;
 
     // Move file by renaming it. If that fails, try copy and remove original
     static void moveFile( const char *oldPath,  const char *newPath )
-                                                                throw( Error );
+;
 
-    static void removeFile( const char *path )                  throw( Error );
+    static void removeFile( const char *path );
 
     static void renameFile( const char *oldPath,  const char *newPath )
-                                                                throw( Error );
+;
     enum Whence {
       IO_SEEK_SET = 0, /* used with File and Input/Output Streams */
       IO_SEEK_CUR = 1,

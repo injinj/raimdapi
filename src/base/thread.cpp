@@ -43,7 +43,7 @@ static unsigned int threadSelfKey                 = Thread::NIL_KEY,
 
 namespace rai {
 
-static ThreadHandle *createThreadHandle( void ) throw( Error );
+static ThreadHandle *createThreadHandle( void );
 
 struct ThrMBufPtr {
   protected:
@@ -83,7 +83,7 @@ class ThrMBuf { /* local alloc mem */
     unsigned int off, pad;
     static const size_t MAX_ALLOC_SIZE = 80 * 1024;
 
-    void allocBlock( void ) throw( Error ) {
+    void allocBlock( void ) {
       size_t allocsz = MAX_ALLOC_SIZE;
       this->mem = NULL;
       MALLOC( allocsz, &this->mem );
@@ -111,7 +111,7 @@ class ThrMBuf { /* local alloc mem */
       }
     }
     /* alloc pkt sz */
-    void alloc( size_t sz,  void *pkt,  size_t alignment ) throw( Error );
+    void alloc( size_t sz,  void *pkt,  size_t alignment );
     /* release ptr returned by alloc() */
     static void release( void *pkt ) {
       ThrMBufPtr * a = (ThrMBufPtr *) ( (byte *) pkt - sizeof( ThrMBufPtr ) );
@@ -134,7 +134,7 @@ class ThrMBuf { /* local alloc mem */
 
 
 inline void
-ThrMBuf::alloc( size_t sz,  void *pkt,  size_t alignment ) throw( Error )
+ThrMBuf::alloc( size_t sz,  void *pkt,  size_t alignment )
 {
   /* align and add 2 size_t's */
   sz = ( sz + sizeof( size_t ) * 2 + alignment - 1 ) & ~( alignment - 1 );
@@ -188,7 +188,7 @@ ThrMBuf::alloc( size_t sz,  void *pkt,  size_t alignment ) throw( Error )
 }
 
 static inline ThrMBuf *
-getThrMBuf( void ) throw( Error )
+getThrMBuf( void )
 {
   ThrMBuf * mbuf;
   if ( threadAllocKey == Thread::NIL_KEY ) {
@@ -208,21 +208,21 @@ getThrMBuf( void ) throw( Error )
 
 
 ThrMBuf *
-Thread::localThrMBuf( void ) throw( Error )
+Thread::localThrMBuf( void )
 {
   return getThrMBuf();
 }
 
 
 ThrMBuf *
-Thread::createThrMBuf( void ) throw( Error )
+Thread::createThrMBuf( void )
 {
   return NEW ThrMBuf();
 }
 
 
 void
-Thread::localAlloc( size_t sz,  void *ptr,  size_t alignment ) throw( Error )
+Thread::localAlloc( size_t sz,  void *ptr,  size_t alignment )
 {
   getThrMBuf()->alloc( sz, ptr, alignment );
   //logMinor( LMINOR, "localAlloc %u (%p)", (unsigned int) sz, *(void **) ptr );
@@ -230,7 +230,7 @@ Thread::localAlloc( size_t sz,  void *ptr,  size_t alignment ) throw( Error )
 
 
 void
-Thread::heapAlloc( size_t sz,  void *ptr,  size_t alignment ) throw( Error )
+Thread::heapAlloc( size_t sz,  void *ptr,  size_t alignment )
 {
   sz = ( sz + sizeof( size_t ) * 2 + alignment - 1 ) & ~( alignment - 1 );
   ThrMBufPtr * a;
@@ -243,7 +243,7 @@ Thread::heapAlloc( size_t sz,  void *ptr,  size_t alignment ) throw( Error )
 
 void
 Thread::localAlloc( ThrMBuf *mbuf,  size_t sz,  void *ptr,
-                    size_t alignment ) throw( Error )
+                    size_t alignment )
 {
   mbuf->alloc( sz, ptr, alignment );
 }
@@ -392,7 +392,7 @@ struct ExternalThread : public Thread {
 
 
 bool
-Thread::createExternalThread( const char *name ) throw( Error )
+Thread::createExternalThread( const char *name )
 {
   rai_create_thread_keys();
 
@@ -423,7 +423,7 @@ Thread::createExternalThread( const char *name ) throw( Error )
 
 
 void
-Thread::stopExternalThread( void ) throw( Error )
+Thread::stopExternalThread( void )
 {
   Thread  * thr;
   ThrMBuf * mbuf;
@@ -625,7 +625,7 @@ struct ThreadHandle {
 };
 
 static ThreadHandle *
-createThreadHandle( void ) throw( Error )
+createThreadHandle( void )
 {
   ThreadHandle * threadPtr;
   MALLOC( sizeof( ThreadHandle ), &threadPtr );
@@ -644,7 +644,7 @@ struct RwLockHandle {
 
 
 Mutex *
-Mutex::create( MutexType isRecursiveLock ) throw( Error )
+Mutex::create( MutexType isRecursiveLock )
 {
   Mutex * m;
 
@@ -686,7 +686,7 @@ Mutex::operator delete( void *p )
 
 
 void
-Mutex::lock( void ) throw( Error )
+Mutex::lock( void )
 {
   if ( rai_has_condition_vars_use() )
     ::EnterCriticalSection( &this->mutexPtr->crit );
@@ -700,7 +700,7 @@ Mutex::lock( void ) throw( Error )
 
 
 bool
-Mutex::tryLock( void ) throw( Error )
+Mutex::tryLock( void )
 {
   bool success = false;
   if ( rai_has_condition_vars_use() ) {
@@ -727,7 +727,7 @@ Mutex::tryLock( void ) throw( Error )
 
 
 void
-Mutex::unlock( void ) throw( Error )
+Mutex::unlock( void )
 {
   if ( rai_has_condition_vars_use() )
     ::LeaveCriticalSection( &this->mutexPtr->crit );
@@ -737,7 +737,7 @@ Mutex::unlock( void ) throw( Error )
 
 
 RwLock *
-RwLock::create( void ) throw( Error )
+RwLock::create( void )
 {
   RwLock     * m;
   unsigned int size;
@@ -778,7 +778,7 @@ RwLock::operator delete( void *p )
 
 
 void
-RwLock::rdLock( void ) throw( Error )
+RwLock::rdLock( void )
 {
   RwLockHandle &h = *this->mutexPtr;
   h.lock->lock();
@@ -797,7 +797,7 @@ RwLock::rdLock( void ) throw( Error )
 
 
 bool
-RwLock::tryRdLock( void ) throw( Error )
+RwLock::tryRdLock( void )
 {
   RwLockHandle &h = *this->mutexPtr;
   bool acquired = false;
@@ -815,7 +815,7 @@ RwLock::tryRdLock( void ) throw( Error )
 
 
 void
-RwLock::wrLock( void ) throw( Error )
+RwLock::wrLock( void )
 {
   RwLockHandle &h = *this->mutexPtr;
   h.lock->lock();
@@ -834,7 +834,7 @@ RwLock::wrLock( void ) throw( Error )
 
 
 bool
-RwLock::tryWrLock( void ) throw( Error )
+RwLock::tryWrLock( void )
 {
   RwLockHandle &h = *this->mutexPtr;
   bool acquired = false;
@@ -852,7 +852,7 @@ RwLock::tryWrLock( void ) throw( Error )
 
 
 void
-RwLock::unlock( void ) throw( Error )
+RwLock::unlock( void )
 {
   RwLockHandle &h = *this->mutexPtr;
   h.lock->lock();
@@ -867,7 +867,7 @@ RwLock::unlock( void ) throw( Error )
 
 
 Condition *
-Condition::create( void ) throw( Error )
+Condition::create( void )
 {
   Condition * c;
 
@@ -915,7 +915,7 @@ Condition::operator delete( void *p )
 
 
 void
-Condition::wait( Mutex *mutex ) throw( Error )
+Condition::wait( Mutex *mutex )
 {
   if ( rai_has_condition_vars_use() ) {
     rai_wcond.sleep( &this->conditionPtr->cond, &mutex->mutexPtr->crit,
@@ -972,7 +972,7 @@ Condition::wait( Mutex *mutex ) throw( Error )
 
 
 bool
-Condition::timedWait( Mutex *mutex,  TimeMSecs howLong ) throw( Error )
+Condition::timedWait( Mutex *mutex,  TimeMSecs howLong )
 {
   bool wasSignaled = false;
   if ( howLong == 0 )
@@ -1040,14 +1040,14 @@ Condition::timedWait( Mutex *mutex,  TimeMSecs howLong ) throw( Error )
 
 
 bool
-Condition::timedWait( Mutex *mutex,  double howLong ) throw( Error )
+Condition::timedWait( Mutex *mutex,  double howLong )
 {
   return this->timedWait( mutex, (TimeMSecs) howLong );
 }
 
 
 void
-Condition::signal( void ) throw( Error )
+Condition::signal( void )
 {
   if ( rai_has_condition_vars_use() ) {
     rai_wcond.wake( &this->conditionPtr->cond );
@@ -1078,7 +1078,7 @@ Condition::signal( void ) throw( Error )
 
 
 void
-Condition::broadcast( void ) throw( Error )
+Condition::broadcast( void )
 {
   if ( rai_has_condition_vars_use() ) {
     rai_wcond.wakeAll( &this->conditionPtr->cond );
@@ -1277,7 +1277,7 @@ Thread::getThreadHandle( void *hndl )
 
 
 void
-Thread::start( void ) throw( Error )
+Thread::start( void )
 {
   rai_create_thread_keys();
 
@@ -1315,7 +1315,7 @@ Thread::start( void ) throw( Error )
 
 
 void *
-Thread::join( void ) throw( Error )
+Thread::join( void )
 {
   logDebug( LDEBUG, "Thread(%u) %s join", this->tid, this->name );
   if ( ! this->isJoined ) {
@@ -1333,14 +1333,14 @@ Thread::join( void ) throw( Error )
 
 
 void
-Thread::kill( void ) throw( Error )
+Thread::kill( void )
 {
   logDebug( LDEBUG, "Thread(%u) %s kill (nop)", this->tid, this->name );
   /* no way to do this like pthread_cancel + deferred */
 }
 
 void
-Thread::interrupt( void ) throw( Error )
+Thread::interrupt( void )
 {
   /* no way to do this like pthread_kill */
 }
@@ -1373,7 +1373,7 @@ Thread::exit( void *exitCode )
 
 
 unsigned int
-Thread::createSpecificKey( void ) throw( Error )
+Thread::createSpecificKey( void )
 {
   DWORD dwIdx = ::TlsAlloc();
 
@@ -1385,14 +1385,14 @@ Thread::createSpecificKey( void ) throw( Error )
 
 
 void
-Thread::putSpecific( unsigned int key,  void *ptr ) throw( Error )
+Thread::putSpecific( unsigned int key,  void *ptr )
 {
   ::TlsSetValue( (DWORD) key, ptr );
 }
 
 
 void *
-Thread::getSpecific( unsigned int key ) throw( Error )
+Thread::getSpecific( unsigned int key )
 {
   return ::TlsGetValue( (DWORD) key );
 }
@@ -1486,7 +1486,7 @@ struct ThreadHandle {
 };
 
 static ThreadHandle *
-createThreadHandle( void ) throw( Error )
+createThreadHandle( void )
 {
   ThreadHandle * threadPtr;
   MALLOC( sizeof( ThreadHandle ), &threadPtr );
@@ -1500,7 +1500,7 @@ struct SemaphoreHandle {
 } // namespace rai
 
 Mutex *
-Mutex::create( MutexType isRecursiveLock ) throw( Error )
+Mutex::create( MutexType isRecursiveLock )
 {
   Mutex      * m;
   unsigned int size;
@@ -1569,7 +1569,7 @@ Mutex::operator delete( void *p )
 
 
 void
-Mutex::lock( void ) throw( Error )
+Mutex::lock( void )
 {
   if ( pthread_mutex_lock( &this->mutexPtr->mutex ) != 0 )
     throw ThreadErr::getErr( ThreadErr::BAD_MUTEX_LOCK );
@@ -1602,7 +1602,7 @@ Mutex::lock( void ) throw( Error )
 
 
 bool
-Mutex::tryLock( void ) throw( Error )
+Mutex::tryLock( void )
 {
   switch ( pthread_mutex_trylock( &this->mutexPtr->mutex ) ) {
     case 0:
@@ -1641,7 +1641,7 @@ Mutex::tryLock( void ) throw( Error )
 
 
 void
-Mutex::unlock( void ) throw( Error )
+Mutex::unlock( void )
 {
 #if defined( EMULATE_RECURSIVE_LOCK )
   if ( this->mutexPtr->isRecursive == RECURSIVE_LOCK ) {
@@ -1662,7 +1662,7 @@ Mutex::unlock( void ) throw( Error )
 
 
 RwLock *
-RwLock::create() throw( Error )
+RwLock::create()
 {
   RwLock      * m;
   unsigned int size;
@@ -1691,7 +1691,7 @@ RwLock::operator delete( void *p )
 }
 
 void
-RwLock::rdLock( void ) throw( Error )
+RwLock::rdLock( void )
 {
   int err;
 
@@ -1715,7 +1715,7 @@ RwLock::rdLock( void ) throw( Error )
 }
 
 bool
-RwLock::tryRdLock( void ) throw( Error )
+RwLock::tryRdLock( void )
 {
   int err;
   switch ( ( err = pthread_rwlock_tryrdlock( &this->mutexPtr->mutex ) ) ) {
@@ -1739,7 +1739,7 @@ RwLock::tryRdLock( void ) throw( Error )
 }
 
 void
-RwLock::wrLock( void ) throw( Error )
+RwLock::wrLock( void )
 {
   int err;
   switch( (err = pthread_rwlock_wrlock( &this->mutexPtr->mutex ) ) ) {
@@ -1759,7 +1759,7 @@ RwLock::wrLock( void ) throw( Error )
 }
 
 bool
-RwLock::tryWrLock( void ) throw( Error )
+RwLock::tryWrLock( void )
 {
   int err;
   switch ( (err = pthread_rwlock_trywrlock( &this->mutexPtr->mutex ) ) ) {
@@ -1782,7 +1782,7 @@ RwLock::tryWrLock( void ) throw( Error )
 }
 
 void
-RwLock::unlock( void ) throw( Error )
+RwLock::unlock( void )
 {
   int err;
   switch( (err = pthread_rwlock_unlock( &this->mutexPtr->mutex ) ) ) {
@@ -1799,7 +1799,7 @@ RwLock::unlock( void ) throw( Error )
 }
 
 Condition *
-Condition::create( void ) throw( Error )
+Condition::create( void )
 {
   Condition * c;
 
@@ -1826,7 +1826,7 @@ Condition::operator delete( void *p )
 
 
 void
-Condition::wait( Mutex *mutex ) throw( Error )
+Condition::wait( Mutex *mutex )
 {
   if ( pthread_cond_wait( &this->conditionPtr->condition,
                           &mutex->mutexPtr->mutex ) != 0 )
@@ -1835,7 +1835,7 @@ Condition::wait( Mutex *mutex ) throw( Error )
 
 
 bool
-Condition::timedWait( Mutex *mutex,  TimeMSecs howLong ) throw( Error )
+Condition::timedWait( Mutex *mutex,  TimeMSecs howLong )
 {
   struct timespec timeout;
   struct timeval  tv;
@@ -1864,7 +1864,7 @@ Condition::timedWait( Mutex *mutex,  TimeMSecs howLong ) throw( Error )
 
 
 bool
-Condition::timedWait( Mutex *mutex,  double howLong ) throw( Error )
+Condition::timedWait( Mutex *mutex,  double howLong )
 {
   struct timespec timeout;
   struct timeval  tv;
@@ -1900,7 +1900,7 @@ Condition::timedWait( Mutex *mutex,  double howLong ) throw( Error )
 
 
 void
-Condition::signal( void ) throw( Error )
+Condition::signal( void )
 {
   if ( ::pthread_cond_signal( &this->conditionPtr->condition ) != 0 )
     throw ThreadErr::getErr( ThreadErr::BAD_COND_SIGNAL );
@@ -1908,7 +1908,7 @@ Condition::signal( void ) throw( Error )
 
 
 void
-Condition::broadcast( void ) throw( Error )
+Condition::broadcast( void )
 {
   if ( ::pthread_cond_broadcast( &this->conditionPtr->condition ) != 0 )
     throw ThreadErr::getErr( ThreadErr::BAD_COND_BROADCAST );
@@ -2145,7 +2145,7 @@ Thread::setPriority( int sched_priority,  SchedPolicy sched_pol )
 
 
 void
-Thread::start( void ) throw( Error )
+Thread::start( void )
 {
   static bool isSet;
   if ( ! isSet ) {
@@ -2208,7 +2208,7 @@ Thread::start( void ) throw( Error )
 
 
 void *
-Thread::join( void ) throw( Error )
+Thread::join( void )
 {
   logDebug( LDEBUG, "Thread(%u) %s join", this->tid, this->name );
   if ( ! this->isJoined ) {
@@ -2225,7 +2225,7 @@ Thread::join( void ) throw( Error )
 
 
 void
-Thread::kill( void ) throw( Error )
+Thread::kill( void )
 {
   logDebug( LDEBUG, "Thread(%u) %s kill", this->tid, this->name );
   if ( this->threadPtr != NULL ) {
@@ -2242,7 +2242,7 @@ Thread::kill( void ) throw( Error )
 
 
 void
-Thread::interrupt( void ) throw( Error )
+Thread::interrupt( void )
 {
   logDebug( LDEBUG, "Thread(%u) %s interrupt", this->tid, this->name );
   if ( this->threadPtr != NULL ) {
@@ -2280,7 +2280,7 @@ Thread::exit( void *exitCode )
 
 
 unsigned int
-Thread::createSpecificKey( void ) throw( Error )
+Thread::createSpecificKey( void )
 {
   pthread_key_t k;
   if ( ::pthread_key_create( &k, NULL ) != 0 )
@@ -2290,14 +2290,14 @@ Thread::createSpecificKey( void ) throw( Error )
 
 
 void
-Thread::putSpecific( unsigned int key,  void *ptr ) throw( Error )
+Thread::putSpecific( unsigned int key,  void *ptr )
 {
   ::pthread_setspecific( key, ptr );
 }
 
 
 void *
-Thread::getSpecific( unsigned int key ) throw( Error )
+Thread::getSpecific( unsigned int key )
 {
   return ::pthread_getspecific( key );
 }
@@ -2369,7 +2369,7 @@ Semaphore::operator delete( void *p )
 }
 
 Semaphore *
-Semaphore::create( int value, SemaphoreType shared ) throw( Error )
+Semaphore::create( int value, SemaphoreType shared )
 {
   Semaphore	* s;
 
@@ -2395,7 +2395,7 @@ Semaphore::create( int value, SemaphoreType shared ) throw( Error )
 
 /** Return current value of semaphore */
 int 
-Semaphore::getValue( void ) throw( Error )
+Semaphore::getValue( void )
 {
   int val;
 
@@ -2418,7 +2418,7 @@ Semaphore::getValue( void ) throw( Error )
 
 /** Post semaphore */
 void 
-Semaphore::post( void ) throw( Error )
+Semaphore::post( void )
 {
   if( ! this->semaphorePtr ) {
     throw ThreadErr::getErr( ThreadErr::BAD_SEMAPHORE );
@@ -2443,7 +2443,7 @@ Semaphore::post( void ) throw( Error )
 
 /** Try waiting for semaphore */
 bool 
-Semaphore::tryWait( void ) throw( Error )
+Semaphore::tryWait( void )
 {
   if( ! this->semaphorePtr ) {
     throw ThreadErr::getErr( ThreadErr::BAD_SEMAPHORE );
@@ -2468,7 +2468,7 @@ Semaphore::tryWait( void ) throw( Error )
 
 /** Block until semaphore is posted */
 bool
-Semaphore::wait( void ) throw( Error )
+Semaphore::wait( void )
 {
   if( ! this->semaphorePtr ) {
     throw ThreadErr::getErr( ThreadErr::BAD_SEMAPHORE );

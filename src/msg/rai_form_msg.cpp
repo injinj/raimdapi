@@ -11,7 +11,7 @@ using namespace rai;
 
 void
 RaiFormMsg::ConvertGet( RaiFormPtr &fld,  RaiMsg_data fdata,  RaiMsg_type ftype,
-                        RaiMsg_size fsize ) throw( RaiException )
+                        RaiMsg_size fsize )
 {
   RaiField field;
   fld.entry->unpack( field, &this->buf[ fld.foff ], fld.fsize );
@@ -22,7 +22,7 @@ RaiFormMsg::ConvertGet( RaiFormPtr &fld,  RaiMsg_data fdata,  RaiMsg_type ftype,
 void
 RaiFormMsg::ConvertAppend( const RaiMsg_dict *f,  RaiMsg_data fdata,
                            RaiMsg_type ftype,
-                           RaiMsg_size fsize ) throw( RaiException )
+                           RaiMsg_size fsize )
 {
   RaiField field;
   field.Update( NULL, ftype, fsize, fdata );
@@ -32,7 +32,7 @@ RaiFormMsg::ConvertAppend( const RaiMsg_dict *f,  RaiMsg_data fdata,
 
 void
 RaiFormMsg::ConvertAppend( const RaiMsg_dict *f,  RaiFormPtr &fld )
-            throw( RaiException )
+
 {
   RaiField field;
   fld.entry->unpack( field, &fld.msg->buf[ fld.foff ], fld.fsize );
@@ -41,7 +41,7 @@ RaiFormMsg::ConvertAppend( const RaiMsg_dict *f,  RaiFormPtr &fld )
 
 
 void
-RaiFormMsg::Print( rai::OutputStream *out ) throw( RaiException )
+RaiFormMsg::Print( rai::OutputStream *out )
 {
   RaiMsg msg;
   msg.UnPack( TIB_SASS_PROTO, this->Packed(), this->PackSize(),

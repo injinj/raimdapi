@@ -36,7 +36,7 @@ FileInputStream::~FileInputStream()
 InputStream *
 FileInputStream::create( File *file,  unsigned int bufLen,  bool closePipe,
                          StreamOffset streamOffset )
-                 throw( Error )
+
 {
   return NEW FileInputStream( file, bufLen, closePipe, streamOffset );
 }
@@ -45,7 +45,7 @@ FileInputStream::create( File *file,  unsigned int bufLen,  bool closePipe,
 InputStream *
 FileInputStream::open( const char *filepath,  unsigned int bufLen,
                        StreamOffset streamOffset )
-                 throw( Error )
+
 {
   File * file;
 
@@ -63,7 +63,7 @@ FileInputStream::open( const char *filepath,  unsigned int bufLen,
 
 
 void
-FileInputStream::close( void ) throw( Error )
+FileInputStream::close( void )
 {
   Error e2;
   File * file;
@@ -99,7 +99,7 @@ FileInputStream::close( void ) throw( Error )
 
 
 StreamOffset
-FileInputStream::seekSet( StreamSeekOffset offset,  int whence ) throw( Error )
+FileInputStream::seekSet( StreamSeekOffset offset,  int whence )
 {
   if ( this->lock != NULL )
     this->lock->lock();
@@ -137,7 +137,7 @@ FileInputStream::seekSet( StreamSeekOffset offset,  int whence ) throw( Error )
 
 
 bool
-FileInputStream::available( void ) throw( Error )
+FileInputStream::available( void )
 {
   StreamOffset off;
   bool         avail;
@@ -169,7 +169,7 @@ FileInputStream::available( void ) throw( Error )
 
 
 unsigned int
-FileInputStream::fillBuf( byte *buf,  unsigned int bufLen ) throw( Error )
+FileInputStream::fillBuf( byte *buf,  unsigned int bufLen )
 {
   if ( this->file == NULL )
     throw IOStreamErr::getErr( IOStreamErr::NOT_OPEN );
@@ -201,7 +201,7 @@ FileOutputStream::~FileOutputStream()
 OutputStream *
 FileOutputStream::create( File *file,  unsigned int bufLen,  bool lineBuffered,
                           bool closePipe,  StreamOffset streamOffset )
-                  throw( Error )
+
 {
   return NEW FileOutputStream( file, bufLen, lineBuffered, closePipe,
                                streamOffset );
@@ -211,7 +211,7 @@ FileOutputStream::create( File *file,  unsigned int bufLen,  bool lineBuffered,
 OutputStream *
 FileOutputStream::open( const char *filepath,  unsigned int bufLen,
                         bool lineBuffered,  StreamOffset streamOffset )
-                  throw( Error )
+
 {
   File * file;
 
@@ -239,7 +239,7 @@ FileOutputStream::open( const char *filepath,  unsigned int bufLen,
 OutputStream *
 FileOutputStream::append( const char *filepath,  unsigned int bufLen,
                           bool lineBuffered )
-                  throw( Error )
+
 {
   File         * file;
   OutputStream * fileOutput;
@@ -263,7 +263,7 @@ FileOutputStream::append( const char *filepath,  unsigned int bufLen,
 
 
 void
-FileOutputStream::close( void ) throw( Error )
+FileOutputStream::close( void )
 {
   Error e2;
   File * file;
@@ -305,7 +305,7 @@ FileOutputStream::close( void ) throw( Error )
 
 
 StreamOffset
-FileOutputStream::seekSet( StreamSeekOffset offset,  int whence ) throw( Error )
+FileOutputStream::seekSet( StreamSeekOffset offset,  int whence )
 {
   if ( this->lock != NULL )
     this->lock->lock();
@@ -340,7 +340,7 @@ FileOutputStream::seekSet( StreamSeekOffset offset,  int whence ) throw( Error )
 
 unsigned int
 FileOutputStream::emptyBuf( const byte *buf,  unsigned int bufLen )
-                  throw( Error )
+
 {
   if ( this->file == NULL )
     throw IOStreamErr::getErr( IOStreamErr::NOT_OPEN );

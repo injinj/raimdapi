@@ -19,7 +19,7 @@ using namespace rai;
 InputStream *
 CFileLoc::openFile( const char *fileName,  const char *searchPath,
                     char pathSep,  char *path,  unsigned int maxPathLen )
-          throw( Error )
+
 {
   const char * sptr,
              * fptr;
@@ -79,7 +79,7 @@ CFileLoc::openFile( const char *fileName,  const char *searchPath,
 
 
 InputStream *
-CFileLoc::openFile( const char *fileName ) throw( Error )
+CFileLoc::openFile( const char *fileName )
 {
   return FileInputStream::open( fileName );
 }
@@ -100,7 +100,7 @@ CFileParser::~CFileParser()
 
 
 CFileStrings *
-CFileParser::createStrings( void ) throw( Error )
+CFileParser::createStrings( void )
 {
   return NEW CFileStrings();
 }
@@ -116,7 +116,7 @@ CFileParser::releaseStrings( CFileStrings *strings )
 CFileExpr *
 CFileParser::parsePath( CFileLocator *locator,  const char *fileName,
                         const char *searchPath,  char pathSep,
-                        bool expandIncludes ) throw( Error )
+                        bool expandIncludes )
 {
   CFileLoc      loc;
   CFileExpr   * node,
@@ -238,7 +238,7 @@ CFileParser::parsePath( CFileLocator *locator,  const char *fileName,
 
 
 CFileExpr *
-CFileParser::parseStream( InputStream *in,  const char *path ) throw( Error )
+CFileParser::parseStream( InputStream *in,  const char *path )
 {
   CFileExpr * node;
   Error       e2;
@@ -287,7 +287,7 @@ CFileParser::reset( void )
 
 
 CFileExpr *
-CFileParser::parseNode( void ) throw( Error )
+CFileParser::parseNode( void )
 {
   CFileExpr * node,
             * head,
@@ -334,7 +334,7 @@ CFileParser::parseNode( void ) throw( Error )
 
 
 void
-CFileParser::parseValue( CFileExpr *node ) throw( Error )
+CFileParser::parseValue( CFileExpr *node )
 {
   CFileExpr  * expr;
   const char * val;
@@ -390,7 +390,7 @@ CFileParser::parseValue( CFileExpr *node ) throw( Error )
 
 CFileExpr *
 CFileParser::createNode( const char *ident,  unsigned int len,
-                         unsigned int off ) throw( Error )
+                         unsigned int off )
 {
   CFileExpr * node;
 
@@ -411,7 +411,7 @@ CFileParser::createNode( const char *ident,  unsigned int len,
 
 CFileParser::TokenType
 CFileParser::getToken( unsigned int &off,  unsigned int &len,
-                       unsigned int &lineNo ) throw( Error )
+                       unsigned int &lineNo )
 {
   unsigned int i;
   TokenType    type;
@@ -497,7 +497,7 @@ CFileParser::getToken( unsigned int &off,  unsigned int &len,
 
 
 bool
-CFileParser::fillBuf( unsigned int &off ) throw( Error )
+CFileParser::fillBuf( unsigned int &off )
 {
   unsigned int n;
 
@@ -526,7 +526,7 @@ CFileParser::fillBuf( unsigned int &off ) throw( Error )
 
 
 CFileParser::TokenType
-CFileParser::getLookahead( void ) throw( Error )
+CFileParser::getLookahead( void )
 {
   TokenType    type;
   unsigned int off,
@@ -649,7 +649,7 @@ CFileParser::isBool( bool &boolVal )
 void
 CFileExpr::print( OutputStream *out,  bool siblings,  bool children,
                   unsigned int indent )
-           throw( Error )
+
 {
   const CFileExpr * expr;
 
@@ -782,7 +782,7 @@ CFileExpr::getValue( bool &val )
 
 
 CFileExpr *
-CFileExprIter::push( CFileExpr *node ) throw( Error )
+CFileExprIter::push( CFileExpr *node )
 {
   if ( this->tos == MAX_EXPR_DEPTH )
     throw CFileErr::getErr( CFileErr::ITER_TOO_DEEP );
@@ -791,7 +791,7 @@ CFileExprIter::push( CFileExpr *node ) throw( Error )
 
 
 CFileExpr *
-CFileExprIter::find( const char *identName ) throw( Error )
+CFileExprIter::find( const char *identName )
 {
   CFileExpr  * node;
 
@@ -824,7 +824,7 @@ CFileExprIter::find( const char *identName ) throw( Error )
 
 
 CFileExpr *
-CFileExprIter::findNext( const char *identName ) throw( Error )
+CFileExprIter::findNext( const char *identName )
 {
   if ( this->child() == NULL ) {
     while ( this->next() == NULL )
@@ -865,7 +865,7 @@ CFileStrings::compare( const char *s1,  const char *s2 )
 
 
 void *
-CFileStrings::allocMem( unsigned int len ) throw( Error )
+CFileStrings::allocMem( unsigned int len )
 {
   unsigned int pos;
   Block        b;
@@ -900,7 +900,7 @@ CFileStrings::allocMem( unsigned int len ) throw( Error )
 
 
 const char *
-CFileStrings::getFileName( const char *fileName ) throw( Error )
+CFileStrings::getFileName( const char *fileName )
 {
   unsigned int pos;
   void       * mem;
@@ -921,7 +921,7 @@ CFileStrings::getFileName( const char *fileName ) throw( Error )
 
 
 const char *
-CFileStrings::getString( const char *ptr,  unsigned int len ) throw( Error )
+CFileStrings::getString( const char *ptr,  unsigned int len )
 {
   unsigned int pos;
   void       * mem;

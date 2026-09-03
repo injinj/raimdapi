@@ -75,14 +75,14 @@ struct RAIMSG_DLL_EXP RaiMsg_dict {
   /* determine the number of significant digits in a real for the grocery hint*/
   static Rai_u8 convertTssPrecision( Rai_f64 );
 
-  void convert( RaiField &field ) const                throw( RaiMsgException );
+  void convert( RaiField &field ) const;
 
-  void pack( RaiField &field,  Rai_u8 *to_ptr ) const  throw( RaiMsgException );
+  void pack( RaiField &field,  Rai_u8 *to_ptr ) const;
 
   void packPartial( RaiField &field,  Rai_u8 *to_ptr ) const
-                                                       throw( RaiMsgException );
+;
   Rai_u8 *unpack( RaiField &field,  Rai_u8 *from_ptr,
-                  unsigned int length ) const          throw( RaiMsgException );
+                  unsigned int length ) const;
   RaiMsg_type getFieldType( void ) const;
 };
 
@@ -202,7 +202,7 @@ struct RAIMSG_DLL_EXP RaiMsg_form {
   }
 
   void initFields( Rai_u16 *fid,  unsigned int fidCount,
-                   bool setFieldName )                 throw( RaiMsgException );
+                   bool setFieldName );
   void computeHashes( void );
 
   static unsigned int calcIndexSize( Rai_u16 *fid,  unsigned int fidCount );
@@ -259,24 +259,24 @@ struct RAIMSG_DLL_EXP RaiMsg_config {
                                          const char *cfile_path = NULL,
                                          char path_sep = 0,
                                          rai::CFileLocator *loc = NULL )
-                                                       throw( RaiMsgException );
+;
   static RaiMsg_config *parseDictionary( rai::InputStream *in )
-                                                       throw( RaiMsgException );
+;
   static RaiMsg_config *parseDictionary( rai::CFileExpr *expr )
-                                                       throw( RaiMsgException );
+;
   static RaiMsg_config *parseDictionary( rai::InputStream *in,
                                          const char *fname,  
                                          const char *cfile_path = NULL,
-                                   char path_sep = 0 ) throw( RaiMsgException );
+                                   char path_sep = 0 );
 
   static void release( RaiMsg_config *dict );
 
   static const char *tssTypeString( unsigned int typ );
 
   void packDataDictionary( RaiMsg &msg,  bool addForms = false ) const
-                                                       throw( RaiMsgException );
+;
   static RaiMsg_config *unpackDataDictionary( RaiMsg &msg )
-                                                       throw( RaiMsgException );
+;
   const RaiMsg_dict *getEntry( const char *fname,
                                unsigned int fname_size ) const;
   const RaiMsg_dict *getEntry( const char *fname ) const {
@@ -311,19 +311,19 @@ struct RAIMSG_DLL_EXP RaiMsg_config {
 
   const RaiMsg_form *getAnonForm( Rai_u16 *fid,  unsigned int fidCount,
                                   bool mustExist = false )
-                                                       throw( RaiMsgException );
-  const RaiMsg_form *getHashedForm( Rai_u64 typeHash ) throw( RaiMsgException );
+;
+  const RaiMsg_form *getHashedForm( Rai_u64 typeHash );
 
-  void initAnonForms( void )                           throw( RaiMsgException );
+  void initAnonForms( void );
 
   void derefForm( const RaiMsg_form *form );
 
   void refForm( const RaiMsg_form *form );
 
-  void describeMemory( RaiMsg &msg )                   throw( RaiMsgException );
+  void describeMemory( RaiMsg &msg );
 
   const RaiMsg_form *describeAnonForm( RaiMsg &msg,  const char *name )
-                                                       throw( RaiMsgException );
+;
   bool getFormRefCount( const RaiMsg_form *form,  ullong &fidHash,
                         unsigned int &count );
 };

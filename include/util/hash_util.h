@@ -75,17 +75,17 @@ class RAIBASE_DLL_EXP HashContext {
     /* tell hash to check precalculated values */
     virtual bool selftest( void )                                    = 0;
     /* dup the context, create a copy for multiple threads */
-    virtual HashContext *dup( void )                  throw( Error ) = 0;
+    virtual HashContext *dup( void ) = 0;
     /* dup the context into memory at p, return null if not enough mem */
     virtual HashContext *dup2( void *p, unsigned int &sz )           = 0;
 
     enum HashType {
       MD4, MD5, SHA1, RIPEMD128, RIPEMD160, SHA256, SHA512
     };
-    static HashContext *create( HashType type )           throw( Error );
+    static HashContext *create( HashType type );
 
     static HashContext *createHMAC( HashType type,  const byte *key,
-                                    unsigned int keyLen ) throw( Error );
+                                    unsigned int keyLen );
 };
 
 namespace Hash32 {

@@ -123,7 +123,7 @@ class Ping {
   static Ping *create( const char *svcname,  const char *netname,
                        const char *dmname,  const char *pref,
                        const char *subject,  unsigned int msgsPerSec,
-                       ullong msgCount ) throw( Error ) {
+                       ullong msgCount ) {
     Ping         * ping;
     char         dictSubject[80];
 
@@ -166,7 +166,7 @@ class Ping {
     }
   };
 
-  void close( void ) throw( Error ) {
+  void close( void ) {
 
     if ( this->session != NULL ) {
       RaiApi::RaiClose();

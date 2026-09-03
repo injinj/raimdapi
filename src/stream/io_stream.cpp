@@ -41,7 +41,7 @@ InputStream::~InputStream( void )
 
 
 void
-InputStream::close( void ) throw( Error )
+InputStream::close( void )
 {
   byte * buf;
 
@@ -64,7 +64,7 @@ InputStream::close( void ) throw( Error )
 
 
 bool
-InputStream::isEof( void ) throw( Error )
+InputStream::isEof( void )
 {
   bool eof;
 
@@ -81,7 +81,7 @@ InputStream::isEof( void ) throw( Error )
 
 
 void
-InputStream::initThreadAccess( bool multithreaded ) throw( Error )
+InputStream::initThreadAccess( bool multithreaded )
 {
   if ( multithreaded ) {
     if ( this->lock == NULL ) {
@@ -98,14 +98,14 @@ InputStream::initThreadAccess( bool multithreaded ) throw( Error )
 
 
 StreamOffset
-InputStream::seekSet( StreamSeekOffset,  int ) throw( Error )
+InputStream::seekSet( StreamSeekOffset,  int )
 {
   throw IOStreamErr::getErr( IOStreamErr::NOT_SEEKABLE );
 }
 
 
 StreamOffset
-InputStream::getStreamOffset( void ) throw( Error )
+InputStream::getStreamOffset( void )
 {
   StreamOffset off;
 
@@ -122,7 +122,7 @@ InputStream::getStreamOffset( void ) throw( Error )
 
 
 bool
-InputStream::available( void ) throw( Error )
+InputStream::available( void )
 {
   bool haveBufferedData;
 
@@ -143,7 +143,7 @@ InputStream::available( void ) throw( Error )
 
 
 unsigned int
-InputStream::gets( char *line,  unsigned int nBytes ) throw( Error )
+InputStream::gets( char *line,  unsigned int nBytes )
 {
   unsigned int i,
                maxBytes,
@@ -272,7 +272,7 @@ got_exception:;
 
 
 unsigned int
-InputStream::readBytes( byte *data,  unsigned int nBytes ) throw( Error )
+InputStream::readBytes( byte *data,  unsigned int nBytes )
 {
   unsigned int needBytes,
                dataOff,
@@ -416,7 +416,7 @@ OutputStream::~OutputStream( void )
 
 
 void
-OutputStream::close( void ) throw ( Error )
+OutputStream::close( void )
 {
   byte * buf;
 
@@ -439,7 +439,7 @@ OutputStream::close( void ) throw ( Error )
 
 
 void
-OutputStream::initThreadAccess( bool multithreaded ) throw( Error )
+OutputStream::initThreadAccess( bool multithreaded )
 {
   if ( multithreaded ) {
     if ( this->lock == NULL ) {
@@ -456,14 +456,14 @@ OutputStream::initThreadAccess( bool multithreaded ) throw( Error )
 
 
 StreamOffset
-OutputStream::seekSet( StreamSeekOffset,  int ) throw( Error )
+OutputStream::seekSet( StreamSeekOffset,  int )
 {
   throw IOStreamErr::getErr( IOStreamErr::NOT_SEEKABLE );
 }
 
 
 StreamOffset
-OutputStream::getStreamOffset( void ) throw( Error )
+OutputStream::getStreamOffset( void )
 {
   StreamOffset off;
 
@@ -480,7 +480,7 @@ OutputStream::getStreamOffset( void ) throw( Error )
 
 
 unsigned int
-OutputStream::puts( const char *s ) throw( Error )
+OutputStream::puts( const char *s )
 {
   return this->writeBytes( (const byte *) s, ::strlen( s ) );
 }
@@ -529,7 +529,7 @@ vformatter_flush( rai_vformatter_buff *fmtBuff )
 
 
 unsigned int
-OutputStream::vprintf( const char *fmt,  va_list ap ) throw( Error )
+OutputStream::vprintf( const char *fmt,  va_list ap )
 {
   VarArgsFormatter vfmt;
   char             tmpBuf[ 1024 ];
@@ -635,7 +635,7 @@ got_exception:;
 
 
 unsigned int
-OutputStream::printf( const char *fmt,  ... ) throw( Error )
+OutputStream::printf( const char *fmt,  ... )
 {
   va_list      ap;
   unsigned int n;
@@ -658,7 +658,7 @@ OutputStream::printf( const char *fmt,  ... ) throw( Error )
 
 unsigned int
 OutputStream::writeBytes( const byte *data,  unsigned int nBytes )
-              throw( Error )
+
 {
   unsigned int n,
                dataLeft;
@@ -743,7 +743,7 @@ got_exception:;
 
 
 void
-OutputStream::flush( void ) throw( Error )
+OutputStream::flush( void )
 {
   Error e2;
 
@@ -775,7 +775,7 @@ OutputStream::flush( void ) throw( Error )
 
 
 void
-OutputStream::doEmptyBuf( void ) throw( Error )
+OutputStream::doEmptyBuf( void )
 {
   unsigned int n;
 
@@ -801,7 +801,7 @@ OutputStream::doEmptyBuf( void ) throw( Error )
 unsigned int
 OutputStream::emptyBuf2( const byte *buf1,  unsigned int bufLen1,
                          const byte *buf2,  unsigned int bufLen2 )
-              throw( Error )
+
 {
   unsigned int n, off = 0;
   
@@ -823,7 +823,7 @@ OutputStream::emptyBuf2( const byte *buf1,  unsigned int bufLen1,
 
 unsigned int
 OutputStream::doEmptyBuf2( const byte *buf2,  unsigned int bufLen2 )
-              throw( Error )
+
 {
   unsigned int n;
 
@@ -849,7 +849,7 @@ OutputStream::doEmptyBuf2( const byte *buf2,  unsigned int bufLen2 )
 
 
 void
-OutputStream::tryEmptyLines( void ) throw( Error )
+OutputStream::tryEmptyLines( void )
 {
   unsigned int newlineOffset,
                n;

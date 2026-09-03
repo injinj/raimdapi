@@ -101,74 +101,74 @@ namespace StrUtil {
   RAIBASE_DLL_EXP
   void parseInt( const char *inString,  int *iVal,
                  const char **end = NULL,  unsigned int base = U_NUMBER )
-                                                          throw( Error );
+;
   RAIBASE_DLL_EXP
   void parseInt( const char *inString,  short *iVal,
                  const char **end = NULL,  unsigned int base = U_NUMBER )
-                                                          throw( Error );
+;
   RAIBASE_DLL_EXP
   void parseInt( const char *inString,  long *iVal,
                  const char **end = NULL,  unsigned int base = U_NUMBER )
-                                                          throw( Error );
+;
   RAIBASE_DLL_EXP
   void parseInt( const char *inString,  llong *iVal,
                  const char **end = NULL,  unsigned int base = U_NUMBER )
-                                                          throw( Error );
+;
   RAIBASE_DLL_EXP
   void parseInt( const char *inString,  unsigned int *iVal,
                  const char **end = NULL,  unsigned int base = U_NUMBER )
-                                                          throw( Error );
+;
   RAIBASE_DLL_EXP
   void parseInt( const char *inString,  unsigned long *iVal,
                  const char **end = NULL,  unsigned int base = U_NUMBER )
-                                                          throw( Error );
+;
   RAIBASE_DLL_EXP
   void parseInt( const char *inString,  ullong *iVal,
                  const char **end = NULL,  unsigned int base = U_NUMBER )
-                                                          throw( Error );
+;
   RAIBASE_DLL_EXP
   void parseInt( const char *inString,  unsigned short *iVal,
                  const char **end = NULL,  unsigned int base = U_NUMBER )
-                                                          throw( Error );
+;
   RAIBASE_DLL_EXP
   void parseInt( const char *inString,  byte *iVal,
                  const char **end = NULL,  unsigned int base = U_NUMBER )
-                                                          throw( Error );
+;
   RAIBASE_DLL_EXP
-  bool parseBoolean( const char *inString )               throw( Error );
+  bool parseBoolean( const char *inString );
 
   RAIBASE_DLL_EXP
   char *intToString( byte i,  char *buf,  unsigned int bufLen,
                      unsigned int base = U_DECIMAL,  bool abrev = true,
-                     char **end = NULL )                  throw( Error );
+                     char **end = NULL );
   RAIBASE_DLL_EXP
   char *intToString( char i,  char *buf,  unsigned int bufLen,
                      unsigned int base = U_DECIMAL,  bool abrev = true,
-                     char **end = NULL )                  throw( Error );
+                     char **end = NULL );
   RAIBASE_DLL_EXP
   char *intToString( unsigned short i,  char *buf,  unsigned int bufLen,
                      unsigned int base = U_DECIMAL,  bool abrev = true,
-                     char **end = NULL )                  throw( Error );
+                     char **end = NULL );
   RAIBASE_DLL_EXP
   char *intToString( short i,  char *buf,  unsigned int bufLen,
                      unsigned int base = U_DECIMAL,  bool abrev = true,
-                     char **end = NULL )                  throw( Error );
+                     char **end = NULL );
   RAIBASE_DLL_EXP
   char *intToString( unsigned int i,  char *buf,  unsigned int bufLen,
                      unsigned int base = U_DECIMAL,  bool abrev = true,
-                     char **end = NULL )                  throw( Error );
+                     char **end = NULL );
   RAIBASE_DLL_EXP
   char *intToString( int i,  char *buf,  unsigned int bufLen,
                      unsigned int base = U_DECIMAL,  bool abrev = true,
-                     char **end = NULL )                  throw( Error );
+                     char **end = NULL );
   RAIBASE_DLL_EXP
   char *intToString( ullong i,  char *buf,  unsigned int bufLen,
                      unsigned int base = U_DECIMAL,  bool abrev = true,
-                     char **end = NULL )                  throw( Error );
+                     char **end = NULL );
   RAIBASE_DLL_EXP
   char *intToString( llong i,  char *buf,  unsigned int bufLen,
                      unsigned int base = U_DECIMAL,  bool abrev = true,
-                     char **end = NULL )                  throw( Error );
+                     char **end = NULL );
   /* if decimalPlaces == 255, then float will be truncated to the last
    * non-zero digit up to 8 places, so 1.100 == 1.1 and 2.000 = 2.0 */
   static const unsigned int UNTIL_ZERO = 255;
@@ -177,31 +177,31 @@ namespace StrUtil {
                        unsigned int decimalPlaces = 2,
                        unsigned int base = U_DECIMAL,
                        bool abrev = true, char **end = NULL )
-                                                          throw( Error );
+;
   RAIBASE_DLL_EXP
   char *floatToString( float f,  char *buf,  unsigned int bufLen,
                        unsigned int decimalPlaces = 2,
                        unsigned int base = U_DECIMAL,
                        bool abrev = true, char **end = NULL )
-                                                          throw( Error );
+;
   RAIBASE_DLL_EXP
   void parseFloat( const char *inString,  float *fVal,
                    const char **end = NULL,  unsigned int base = U_DECIMAL )
-                                                          throw( Error );
+;
   RAIBASE_DLL_EXP
   void parseFloat( const char *inString,  double *fVal,
                    const char **end = NULL,  unsigned int base = U_DECIMAL )
-                                                          throw( Error );
+;
   RAIBASE_DLL_EXP
   void parseFloat2( const char *inString,  double *fVal,
                     const char **end,  unsigned int base,
                     unsigned int &precision,  unsigned int &denom,
-                    bool &novalue )  throw( Error );
+                    bool &novalue );
   RAIBASE_DLL_EXP
   void parseFloat2( const char *inString,  float *fVal,
                     const char **end,  unsigned int base,
                     unsigned int &precision,  unsigned int &denom,
-                    bool &novalue )  throw( Error );
+                    bool &novalue );
   RAIBASE_DLL_EXP
   bool isValidInt( const char *inString );
 

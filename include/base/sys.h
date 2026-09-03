@@ -29,7 +29,7 @@ namespace Sys {
   extern RAIBASE_DLL_EXP
          char           versionString[ 32 ]; /* runtime version info */
   RAIBASE_DLL_EXP
-  void initialize( const char *vers = "rai/" __DATE__ ) throw( Error );
+  void initialize( const char *vers = "rai/" __DATE__ );
   RAIBASE_DLL_EXP
   void terminate( void );
 }

@@ -27,7 +27,7 @@ const char DEFAULT_PROTO[] = "tibrv";
 
 RaiApi *
 RaiApi::RaiOpen( const char *name,  int argc,  char *argv[] )
-        throw( RaiException )
+
 {
   for ( int i = 1; i + 1 < argc; i++ ) {
     if ( ::strcmp( argv[ i ], "-api" ) == 0 ||
@@ -44,7 +44,7 @@ RaiApi::RaiOpen( const char *name,  int argc,  char *argv[] )
 
 
 void
-RaiApi::GetArgs( Args &args ) throw( RaiException )
+RaiApi::GetArgs( Args &args )
 {
   static const StringArg api( raiapi_api_arg, DEFAULT_PROTO, "<name>",
                        "Api protocol name to use" );
@@ -59,7 +59,7 @@ RaiApi::GetArgs( Args &args ) throw( RaiException )
 
 
 void
-RaiApi::GetDictArgs( Args &args ) throw( RaiException )
+RaiApi::GetDictArgs( Args &args )
 {
   static const StringArg cfilePath(  cfile_path_arg, NULL, "<path>",
                        "Path to use when locating fields and records "
@@ -81,7 +81,7 @@ RaiApi::GetDictArgs( Args &args ) throw( RaiException )
 
 
 void
-RaiApi::ParseArgs( Args &args ) throw( RaiException )
+RaiApi::ParseArgs( Args &args )
 {
   if ( args.exists( raiapi_api_arg ) ) {
     const char *api  = args.getString( raiapi_api_arg );
@@ -100,7 +100,7 @@ RaiApi::ParseArgs( Args &args ) throw( RaiException )
 
 bool
 RaiApi::SetIoctl( const char *parameter,  const void *value )
-        throw( RaiException )
+
 { 
   if ( ::strcmp( parameter, raiapi_api_arg ) == 0 )
     STRDUP( this->api, (const char *) value ); 
@@ -137,7 +137,7 @@ RaiApi::RaiVersion( void )
 
 
 bool
-RaiApi::OpenLog( Args &args ) throw( RaiException )
+RaiApi::OpenLog( Args &args )
 {
   const char * logName   = NULL,
              * levelName = NULL;
@@ -177,7 +177,7 @@ RaiApi::PrintLog( Log::LogLevel level,  const char *where,  int line,
 
 
 bool
-RaiApi::OpenDict( Args &args ) throw( RaiException )
+RaiApi::OpenDict( Args &args )
 {
   if ( args.exists( cfile_path_arg ) ) {
     const char * cfile_p  = args.getString( cfile_path_arg );
@@ -225,7 +225,7 @@ RaiSession::~RaiSession()
 }
 
 void
-RaiSession::Start( void ) throw( RaiException )
+RaiSession::Start( void )
 {
 }
 
@@ -289,7 +289,7 @@ getRaiMsgTypeId( RaiMsg_protocol proto )
 
 void
 RaiPublish::Publish( const char *subject,  RaiMsg &raiMsg,
-                     TimeNSecs stamp ) throw( RaiException )
+                     TimeNSecs stamp )
 {
   if ( this->autoInc ) {
     raiMsg.Update( "SEQ_NO", this->nextSeqno++ );
@@ -300,7 +300,7 @@ RaiPublish::Publish( const char *subject,  RaiMsg &raiMsg,
 
 void
 RaiPublish::Publish( const char *subject,  RaiMsg* raiMsg,  TimeNSecs stamp )
-            throw( RaiException )
+
 {     
   if ( this->autoInc ) {
     raiMsg->Update( "SEQ_NO", this->nextSeqno++ );
@@ -311,7 +311,7 @@ RaiPublish::Publish( const char *subject,  RaiMsg* raiMsg,  TimeNSecs stamp )
 }
 
 void
-RaiPublish::SetPrefix( const char *prefix ) throw( RaiException )
+RaiPublish::SetPrefix( const char *prefix )
 {
   if ( prefix != NULL && prefix[ 0 ] == '\0' )
     prefix = NULL;
@@ -419,7 +419,7 @@ static const char MSG_TYPE_F[]   = "MSG_TYPE",
 RaiMsg *
 RaiApi::NewRaiMsg( RaiMsg_protocol proto,  Rai_u16 MsgType,
                    const char *FormType,  Rai_u16 SeqNo,
-                   Rai_u16 RecStatus ) throw( RaiException )
+                   Rai_u16 RecStatus )
 {
   const RaiMsg_form *form;
   if ( FormType != NULL && FormType[ 0 ] == '\0' )
@@ -442,7 +442,7 @@ RaiApi::NewRaiMsg( RaiMsg_protocol proto,  Rai_u16 MsgType,
 
 RaiMsg *
 RaiApi::NewRaiMsg( RaiMsg_protocol proto,  Rai_u16 MsgType,  Rai_u16 RecType,
-                   Rai_u16 SeqNo,  Rai_u16 RecStatus ) throw( RaiException )
+                   Rai_u16 SeqNo,  Rai_u16 RecStatus )
 {
   RaiMsg * raiMsg = NEW RaiMsg( proto ); 
 

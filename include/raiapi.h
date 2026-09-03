@@ -115,9 +115,9 @@ class RaiTimer {
   RaiTimerImpl	* timerImpl;
  public:
   RaiTimer( RaiSession * session, RaiTimerCallback callback,
-            rai::TimeMSecs interval, void * closure )           throw( RaiException );
-  rai::TimeMSecs  GetInterval( void )                           throw( RaiException );
-  void SetInterval(rai::TimeMSecs  interval)                    throw( RaiException );
+            rai::TimeMSecs interval, void * closure );
+  rai::TimeMSecs  GetInterval( void );
+  void SetInterval(rai::TimeMSecs  interval);
   virtual ~RaiTimer( void );
 };
 
@@ -128,8 +128,8 @@ class RaiDict {
  public:
   bool haveDictionary;
   bool isDispatcher;
-  RaiDict( void )                                             throw( RaiException );
-  void Load( RaiSession *session, char *dictSubject )         throw( RaiException );
+  RaiDict( void );
+  void Load( RaiSession *session, char *dictSubject );
   virtual ~RaiDict( void );
 };
 
@@ -142,9 +142,9 @@ class RaiSession {
   RaiSessionImpl        * sessionImpl;
 
   RaiSession( const char *svcname, const char *netname,
-	      const char *dmnname )                         throw( RaiException );
+	      const char *dmnname );
   RaiSession( const char *svcname, const char *netname,
-	      const char *dmnname, bool createDispatcher )  throw( RaiException );
+	      const char *dmnname, bool createDispatcher );
     
   void Destroy();
   virtual ~RaiSession();
@@ -175,20 +175,20 @@ class RaiPublish {
   bool usesSass;
 
   RaiPublish( RaiSession *session, const char *subject, bool isComplex = false )
-                                                          throw( RaiException );
+;
   RaiPublish( RaiSession *session, bool isComplex = false )
-                                                          throw( RaiException );
+;
 
-  void Publish( RaiMsg * raiMsg )			                    throw( RaiException );
+  void Publish( RaiMsg * raiMsg );
     
-  void Publish( const char * subject, RaiMsg * raiMsg )   throw( RaiException );
+  void Publish( const char * subject, RaiMsg * raiMsg );
 
-  void Publish( byte * buffer, unsigned int size )        throw( RaiException );
+  void Publish( byte * buffer, unsigned int size );
 
   void Publish( const char * subject, byte * buffer, 
-		unsigned int size )			                              throw( RaiException );
+		unsigned int size );
 
-  void Ioctl( IoctlParameter parameter, void * value)     throw( RaiException );
+  void Ioctl( IoctlParameter parameter, void * value);
 
   void Destroy();
 
@@ -214,32 +214,32 @@ class RaiApi {
 
   public:
 
-    static void RaiOpen( RaiTransport transport, RaiProto protocol ) throw( RaiException );
+    static void RaiOpen( RaiTransport transport, RaiProto protocol );
 
-    static void RaiClose( void )                          throw( RaiException );
+    static void RaiClose( void );
 
-    static void RaiMainloop( RaiSession * session )       throw( RaiException );
+    static void RaiMainloop( RaiSession * session );
 
     static void RaiTimedDispatch( RaiSession *session, unsigned int interval ) 
-								 throw( RaiException );
+;
 
-    static void RaiDispatch( RaiSession *session )         throw( RaiException );
+    static void RaiDispatch( RaiSession *session );
 
     static RaiMsg * NewSASSMsg( Sass::MsgType MsgType, short RecType,
                  short SeqNo = 0, Sass::RecStatus RecStatus = Sass::OK )
-                                                           throw( RaiException );
+;
 
     static RaiMsg * NewSASSMsg( Sass::MsgType MsgType, const char * RecType,
                  short SeqNo = 0, Sass::RecStatus RecStatus = Sass::OK )
-                                                           throw( RaiException );
+;
 
     static RaiMsg * NewRaiMsg( Sass::MsgType MsgType, short RecType,
                  short SeqNo = 0, Sass::RecStatus RecStatus  = Sass::OK )
-                                                           throw( RaiException );
+;
   
     static RaiMsg * NewRaiMsg( Sass::MsgType MsgType, const char * RecType, 
                  short SeqNo = 0, Sass::RecStatus RecStatus = Sass::OK) 
-                                                           throw( RaiException );
+;
 
     static const char * RaiVersion( void );
 
@@ -257,7 +257,7 @@ class RaiApi {
 
     static int GetLogLevel( void );
  
-    static void RaiIoctl( IoctlParameter parameter, void * value)    throw( RaiException );
+    static void RaiIoctl( IoctlParameter parameter, void * value);
 
 };
 
@@ -269,7 +269,7 @@ class RaiSubscribe {
 
   RaiSubscribe( RaiSession * session, const char * subject,
 		RaiCallback callback, void * closure, SubParameter parm = BOTH ) 
-							       throw( RaiException );
+;
   void Cancel();
   virtual ~RaiSubscribe();
 

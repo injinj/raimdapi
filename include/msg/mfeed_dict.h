@@ -181,14 +181,14 @@ struct RAIMSG_DLL_EXP RaiMfeed_dict {
                                const char *enumtype_def,
                                const char *cfile_path = NULL,
                                char path_sep = 0,
-                   rai::CFileLocator *locator = NULL ) throw( RaiMsgException );
+                   rai::CFileLocator *locator = NULL );
   static RaiMfeed_dict *parseDictionary2(
                                const char *appendix_a,
                                const char *enumtype_def,
                                const char *cfile_path,
                                char path_sep,
                                rai::CFileLocator *locator,
-                               int logLvl )            throw( RaiMsgException );
+                               int logLvl );
   static RaiMfeed_dict *parseDictionary3(
                                const char *appendix_a,
                                const char *enumtype_def,
@@ -197,16 +197,16 @@ struct RAIMSG_DLL_EXP RaiMfeed_dict {
                                const char *cfile_path,
                                char path_sep,
                                rai::CFileLocator *locator,
-                               int logLvl )            throw( RaiMsgException );
+                               int logLvl );
   static RaiMfeed_dict *parse( rai::InputStream *appendixIn,
                                rai::InputStream *enumtypeIn,
                                rai::InputStream *flistIn = NULL,
-                               rai::InputStream *fidIn = NULL ) throw( RaiMsgException );
+                               rai::InputStream *fidIn = NULL );
   void addMfeedFlistMap( RaiMfeed_mapEntry *e );
 
   void addMfeedFidMap( RaiMfeed_mapEntry *e );
 
-  void addMfeedEntry( RaiMfeed_entry *entry )          throw( RaiMsgException );
+  void addMfeedEntry( RaiMfeed_entry *entry );
 
   void addMfeedEnum( RaiMfeed_enumEntry *entry );
 
@@ -220,11 +220,11 @@ struct RAIMSG_DLL_EXP RaiMfeed_dict {
                                unsigned int enumAcroElemCount,
                                int maxFid,
                                unsigned int rwfTypeCount )
-                                                       throw( RaiMsgException );
+;
   void printAppendix( rai::OutputStream *appendixOut ) const
-                                                       throw( RaiMsgException );
+;
   void printEnumtype( rai::OutputStream *enumtypeOut ) const
-                                                       throw( RaiMsgException );
+;
   const RaiMfeed_entry *getMapEntry( const RaiMsg_dict *entry ) const;
 
   const RaiMfeed_entry *getMapEntry( Rai_i16 fid,
@@ -265,14 +265,14 @@ struct RAIMSG_DLL_EXP RaiMfeed_dict {
   void indexSass( void );
 
   void packDataDictionary( RaiMsg &msg,  bool full ) const
-                                                       throw( RaiMsgException );
-  void packDataDictionary2( RaiMsg &msg ) const        throw( RaiMsgException );
+;
+  void packDataDictionary2( RaiMsg &msg ) const;
 
   static RaiMfeed_dict *unpackDataDictionary2( RaiMsg &msg )
-                                                       throw( RaiMsgException );
+;
   static RaiMfeed_dict *unpackDataDictionary( RaiMsg &msg )
-                                                       throw( RaiMsgException );
-  static bool isMfeedPackedDict( RaiMsg &msg )         throw( RaiMsgException );
+;
+  static bool isMfeedPackedDict( RaiMsg &msg );
 
   static RaiMfeed_type getType( const char *p );
 

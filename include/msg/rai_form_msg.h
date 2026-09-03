@@ -26,17 +26,17 @@ struct RAIMSG_DLL_EXP RaiFormPtr {
   const RaiMsg_dict *entry;
   RaiFormMsg *msg;
 
-  const RaiMsg_dict *First( RaiFormMsg *m ) throw( RaiException );
+  const RaiMsg_dict *First( RaiFormMsg *m );
 
-  const RaiMsg_dict *Next( void ) throw( RaiException );
+  const RaiMsg_dict *Next( void );
 
   const RaiMsg_dict *Find( RaiFormMsg &m,
-                           const RaiMsg_dict *entry ) throw( RaiException ) {
+                           const RaiMsg_dict *entry ) {
     return this->Find( &m, entry );
   }
   const RaiMsg_dict *Find( RaiFormMsg *m,
-                           const RaiMsg_dict *entry ) throw( RaiException );
-  template<class T> void Get( T &val ) throw( RaiException );
+                           const RaiMsg_dict *entry );
+  template<class T> void Get( T &val );
 };
 
 class RAIMSG_DLL_EXP RaiFormMsg {
@@ -45,7 +45,7 @@ protected:
   unsigned int bufLen, bufOff;
 
 public:
-  void UnPack( RaiMsg_data b,  unsigned int len ) throw( RaiException ) {
+  void UnPack( RaiMsg_data b,  unsigned int len ) {
     unsigned int magic, off;
     if ( len >= 8 ) {
       rai::Unaligned::endianGetInt( (byte *) b, magic );
@@ -61,13 +61,13 @@ public:
     throw badFormMsgErr();
   }
 
-  const RaiMsg_dict *First( RaiFormPtr &fld ) const throw( RaiException ) {
+  const RaiMsg_dict *First( RaiFormPtr &fld ) const {
     fld.foff = 8;
     fld.fsize = 0;
     return this->Next( fld );
   }
 
-  const RaiMsg_dict *Next( RaiFormPtr &fld ) const throw( RaiException ) {
+  const RaiMsg_dict *Next( RaiFormPtr &fld ) const {
     Rai_u16 fid, partialLen;
     fld.foff += fld.fsize;
     if ( fld.foff >= this->bufOff - 1 )
@@ -92,7 +92,7 @@ public:
   }
 
   const RaiMsg_dict *Find( RaiFormPtr &fld,
-                           const RaiMsg_dict *f ) const throw( RaiException ) {
+                           const RaiMsg_dict *f ) const {
     const RaiMsg_dict *g;
     if ( (g = this->First( fld )) != NULL ) {
       do {
@@ -103,63 +103,63 @@ public:
     return NULL;
   }
 
-  void Print( rai::OutputStream *out ) throw( RaiException );
+  void Print( rai::OutputStream *out );
 
   void ConvertGet( RaiFormPtr &fld,  RaiMsg_data fdata,
-                  RaiMsg_type ftype,  RaiMsg_size fsize ) throw( RaiException );
+                  RaiMsg_type ftype,  RaiMsg_size fsize );
 
-  void Get( RaiFormPtr &fld,  Rai_i8 &i8 ) throw( RaiException ) {
+  void Get( RaiFormPtr &fld,  Rai_i8 &i8 ) {
     return this->Get( fld, (Rai_u8 &) i8 );
   }
 
-  void Get( RaiFormPtr &fld,  Rai_u8 &u8 ) throw( RaiException ) {
+  void Get( RaiFormPtr &fld,  Rai_u8 &u8 ) {
     if ( isIntType( fld.entry->ftype ) && fld.entry->fsize == sizeof( u8 ) )
       u8 = this->buf[ fld.foff + 2 ];
     else
       this->ConvertGet( fld, &u8, RAIMSG_UINT, sizeof( u8 ) );
   }
 
-  void Get( RaiFormPtr &fld,  Rai_i16 &i16 ) throw( RaiException ) {
+  void Get( RaiFormPtr &fld,  Rai_i16 &i16 ) {
     return this->Get( fld, (Rai_u16 &) i16 );
   }
 
-  void Get( RaiFormPtr &fld,  Rai_u16 &u16 ) throw( RaiException ) {
+  void Get( RaiFormPtr &fld,  Rai_u16 &u16 ) {
     if ( isIntType( fld.entry->ftype ) && fld.entry->fsize == sizeof( u16 ) )
       rai::Unaligned::endianGetInt( &this->buf[ fld.foff + 2 ], u16 );
     else
       this->ConvertGet( fld, &u16, RAIMSG_UINT, sizeof( u16 ) );
   }
 
-  void Get( RaiFormPtr &fld,  Rai_i32 &i32 ) throw( RaiException ) {
+  void Get( RaiFormPtr &fld,  Rai_i32 &i32 ) {
     return this->Get( fld, (Rai_u32 &) i32 );
   }
 
-  void Get( RaiFormPtr &fld,  Rai_u32 &u32 ) throw( RaiException ) {
+  void Get( RaiFormPtr &fld,  Rai_u32 &u32 ) {
     if ( isIntType( fld.entry->ftype ) && fld.entry->fsize == sizeof( u32 ) )
       rai::Unaligned::endianGetInt( &this->buf[ fld.foff + 2 ], u32 );
     else
       this->ConvertGet( fld, &u32, RAIMSG_UINT, sizeof( u32 ) );
   }
 
-  void Get( RaiFormPtr &fld,  Rai_i64 &i64 ) throw( RaiException ) {
+  void Get( RaiFormPtr &fld,  Rai_i64 &i64 ) {
     return this->Get( fld, (Rai_u64 &) i64 );
   }
 
-  void Get( RaiFormPtr &fld,  Rai_u64 &u64 ) throw( RaiException ) {
+  void Get( RaiFormPtr &fld,  Rai_u64 &u64 ) {
     if ( isIntType( fld.entry->ftype ) && fld.entry->fsize == sizeof( u64 ) )
       rai::Unaligned::endianGetInt( &this->buf[ fld.foff + 2 ], u64 );
     else
       this->ConvertGet( fld, &u64, RAIMSG_UINT, sizeof( u64 ) );
   }
 
-  void Get( RaiFormPtr &fld,  Rai_f32 &f32 ) throw( RaiException ) {
+  void Get( RaiFormPtr &fld,  Rai_f32 &f32 ) {
     if ( isFloatType( fld.entry->ftype ) && fld.entry->fsize == sizeof( f32 ) )
       rai::Unaligned::endianGetFloat( &this->buf[ fld.foff + 2 ], f32 );
     else
       this->ConvertGet( fld, &f32, RAIMSG_REAL, sizeof( f32 ) );
   }
 
-  void Get( RaiFormPtr &fld,  Rai_f64 &f64 ) throw( RaiException ) {
+  void Get( RaiFormPtr &fld,  Rai_f64 &f64 ) {
     /* price is 9 bytes, 8 bytes followed by denom, ignoring the denom here */
     if ( isFloatType( fld.entry->ftype ) && fld.entry->fsize >= sizeof( f64 ) )
       rai::Unaligned::endianGetFloat( &this->buf[ fld.foff + 2 ], f64 );
@@ -167,11 +167,11 @@ public:
       this->ConvertGet( fld, &f64, RAIMSG_REAL, sizeof( f64 ) );
   }
 
-  void Get( RaiFormPtr &fld,  const char *&s ) throw( RaiException ) {
+  void Get( RaiFormPtr &fld,  const char *&s ) {
     s = (const char *) &this->buf[ fld.foff + 2 ];
   }
 
-  void InitBuffer( RaiMsg_data b,  unsigned int len ) throw( RaiException ) {
+  void InitBuffer( RaiMsg_data b,  unsigned int len ) {
     this->buf    = (byte *) b;
     this->bufLen = len;
     this->bufOff = 8;
@@ -212,10 +212,10 @@ public:
   }
 
   void ConvertAppend( const RaiMsg_dict *f,  RaiMsg_data fdata,
-                  RaiMsg_type ftype,  RaiMsg_size fsize ) throw( RaiException );
+                  RaiMsg_type ftype,  RaiMsg_size fsize );
 
   void ConvertAppend( const RaiMsg_dict *f,
-                      RaiFormPtr &fld ) throw( RaiException );
+                      RaiFormPtr &fld );
   static bool isIntType( Rai_u8 t ) {
     static const unsigned int tssIntTypes = ( 1U << RAI_TSS_INTEGER ) |
                                             ( 1U << RAI_TSS_SHORT_INT ) |
@@ -246,17 +246,17 @@ public:
   }
 
   void Append_REC_TYPE( const RaiMsg_dict *f,  Rai_u16 u16 )
-      throw( RaiException ) {
+ {
     return this->Append( f, (Rai_u16) ( ( u16 & ~( FID_PRIMITIVE_FLAG ) ) |
                                         FID_FIXED_FLAG ) );
 
   }
 
-  void Append( const RaiMsg_dict *f,  Rai_i8 i8 ) throw( RaiException ) {
+  void Append( const RaiMsg_dict *f,  Rai_i8 i8 ) {
     return this->Append( f, (Rai_u8) i8 );
   }
 
-  void Append( const RaiMsg_dict *f,  Rai_u8 u8 ) throw( RaiException ) {
+  void Append( const RaiMsg_dict *f,  Rai_u8 u8 ) {
     RaiMsg_size sz = 2U + ( ( (unsigned int) f->fsize + 1 ) & ~1U );
 
     if ( this->bufOff + sz > this->bufLen )
@@ -273,11 +273,11 @@ public:
     this->bufOff += sz;
   }
 
-  void Append( const RaiMsg_dict *f,  Rai_i16 i16 ) throw( RaiException ) {
+  void Append( const RaiMsg_dict *f,  Rai_i16 i16 ) {
     return this->Append( f, (Rai_u16) i16 );
   }
 
-  void Append( const RaiMsg_dict *f,  Rai_u16 u16 ) throw( RaiException ) {
+  void Append( const RaiMsg_dict *f,  Rai_u16 u16 ) {
     RaiMsg_size sz = 2U + ( ( (unsigned int) f->fsize + 1 ) & ~1U );
 
     if ( this->bufOff + sz > this->bufLen )
@@ -292,11 +292,11 @@ public:
     this->bufOff += sz;
   }
 
-  void Append( const RaiMsg_dict *f,  Rai_i32 i32 ) throw( RaiException ) {
+  void Append( const RaiMsg_dict *f,  Rai_i32 i32 ) {
     return this->Append( f, (Rai_u32) i32 );
   }
 
-  void Append( const RaiMsg_dict *f,  Rai_u32 u32 ) throw( RaiException ) {
+  void Append( const RaiMsg_dict *f,  Rai_u32 u32 ) {
     RaiMsg_size sz = 2U + ( ( (unsigned int) f->fsize + 1 ) & ~1U );
 
     if ( this->bufOff + sz > this->bufLen )
@@ -311,11 +311,11 @@ public:
     this->bufOff += sz;
   }
 
-  void Append( const RaiMsg_dict *f,  Rai_i64 i64 ) throw( RaiException ) {
+  void Append( const RaiMsg_dict *f,  Rai_i64 i64 ) {
     return this->Append( f, (Rai_u64) i64 );
   }
 
-  void Append( const RaiMsg_dict *f,  Rai_u64 u64 ) throw( RaiException ) {
+  void Append( const RaiMsg_dict *f,  Rai_u64 u64 ) {
     RaiMsg_size sz = 2U + ( ( (unsigned int) f->fsize + 1 ) & ~1U );
 
     if ( this->bufOff + sz > this->bufLen )
@@ -330,7 +330,7 @@ public:
     this->bufOff += sz;
   }
 
-  void Append( const RaiMsg_dict *f,  Rai_f32 f32 ) throw( RaiException ) {
+  void Append( const RaiMsg_dict *f,  Rai_f32 f32 ) {
     RaiMsg_size sz = 2U + ( ( (unsigned int) f->fsize + 1 ) & ~1U );
 
     if ( this->bufOff + sz > this->bufLen )
@@ -350,7 +350,7 @@ public:
     this->bufOff += sz;
   }
 
-  void Append( const RaiMsg_dict *f,  Rai_f64 f64 ) throw( RaiException ) {
+  void Append( const RaiMsg_dict *f,  Rai_f64 f64 ) {
     RaiMsg_size sz = 2U + ( ( (unsigned int) f->fsize + 1 ) & ~1U );
 
     if ( this->bufOff + sz > this->bufLen )
@@ -370,7 +370,7 @@ public:
     this->bufOff += sz;
   }
 
-  void Append( const RaiMsg_dict *f,  const char *str ) throw( RaiException ) {
+  void Append( const RaiMsg_dict *f,  const char *str ) {
     RaiMsg_size sz = 2U + ( ( (unsigned int) f->fsize + 1 ) & ~1U );
 
     if ( this->bufOff + sz > this->bufLen )
@@ -395,7 +395,7 @@ public:
   }
 
   void Append( const RaiMsg_dict *f,  const char *str,
-               RaiMsg_size strLen ) throw( RaiException ) {
+               RaiMsg_size strLen ) {
     RaiMsg_size sz = 2U + ( ( (unsigned int) f->fsize + 1 ) & ~1U );
 
     if ( this->bufOff + sz > this->bufLen )
@@ -423,7 +423,7 @@ public:
   }
 
   void Append( const RaiMsg_dict *f,  RaiMsg_type type,  RaiMsg_size size,
-               RaiMsg_data buf ) throw( RaiException ) {
+               RaiMsg_data buf ) {
     if ( type == RAIMSG_STRING )
       this->Append( f, (const char *) buf, size );
     else {
@@ -442,7 +442,7 @@ public:
     return this->Append( f, *fld );
   }
 
-  void Append( const RaiMsg_dict *f,  RaiFormPtr &fld ) throw( RaiException ) {
+  void Append( const RaiMsg_dict *f,  RaiFormPtr &fld ) {
     if ( isStringType( f->ftype ) && isStringType( fld.entry->ftype ) ) {
       this->Append( f, (const char *) &fld.msg->buf[ fld.foff + 2 ],
                     fld.entry->fsize );
@@ -469,7 +469,7 @@ public:
     }
   }
 
-  void Append( RaiFormPtr &fld ) throw( RaiException ) {
+  void Append( RaiFormPtr &fld ) {
     if ( this->bufOff + fld.fsize > this->bufLen )
       throw bufOverflowErr();
     for ( unsigned int i = 0; i < fld.fsize; i++ )
@@ -480,28 +480,28 @@ public:
 
 
 inline const RaiMsg_dict *
-RaiFormPtr::First( RaiFormMsg *m ) throw( RaiException )
+RaiFormPtr::First( RaiFormMsg *m )
 {
   this->msg = m;
   return m->First( *this );
 }
 
 inline const RaiMsg_dict *
-RaiFormPtr::Next( void ) throw( RaiException )
+RaiFormPtr::Next( void )
 {
   return this->msg->Next( *this );
 }
 
 inline const RaiMsg_dict *
 RaiFormPtr::Find( RaiFormMsg *m,
-                  const RaiMsg_dict *entry ) throw( RaiException )
+                  const RaiMsg_dict *entry )
 {
   this->msg = m;
   return m->Find( *this, entry );
 }
 
 template<class T> inline void
-RaiFormPtr::Get( T &val ) throw( RaiException )
+RaiFormPtr::Get( T &val )
 {
   this->msg->Get( *this, val );
 }

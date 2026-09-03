@@ -112,7 +112,7 @@ RaiMsg::StringToProto( const char *s )
 
 
 void
-RaiMsg::ReUse( void ) throw( RaiMsgException )
+RaiMsg::ReUse( void )
 {
   if ( this->msgBuf != NULL ) {
     if ( this->msgEx != NULL )
@@ -133,7 +133,7 @@ RaiMsg::ReUse( void ) throw( RaiMsgException )
 
 
 void
-RaiMsg::ReUse( RaiMsg_protocol proto ) throw( RaiMsgException )
+RaiMsg::ReUse( RaiMsg_protocol proto )
 {
   if ( this->msgBuf != NULL ) {
     if ( this->msgEx != NULL )
@@ -160,7 +160,7 @@ RaiMsg::Release( void )
 
 
 RaiMsg_size
-RaiMsg::HeaderSize( RaiMsg_protocol proto ) throw( RaiMsgException )
+RaiMsg::HeaderSize( RaiMsg_protocol proto )
 {
   if ( ! RaiMsg::isValidProto( proto ) )
     throw RaiMsgErr::getErr( RaiMsgErr::BAD_PROTO );
@@ -236,7 +236,7 @@ RaiMsg::InitHeader( RaiMsg_size messageSize )
 void
 RaiMsg::InitBuffer( RaiMsg_data msg_buffer,  RaiMsg_size msg_off,
                     RaiMsg_size msg_buffer_size,  RaiMsg_protocol proto,
-                    RaiMsg_memory is_dynamic ) throw( RaiMsgException )
+                    RaiMsg_memory is_dynamic )
 {
   if ( ! RaiMsg::isValidProto( proto ) )
     throw RaiMsgErr::getErr( RaiMsgErr::BAD_PROTO );
@@ -288,7 +288,7 @@ RaiMsg::InitSubMessage( Rai_u8 *msg_buffer,  RaiMsg_size msg_buffer_size,
 
 
 void
-RaiMsg::ClearForm( const RaiMsg_form *form ) throw( RaiMsgException )
+RaiMsg::ClearForm( const RaiMsg_form *form )
 {
   Rai_u8    * formBuf,
             * msgBuf;
@@ -360,7 +360,7 @@ RaiMsg::ClearForm( const RaiMsg_form *form ) throw( RaiMsgException )
 
 bool
 RaiMsg::CheckIsForm( const RaiMsg_form *form,  bool inFormOrder )
-        throw( RaiMsgException )
+
 {
   Rai_u8            * formBuf,
                     * msgBuf,
@@ -447,7 +447,7 @@ RaiMsg::CheckIsForm( const RaiMsg_form *form,  bool inFormOrder )
 
 
 void
-RaiMsg::Copy( RaiMsg *msg_ptr ) throw( RaiMsgException )
+RaiMsg::Copy( RaiMsg *msg_ptr )
 {
   RaiMsg_size msgSize,
               newMsgSize;
@@ -506,7 +506,7 @@ RaiMsg::Copy( RaiMsg *msg_ptr ) throw( RaiMsgException )
 
 bool
 RaiMsg::Get( const RaiMsg_dict *entry,  RaiField &field )
-        throw( RaiMsgException )
+
 {
   if ( this->isForm() ) {
     RaiMsg_size off;
@@ -524,7 +524,7 @@ RaiMsg::Get( const RaiMsg_dict *entry,  RaiField &field )
 
 bool
 RaiMsg::Get( const RaiMsg_dict *entry,  char *str,
-             RaiMsg_size limit ) throw( RaiMsgException )
+             RaiMsg_size limit )
 {
   RaiField field;
   if ( this->Get( entry, field ) ) {
@@ -536,7 +536,7 @@ RaiMsg::Get( const RaiMsg_dict *entry,  char *str,
 
 
 bool
-RaiMsg::Get( const RaiMsg_dict *entry,  char *&str ) throw( RaiMsgException )
+RaiMsg::Get( const RaiMsg_dict *entry,  char *&str )
 {
   RaiMsg_type type;
   RaiMsg_data data;
@@ -557,7 +557,7 @@ RaiMsg::Get( const RaiMsg_dict *entry,  char *&str ) throw( RaiMsgException )
 
 bool
 RaiMsg::Get( const RaiMsg_dict *entry,  RaiMsg_type ftype,
-             RaiMsg_size fsize,  RaiMsg_data fdata ) throw( RaiMsgException )
+             RaiMsg_size fsize,  RaiMsg_data fdata )
 {
   RaiField      field;
   RaiField_data data;
@@ -576,7 +576,7 @@ RaiMsg::Get( const RaiMsg_dict *entry,  RaiMsg_type ftype,
 
 
 bool
-RaiMsg::Get( RaiMsg_name fname,  RaiField &field ) throw( RaiMsgException )
+RaiMsg::Get( RaiMsg_name fname,  RaiField &field )
 {
   RaiMsg_name fieldName,
               ptr;
@@ -616,7 +616,7 @@ RaiMsg::Get( RaiMsg_name fname,  RaiField &field ) throw( RaiMsgException )
 
 bool
 RaiMsg::GetEx( RaiMsg_name fname,  Rai_u16 fid,  RaiField &field )
-        throw( RaiMsgException )
+
 {
   char        buf[ 256 ];
   RaiMsg_size fnameLen;
@@ -630,7 +630,7 @@ RaiMsg::GetEx( RaiMsg_name fname,  Rai_u16 fid,  RaiField &field )
 
 bool
 RaiMsg::Get( RaiMsg_name fname,  char *str,  RaiMsg_size limit )
-        throw( RaiMsgException )
+
 {
   RaiField field;
   if ( this->Get( fname, field ) ) {
@@ -643,7 +643,7 @@ RaiMsg::Get( RaiMsg_name fname,  char *str,  RaiMsg_size limit )
 
 bool
 RaiMsg::GetEx( RaiMsg_name fname,  Rai_u16 fid,  char *str,  RaiMsg_size limit )
-        throw( RaiMsgException )
+
 {
   RaiField field;
   if ( this->GetEx( fname, fid, field ) ) {
@@ -1052,7 +1052,7 @@ byte
 RaiMsg::GetSassHeader( Rai_u16 &msgType,  Rai_u16 &recType,
                        Rai_u16 &seqNo,  Rai_u16 &recStatus,
                        Rai_u8 needFlds )
-        throw( RaiMsgException )
+
 {
   SassHdrParse hdr( this->msgStart +
                       ( ( this->isDynamic != RAIMSG_MEMORY_FIXED ) ?
@@ -1080,7 +1080,7 @@ RaiMsg::GetSassHeaderFields( RaiField &msgTypeF,  RaiField &recTypeF,
                              RaiField &seqNoF,  RaiField &recStatusF,
                              Rai_u16 &msgType,  Rai_u16 &recType,
                              Rai_u16 &seqNo,  Rai_u16 &recStatus )
-        throw( RaiMsgException )
+
 {
   SassHdrParse hdr( this->msgStart +
                       ( ( this->isDynamic != RAIMSG_MEMORY_FIXED ) ?
@@ -1114,7 +1114,7 @@ RaiMsg::GetSassHeaderFields( RaiField &msgTypeF,  RaiField &recTypeF,
 #if 0
 /* template version of Get works for this, must pass const char * */
 bool
-RaiMsg::Get( RaiMsg_name fname,  char *&str ) throw( RaiMsgException )
+RaiMsg::Get( RaiMsg_name fname,  char *&str )
 {
   RaiMsg_type type;
   RaiMsg_data data;
@@ -1136,7 +1136,7 @@ RaiMsg::Get( RaiMsg_name fname,  char *&str ) throw( RaiMsgException )
 
 bool
 RaiMsg::Get( RaiMsg_name fname,  RaiMsg_type ftype,
-             RaiMsg_size fsize,  RaiMsg_data fdata ) throw( RaiMsgException )
+             RaiMsg_size fsize,  RaiMsg_data fdata )
 {
   RaiField      field;
   RaiField_data data;
@@ -1152,7 +1152,7 @@ RaiMsg::Get( RaiMsg_name fname,  RaiMsg_type ftype,
 
 bool
 RaiMsg::GetEx( RaiMsg_name fname,  Rai_u16 fid,  RaiMsg_type ftype,
-               RaiMsg_size fsize,  RaiMsg_data fdata ) throw( RaiMsgException )
+               RaiMsg_size fsize,  RaiMsg_data fdata )
 {
   RaiField      field;
   RaiField_data data;
@@ -1212,7 +1212,7 @@ RaiMsg::ReleaseExtra( void )
 void
 RaiMsg::GetDecodedArray( RaiMsg_data array,  RaiMsg_type elem_type,
                          RaiMsg_size elem_size,  RaiMsg_size array_size,
-                         RaiMsg_data &decodedArray ) throw( RaiMsgException )
+                         RaiMsg_data &decodedArray )
 {
   RaiMsg       * msg;
   RaiMsg_extra * msgEx;
@@ -1312,7 +1312,7 @@ RaiMsg::GetDecodedArray( RaiMsg_data array,  RaiMsg_type elem_type,
 
 void
 RaiMsg::GetDecodedString( RaiMsg_data string,  RaiMsg_size string_size,
-                          RaiMsg_data &decodedString ) throw( RaiMsgException )
+                          RaiMsg_data &decodedString )
 {
   RaiMsg       * msg;
   RaiMsg_extra * msgEx;
@@ -1357,7 +1357,7 @@ RaiMsg::GetDecodedString( RaiMsg_data string,  RaiMsg_size string_size,
 
 void
 RaiMsg::Apply( RaiMsg_name fname,  RaiMsg_apply_cb callback_function,
-               void *closure ) throw( RaiMsgException )
+               void *closure )
 {
   RaiMsg_name fieldName;
   RaiField    field;
@@ -1383,7 +1383,7 @@ RaiMsg::SetNameSeparator( char sep_char )
 
 
 void
-RaiMsg::AppendHeader( void ) throw( RaiMsgException )
+RaiMsg::AppendHeader( void )
 {
   Rai_u8    * msgBuf;
   RaiMsg_size start = 0;
@@ -1416,7 +1416,7 @@ RaiMsg::AppendHeader( void ) throw( RaiMsgException )
 
 Rai_u8 *
 RaiMsg::Adjust( RaiMsg_size field_offset, RaiMsg_size new_size,
-                RaiMsg_size old_size ) throw( RaiMsgException )
+                RaiMsg_size old_size )
 {
   Rai_u8       * msgBuf;
   RaiMsg_extra * msgEx;
@@ -1562,7 +1562,7 @@ RaiMsg::Adjust( RaiMsg_size field_offset, RaiMsg_size new_size,
 
 RaiMsg_data
 RaiMsg::AppendRaw( RaiMsg_data field_data,
-                   RaiMsg_size field_size ) throw( RaiMsgException )
+                   RaiMsg_size field_size )
 {
   RaiMsg_size msgEnd;
   Rai_u8    * msgBuf;
@@ -1598,7 +1598,7 @@ RaiMsg::RawData( RaiMsg_size *dataSize )
 #if 0
 static void
 raimsg_copy_field_func( RaiField &field1,  RaiMsg * const _this,
-                        void ( RaiMsg::*func )( RaiField * ) ) throw( RaiMsgException )
+                        void ( RaiMsg::*func )( RaiField * ) )
 {
   RaiField    field2;
   Rai_u8      memBuf[ 256 ],
@@ -1621,7 +1621,7 @@ raimsg_copy_field_func( RaiField &field1,  RaiMsg * const _this,
 
 
 void
-RaiMsg::Append( RaiField *field_ptr ) throw( RaiMsgException )
+RaiMsg::Append( RaiField *field_ptr )
 {
   if ( ! field_ptr->Overlaps( *this ) )
     this->Append2( field_ptr );
@@ -1631,7 +1631,7 @@ RaiMsg::Append( RaiField *field_ptr ) throw( RaiMsgException )
 #endif
 
 void
-RaiMsg::Append( RaiField *field_ptr ) throw( RaiMsgException )
+RaiMsg::Append( RaiField *field_ptr )
 {
   RaiMsg_size         msgEnd,
                       fieldSize;
@@ -1660,7 +1660,7 @@ RaiMsg::Append( RaiField *field_ptr ) throw( RaiMsgException )
 
 
 void
-RaiMsg::Append( RaiMsg_name fname,  RaiMsg *msg_ptr ) throw( RaiMsgException )
+RaiMsg::Append( RaiMsg_name fname,  RaiMsg *msg_ptr )
 {
   RaiField field;
   /* Need to tell field what proto we are so it can initialize the sub message
@@ -1692,7 +1692,7 @@ RaiMsg::Append( RaiMsg_name fname,  RaiMsg *msg_ptr ) throw( RaiMsgException )
 void
 RaiMsg::Append( RaiMsg_name fname,  RaiMsg_data partial_data,
                 RaiMsg_size partial_size,  RaiMsg_size offset )
-        throw( RaiMsgException )
+
 {
   RaiField field;
   field.Update( fname, partial_data, partial_size, offset );
@@ -1703,7 +1703,7 @@ RaiMsg::Append( RaiMsg_name fname,  RaiMsg_data partial_data,
 void
 RaiMsg::Append( RaiMsg_name fname,  RaiMsg_data array_data,
                 RaiMsg_size num_entries,  RaiMsg_type entry_type,
-                RaiMsg_size entry_size ) throw( RaiMsgException )
+                RaiMsg_size entry_size )
 {
   RaiField field;
   field.Update( fname, array_data, num_entries, entry_type, entry_size );
@@ -1713,7 +1713,7 @@ RaiMsg::Append( RaiMsg_name fname,  RaiMsg_data array_data,
 
 void
 RaiMsg::Append( RaiMsg_name fname,  RaiMsg_type ftype,
-                RaiMsg_size fsize,  RaiMsg_data fdata ) throw( RaiMsgException )
+                RaiMsg_size fsize,  RaiMsg_data fdata )
 {
   RaiField field;
   field.Update( fname, ftype, fsize, fdata );
@@ -1725,7 +1725,7 @@ void
 RaiMsg::Append( RaiMsg_name fname,  RaiMsg_type ftype,
                 RaiMsg_size fsize,  RaiMsg_data fdata,
                 RaiMsg_type hint_type,  RaiMsg_size hint_size,
-                RaiMsg_data hint_data ) throw( RaiMsgException )
+                RaiMsg_data hint_data )
 {
   RaiField field;
   field.Update( fname, ftype, fsize, fdata, hint_type, hint_size, hint_data );
@@ -1736,7 +1736,7 @@ RaiMsg::Append( RaiMsg_name fname,  RaiMsg_type ftype,
 static void
 raimsg_copy_field_func2( const RaiMsg_dict *entry,  RaiField &field1,
                          RaiMsg * const _this,
-      void ( RaiMsg::*func )( const RaiMsg_dict *, RaiField * ) ) throw( RaiMsgException )
+      void ( RaiMsg::*func )( const RaiMsg_dict *, RaiField * ) )
 {
   RaiField    field2;
   Rai_u8      memBuf[ 256 ],
@@ -1761,7 +1761,7 @@ raimsg_copy_field_func2( const RaiMsg_dict *entry,  RaiField &field1,
 
 
 void
-RaiMsg::Append( const RaiMsg_dict *entry,  RaiField *field_ptr ) throw( RaiMsgException )
+RaiMsg::Append( const RaiMsg_dict *entry,  RaiField *field_ptr )
 {
   if ( ! field_ptr->Overlaps( *this ) )
     this->Append2( entry, field_ptr );
@@ -1772,7 +1772,7 @@ RaiMsg::Append( const RaiMsg_dict *entry,  RaiField *field_ptr ) throw( RaiMsgEx
 
 void
 RaiMsg::Append( const RaiMsg_dict *entry,  RaiField *field_ptr )
-        throw( RaiMsgException )
+
 {
   RaiMsg_size msgEnd,
               fieldSize;
@@ -1814,7 +1814,7 @@ RaiMsg::Append( const RaiMsg_dict *entry,  RaiField *field_ptr )
 
 void
 RaiMsg::Append( RaiMsg_name fname,  RaiField *field_ptr )
-        throw( RaiMsgException )
+
 {
   RaiField field;
   field.Update( field_ptr );
@@ -1828,7 +1828,7 @@ RaiMsg::Append( RaiMsg_name fname,  RaiField *field_ptr )
 void
 RaiMsg::Append( const RaiMsg_dict *entry,  RaiMsg_data partial_data,
                 RaiMsg_size partial_size,  RaiMsg_size offset )
-        throw( RaiMsgException )
+
 {
   RaiField field;
   field.Update( NULL, partial_data, partial_size, offset );
@@ -1839,7 +1839,7 @@ RaiMsg::Append( const RaiMsg_dict *entry,  RaiMsg_data partial_data,
 void
 RaiMsg::Append( const RaiMsg_dict *entry,  RaiMsg_data array_data,
                 RaiMsg_size num_entries,  RaiMsg_type entry_type,
-                RaiMsg_size entry_size ) throw( RaiMsgException )
+                RaiMsg_size entry_size )
 {
   RaiField field;
   field.Update( NULL, array_data, num_entries, entry_type, entry_size );
@@ -1849,7 +1849,7 @@ RaiMsg::Append( const RaiMsg_dict *entry,  RaiMsg_data array_data,
 
 void
 RaiMsg::Append( const RaiMsg_dict *entry,  RaiMsg_type ftype,
-                RaiMsg_size fsize,  RaiMsg_data fdata ) throw( RaiMsgException )
+                RaiMsg_size fsize,  RaiMsg_data fdata )
 {
   RaiField field;
   field.Update( NULL, ftype, fsize, fdata );
@@ -1861,7 +1861,7 @@ void
 RaiMsg::Append( const RaiMsg_dict *entry,  RaiMsg_type ftype,
                 RaiMsg_size fsize,  RaiMsg_data fdata,
                 RaiMsg_type hint_type,  RaiMsg_size hint_size,
-                RaiMsg_data hint_data ) throw( RaiMsgException )
+                RaiMsg_data hint_data )
 {
   RaiField field;
   field.Update( NULL, ftype, fsize, fdata, hint_type, hint_size, hint_data );
@@ -1871,7 +1871,7 @@ RaiMsg::Append( const RaiMsg_dict *entry,  RaiMsg_type ftype,
 
 void
 RaiMsg::Update( RaiMsg_name fname,  RaiField *field_ptr )
-        throw( RaiMsgException )
+
 {
   RaiField field;
   field.Update( field_ptr );
@@ -1883,7 +1883,7 @@ RaiMsg::Update( RaiMsg_name fname,  RaiField *field_ptr )
 
 #if 0
 void
-RaiMsg::Update( RaiField *field_ptr ) throw( RaiMsgException )
+RaiMsg::Update( RaiField *field_ptr )
 {
   if ( ! field_ptr->Overlaps( *this ) )
     this->Update2( field_ptr );
@@ -1893,7 +1893,7 @@ RaiMsg::Update( RaiField *field_ptr ) throw( RaiMsgException )
 #endif
 
 void
-RaiMsg::Update( RaiField *field_ptr ) throw( RaiMsgException )
+RaiMsg::Update( RaiField *field_ptr )
 {
   RaiMsg_name         fname;
   const RaiMsg_dict * entry;
@@ -1924,7 +1924,7 @@ RaiMsg::Update( RaiField *field_ptr ) throw( RaiMsgException )
 
 void
 RaiMsg::Replace( RaiField *old_field,  RaiField *new_field )
-        throw( RaiMsgException )
+
 {
   RaiMsg_name         fname;
   const RaiMsg_dict * old_entry;
@@ -1948,7 +1948,7 @@ RaiMsg::Replace( RaiField *old_field,  RaiField *new_field )
 
 void
 RaiMsg::Replace_SD( RaiField &field,  RaiField &new_field )
-        throw( RaiMsgException )
+
 {
   char        tmpBuf[ 128 ];
   Rai_u8    * msgBuf;
@@ -2076,7 +2076,7 @@ RaiMsg::Replace_SD( RaiField &field,  RaiField &new_field )
 
 
 void
-RaiMsg::Update( RaiMsg_name fname,  RaiMsg *msg_ptr ) throw( RaiMsgException )
+RaiMsg::Update( RaiMsg_name fname,  RaiMsg *msg_ptr )
 {
   RaiField field;
   if ( msg_ptr == NULL || msg_ptr->msgBuf == NULL ) {
@@ -2106,7 +2106,7 @@ RaiMsg::Update( RaiMsg_name fname,  RaiMsg *msg_ptr ) throw( RaiMsgException )
 void
 RaiMsg::Update( RaiMsg_name fname,  RaiMsg_data partial_data,
                 RaiMsg_size partial_size,  RaiMsg_size offset )
-        throw( RaiMsgException )
+
 {
   RaiField field;
   field.Update( fname, partial_data, partial_size, offset );
@@ -2117,7 +2117,7 @@ RaiMsg::Update( RaiMsg_name fname,  RaiMsg_data partial_data,
 void
 RaiMsg::Update( RaiMsg_name fname,  RaiMsg_data array_data,
                 RaiMsg_size num_entries,  RaiMsg_type entry_type,
-                RaiMsg_size entry_size ) throw( RaiMsgException )
+                RaiMsg_size entry_size )
 {
   RaiField field;
   field.Update( fname, array_data, num_entries, entry_type, entry_size );
@@ -2127,7 +2127,7 @@ RaiMsg::Update( RaiMsg_name fname,  RaiMsg_data array_data,
 
 void
 RaiMsg::Update( RaiMsg_name fname,  RaiMsg_type ftype,
-                RaiMsg_size fsize,  RaiMsg_data fdata ) throw( RaiMsgException )
+                RaiMsg_size fsize,  RaiMsg_data fdata )
 {
   RaiField field;
   field.Update( fname, ftype, fsize, fdata );
@@ -2139,7 +2139,7 @@ void
 RaiMsg::Update( RaiMsg_name fname,  RaiMsg_type ftype,
                 RaiMsg_size fsize,  RaiMsg_data fdata,
                 RaiMsg_type hint_type,  RaiMsg_size hint_size,
-                RaiMsg_data hint_data ) throw( RaiMsgException )
+                RaiMsg_data hint_data )
 {
   RaiField field;
   field.Update( fname, ftype, fsize, fdata, hint_type, hint_size, hint_data );
@@ -2148,7 +2148,7 @@ RaiMsg::Update( RaiMsg_name fname,  RaiMsg_type ftype,
 
 #if 0
 void
-RaiMsg::Update( const RaiMsg_dict *entry,  RaiField *field_ptr ) throw( RaiMsgException )
+RaiMsg::Update( const RaiMsg_dict *entry,  RaiField *field_ptr )
 {
   if ( ! field_ptr->Overlaps( *this ) )
     this->Update2( entry, field_ptr );
@@ -2159,7 +2159,7 @@ RaiMsg::Update( const RaiMsg_dict *entry,  RaiField *field_ptr ) throw( RaiMsgEx
 
 void
 RaiMsg::Update( const RaiMsg_dict *entry,  RaiField *field_ptr )
-        throw( RaiMsgException )
+
 {
   RaiMsg_size off;
   Rai_u16     fid;
@@ -2206,7 +2206,7 @@ RaiMsg::Update( const RaiMsg_dict *entry,  RaiField *field_ptr )
 
 void
 RaiMsg::Replace_SASS( const RaiMsg_dict *entry,  RaiField &old_field,
-                      RaiField &new_field ) throw( RaiMsgException )
+                      RaiField &new_field )
 {
   char        tmpBuf[ 128 ];
   RaiMsg_data data;
@@ -2313,7 +2313,7 @@ RaiMsg::Replace_SASS( const RaiMsg_dict *entry,  RaiField &old_field,
 void
 RaiMsg::Update( const RaiMsg_dict *entry,  RaiMsg_data partial_data,
                 RaiMsg_size partial_size,  RaiMsg_size offset )
-        throw( RaiMsgException )
+
 {
   RaiField field;
   field.Update( NULL, partial_data, partial_size, offset );
@@ -2324,7 +2324,7 @@ RaiMsg::Update( const RaiMsg_dict *entry,  RaiMsg_data partial_data,
 void
 RaiMsg::Update( const RaiMsg_dict *entry,  RaiMsg_data array_data,
                 RaiMsg_size num_entries,  RaiMsg_type entry_type,
-                RaiMsg_size entry_size ) throw( RaiMsgException )
+                RaiMsg_size entry_size )
 {
   RaiField field;
   field.Update( NULL, array_data, num_entries, entry_type, entry_size );
@@ -2334,7 +2334,7 @@ RaiMsg::Update( const RaiMsg_dict *entry,  RaiMsg_data array_data,
 
 void
 RaiMsg::Update( const RaiMsg_dict *entry,  RaiMsg_type ftype,
-                RaiMsg_size fsize,  RaiMsg_data fdata ) throw( RaiMsgException )
+                RaiMsg_size fsize,  RaiMsg_data fdata )
 {
   RaiField field;
   field.Update( NULL, ftype, fsize, fdata );
@@ -2346,7 +2346,7 @@ void
 RaiMsg::Update( const RaiMsg_dict *entry,  RaiMsg_type ftype,
                 RaiMsg_size fsize,  RaiMsg_data fdata,
                 RaiMsg_type hint_type,  RaiMsg_size hint_size,
-                RaiMsg_data hint_data ) throw( RaiMsgException )
+                RaiMsg_data hint_data )
 {
   RaiField field;
   field.Update( NULL, ftype, fsize, fdata, hint_type, hint_size, hint_data );
@@ -2355,7 +2355,7 @@ RaiMsg::Update( const RaiMsg_dict *entry,  RaiMsg_type ftype,
 
 
 template<class T> bool
-RaiMsg::Get( RaiMsg_name fname,  T &arg ) throw( RaiMsgException )
+RaiMsg::Get( RaiMsg_name fname,  T &arg )
 {
   RaiField field;
   if ( this->Get( fname, field ) ) {
@@ -2366,11 +2366,11 @@ RaiMsg::Get( RaiMsg_name fname,  T &arg ) throw( RaiMsgException )
 }
 #define INSTANTIATE_GET1( TYPE ) \
   template bool RAIMSG_DLL_EXP \
-  RaiMsg::Get( RaiMsg_name fname,  TYPE &arg ) throw( RaiMsgException )
+  RaiMsg::Get( RaiMsg_name fname,  TYPE &arg )
 
 template<class T> bool
 RaiMsg::GetEx( RaiMsg_name fname,  Rai_u16 fid,  T &arg )
-        throw( RaiMsgException )
+
 {
   RaiField field;
   if ( this->GetEx( fname, fid, field ) ) {
@@ -2381,10 +2381,10 @@ RaiMsg::GetEx( RaiMsg_name fname,  Rai_u16 fid,  T &arg )
 }
 #define INSTANTIATE_GET2( TYPE ) \
   template bool RAIMSG_DLL_EXP \
-  RaiMsg::GetEx( RaiMsg_name fname,  Rai_u16 fid,  TYPE &arg ) throw( RaiMsgException )
+  RaiMsg::GetEx( RaiMsg_name fname,  Rai_u16 fid,  TYPE &arg )
 
 template<class T> bool
-RaiMsg::Get( const RaiMsg_dict *entry,  T &arg ) throw( RaiMsgException )
+RaiMsg::Get( const RaiMsg_dict *entry,  T &arg )
 {
   RaiField field;
   if ( this->Get( entry, field ) ) {
@@ -2395,10 +2395,10 @@ RaiMsg::Get( const RaiMsg_dict *entry,  T &arg ) throw( RaiMsgException )
 }
 #define INSTANTIATE_GET3( TYPE ) \
   template bool RAIMSG_DLL_EXP \
-  RaiMsg::Get( const RaiMsg_dict *entry,  TYPE &arg ) throw( RaiMsgException )
+  RaiMsg::Get( const RaiMsg_dict *entry,  TYPE &arg )
 
 template<class T> void
-RaiMsg::Append( RaiMsg_name fname,  T arg ) throw( RaiMsgException )
+RaiMsg::Append( RaiMsg_name fname,  T arg )
 {
   RaiField field;
   field.Update( fname, arg );
@@ -2406,11 +2406,11 @@ RaiMsg::Append( RaiMsg_name fname,  T arg ) throw( RaiMsgException )
 }
 #define INSTANTIATE_APPEND1( TYPE ) \
   template void RAIMSG_DLL_EXP \
-  RaiMsg::Append( RaiMsg_name fname,  TYPE arg ) throw( RaiMsgException )
+  RaiMsg::Append( RaiMsg_name fname,  TYPE arg )
 
 template<class T> void
 RaiMsg::AppendEx( RaiMsg_name fname,  Rai_u16 fid,  T arg )
-        throw( RaiMsgException )
+
 {
   RaiField    field;
   char        buf[ 256 ];
@@ -2421,10 +2421,10 @@ RaiMsg::AppendEx( RaiMsg_name fname,  Rai_u16 fid,  T arg )
 }
 #define INSTANTIATE_APPEND2( TYPE ) \
   template void RAIMSG_DLL_EXP \
-  RaiMsg::AppendEx( RaiMsg_name fname,  Rai_u16 fid,  TYPE arg ) throw( RaiMsgException )
+  RaiMsg::AppendEx( RaiMsg_name fname,  Rai_u16 fid,  TYPE arg )
 
 template<class T> void
-RaiMsg::Append( const RaiMsg_dict *entry, T arg ) throw( RaiMsgException )
+RaiMsg::Append( const RaiMsg_dict *entry, T arg )
 {
   RaiField field;
   field.Update( NULL, arg );
@@ -2432,10 +2432,10 @@ RaiMsg::Append( const RaiMsg_dict *entry, T arg ) throw( RaiMsgException )
 }
 #define INSTANTIATE_APPEND3( TYPE ) \
   template void RAIMSG_DLL_EXP \
-  RaiMsg::Append( const RaiMsg_dict *entry,  TYPE arg ) throw( RaiMsgException )
+  RaiMsg::Append( const RaiMsg_dict *entry,  TYPE arg )
 
 template<class T> void
-RaiMsg::Update( RaiMsg_name fname,  T arg ) throw( RaiMsgException )
+RaiMsg::Update( RaiMsg_name fname,  T arg )
 {
   RaiField field;
   field.Update( fname, arg );
@@ -2443,11 +2443,11 @@ RaiMsg::Update( RaiMsg_name fname,  T arg ) throw( RaiMsgException )
 }
 #define INSTANTIATE_UPDATE1( TYPE ) \
   template void RAIMSG_DLL_EXP \
-  RaiMsg::Update( RaiMsg_name fname,  TYPE arg ) throw( RaiMsgException )
+  RaiMsg::Update( RaiMsg_name fname,  TYPE arg )
 
 template<class T> void
 RaiMsg::UpdateEx( RaiMsg_name fname,  Rai_u16 fid,  T arg )
-        throw( RaiMsgException )
+
 {
   RaiField    field;
   char        buf[ 256 ];
@@ -2458,10 +2458,10 @@ RaiMsg::UpdateEx( RaiMsg_name fname,  Rai_u16 fid,  T arg )
 }
 #define INSTANTIATE_UPDATE2( TYPE ) \
   template void RAIMSG_DLL_EXP \
-  RaiMsg::UpdateEx( RaiMsg_name fname,  Rai_u16 fid,  TYPE arg ) throw( RaiMsgException )
+  RaiMsg::UpdateEx( RaiMsg_name fname,  Rai_u16 fid,  TYPE arg )
 
 template<class T> void
-RaiMsg::Update( const RaiMsg_dict *entry, T arg ) throw( RaiMsgException )
+RaiMsg::Update( const RaiMsg_dict *entry, T arg )
 {
   RaiField field;
   field.Update( NULL, arg );
@@ -2469,7 +2469,7 @@ RaiMsg::Update( const RaiMsg_dict *entry, T arg ) throw( RaiMsgException )
 }
 #define INSTANTIATE_UPDATE3( TYPE ) \
   template void RAIMSG_DLL_EXP \
-  RaiMsg::Update( const RaiMsg_dict *entry,  TYPE arg ) throw( RaiMsgException )
+  RaiMsg::Update( const RaiMsg_dict *entry,  TYPE arg )
 
 #define INSTANTIATE_ALL( D ) \
   D( bool ); D( Rai_u8 ); D( Rai_i8 ); D( Rai_u16 ); D( Rai_i16 ); \
@@ -2496,7 +2496,7 @@ INSTANTIATE_ALL2( INSTANTIATE_UPDATE3 );
 
 void
 RaiMsg::AppendEx( RaiMsg_name fname,  Rai_u16 fid,  RaiField *field_ptr )
-        throw( RaiMsgException )
+
 {
   RaiField field;
   char     buf[ 256 ];
@@ -2511,7 +2511,7 @@ RaiMsg::AppendEx( RaiMsg_name fname,  Rai_u16 fid,  RaiField *field_ptr )
 
 
 bool
-RaiMsg::Activate( RaiMsg_name msg_field_name ) throw( RaiMsgException )
+RaiMsg::Activate( RaiMsg_name msg_field_name )
 {
   RaiMsg_size    offsetStack[ MAX_MSG_DEPTH ];
   Rai_u32        offsetTop;
@@ -2597,7 +2597,7 @@ RaiMsg::Activate( RaiMsg_name msg_field_name ) throw( RaiMsgException )
 bool
 RaiMsg::GetMsgOffset( RaiMsg_name msg_field_name,  RaiMsg_size *offset_stack,
                       Rai_u32 &offset_top,  RaiMsg *msgBase )
-        throw( RaiMsgException )
+
 {
   RaiMsg_name fieldName,
               ptr;
@@ -2684,7 +2684,7 @@ RaiMsg::GetMsgOffset( RaiMsg_name msg_field_name,  RaiMsg_size *offset_stack,
 
 bool
 RaiMsg::Rename( RaiMsg_name old_fname, RaiMsg_name new_fname )
-        throw( RaiMsgException )
+
 {
   Rai_u8    * msgBuf;
   RaiMsg_size newSize,
@@ -2711,7 +2711,7 @@ RaiMsg::Rename( RaiMsg_name old_fname, RaiMsg_name new_fname )
 
 
 bool
-RaiMsg::Remove( RaiMsg_name fname ) throw( RaiMsgException )
+RaiMsg::Remove( RaiMsg_name fname )
 {
   RaiMsg_size oldSize;
   RaiField    field;
@@ -2731,7 +2731,7 @@ RaiMsg::Remove( RaiMsg_name fname ) throw( RaiMsgException )
 
 
 void
-RaiMsg::UnPack( RaiMsg_data from_ptr ) throw( RaiMsgException )
+RaiMsg::UnPack( RaiMsg_data from_ptr )
 {
   this->UnPack( from_ptr, 0xffffffffU );
 }
@@ -2739,7 +2739,7 @@ RaiMsg::UnPack( RaiMsg_data from_ptr ) throw( RaiMsgException )
 
 void
 RaiMsg::UnPack( RaiMsg_data from_ptr,  RaiMsg_size from_size )
-        throw( RaiMsgException )
+
 {
   RaiMsg_protocol proto;
   RaiMsg_size start = 0;
@@ -2785,7 +2785,7 @@ static const Rai_u8 tibrv_encap_data_[]  = "\007_data_\000\007",
                     tibrv_encap_RAIMSG[] = "\010_RAIMSG\000\007",
                     tibrv_encap_TIBMSG[] = "\010_TIBMSG\000\007";
 void
-RaiMsg::TibrvEncapsulate( void ) throw( RaiMsgException )
+RaiMsg::TibrvEncapsulate( void )
 {
   RaiMsg_size rvSize, hdrSize, fnameSize, newSize, off;
   const byte * fname;
@@ -2935,7 +2935,7 @@ check_mama_encap:;
 void
 RaiMsg::UnPack( RaiMsg_protocol proto,  RaiMsg_data from_ptr,
                 RaiMsg_size from_size,  RaiMsg_memory memKind )
-        throw( RaiMsgException )
+
 {
   this->UnPack( proto, from_ptr, from_size, memKind, 0 );
 }
@@ -2944,7 +2944,7 @@ RaiMsg::UnPack( RaiMsg_protocol proto,  RaiMsg_data from_ptr,
 void
 RaiMsg::UnPack( RaiMsg_protocol proto,  RaiMsg_data from_ptr,
                 RaiMsg_size from_size,  RaiMsg_memory memKind,
-                RaiMsg_size from_off ) throw( RaiMsgException )
+                RaiMsg_size from_off )
 {
   Rai_u32     magic;
   Rai_u16     u16;
@@ -3013,7 +3013,7 @@ RaiMsg::UnPack( RaiMsg_protocol proto,  RaiMsg_data from_ptr,
 
 
 void
-RaiMsg::Pack( RaiMsg_data to_ptr ) const throw( RaiMsgException )
+RaiMsg::Pack( RaiMsg_data to_ptr ) const
 {
   RaiMsg_size msgSize;
 
@@ -3024,7 +3024,7 @@ RaiMsg::Pack( RaiMsg_data to_ptr ) const throw( RaiMsgException )
 
 
 RaiMsg_size
-RaiMsg::PackSize( void ) const throw( RaiMsgException )
+RaiMsg::PackSize( void ) const
 {
   if ( this->msgBuf == NULL )
     return 0;
@@ -3091,7 +3091,7 @@ void
 RaiMsg::Print( OutputStream *output_file,  Rai_u32 field_newlines,
                const char *fname_format,  Rai_u32 print_opaques,
                const char *debug_format,  const char *debug_hformat )
-        throw( RaiMsgException )
+
 {
   RaiField field;
 
@@ -3107,7 +3107,7 @@ RaiMsg::Print( OutputStream *output_file,  Rai_u32 field_newlines,
 void
 RaiMsg::PrintXML( OutputStream *output_file,  Rai_u32 attr_flags,
                   Rai_u32 field_newlines,  const char *msg_name,
-                  const char **msg_atts ) throw( RaiMsgException )
+                  const char **msg_atts )
 {
   RaiField     field;
   unsigned int i;
@@ -3149,7 +3149,7 @@ RaiMsg::PrintXML( OutputStream *output_file,  Rai_u32 attr_flags,
 
 
 void
-RaiMsg::PrintHex( OutputStream *output_file ) throw( RaiMsgException )
+RaiMsg::PrintHex( OutputStream *output_file )
 {
   Rai_u8    * msg;
   RaiMsg_size msgSize;
@@ -3163,7 +3163,7 @@ RaiMsg::PrintHex( OutputStream *output_file ) throw( RaiMsgException )
 void
 RaiMsg::PrintHex( OutputStream *output_file,  Rai_u8 *msg,
                   RaiMsg_size msgSize,  RaiMsg_size offset )
-        throw( RaiMsgException )
+
 {
   static const char hexChars[] = "0123456789abcdef";
   RaiMsg_size i, j, k, l, m;
@@ -3217,7 +3217,7 @@ RaiMsg::PrintHex( OutputStream *output_file,  Rai_u8 *msg,
 
 
 void
-RaiMsg::Read( InputStream *f,  OutputStream *err ) throw( RaiMsgException )
+RaiMsg::Read( InputStream *f,  OutputStream *err )
 {
   unsigned int  i,
                 j,
@@ -3512,7 +3512,7 @@ RaiMsg::Read( InputStream *f,  OutputStream *err ) throw( RaiMsgException )
 
 void
 RaiMsg::Read( const char *filename,  OutputStream *err )
-        throw( RaiMsgException )
+
 {
   InputStream * fp;
 
@@ -3548,7 +3548,7 @@ RaiMsg::GetDataDictionary( void )
 void
 RaiMsg::ReadDataDictionary( const char *tss_fields_fname,
                             const char *tss_records_fname )
-        throw( RaiMsgException )
+
 {
   DataDictionary = RaiMsg_config::parseDictionary( tss_fields_fname,
                                                    tss_records_fname );

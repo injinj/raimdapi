@@ -149,8 +149,8 @@ struct RAIMSG_DLL_EXP RaiField {
     return isValidMachineType( type, size );
   }
   static RaiMsg_size MakeFidName( RaiMsg_name fname,  Rai_u16 fid,
-                                  char buf[ 256 ] )    throw( RaiMsgException );
-  RaiMsg_data Data( void )                             throw( RaiMsgException );
+                                  char buf[ 256 ] );
+  RaiMsg_data Data( void );
 
   RaiMsg_type HintType( void ) const {
     return this->hintType;
@@ -210,12 +210,12 @@ struct RAIMSG_DLL_EXP RaiField {
   static void Convert( RaiMsg_type dtype,  RaiMsg_size dsize,
                        RaiMsg_data dest,  RaiMsg_type stype,
                        RaiMsg_size ssize,  RaiMsg_data src )
-                                                      throw( RaiMsgException ) {
+ {
     ConvertCtx ctx;
     ctx.init( dtype, dsize, dest, stype, ssize, src );
     RaiField::Convert( ctx );
   }
-  static void Convert( ConvertCtx &ctx )               throw( RaiMsgException );
+  static void Convert( ConvertCtx &ctx );
 
   RaiMsg_data AlignData( RaiField_data &val );
 
@@ -227,109 +227,109 @@ struct RAIMSG_DLL_EXP RaiField {
     srcCtx.srcData = this->AlignData( srcData );
     srcCtx.srcHint = 0;
   }
-  void Convert( bool &b )                              throw( RaiMsgException );
+  void Convert( bool &b );
 
-  void Convert( Rai_i8 &i8 )                           throw( RaiMsgException );
+  void Convert( Rai_i8 &i8 );
 
-  void Convert( Rai_u8 &u8 )                           throw( RaiMsgException );
+  void Convert( Rai_u8 &u8 );
 
-  void Convert( Rai_i16 &i16 )                         throw( RaiMsgException );
+  void Convert( Rai_i16 &i16 );
 
-  void Convert( Rai_u16 &u16 )                         throw( RaiMsgException );
+  void Convert( Rai_u16 &u16 );
 
-  void Convert( Rai_i32 &i32 )                         throw( RaiMsgException );
+  void Convert( Rai_i32 &i32 );
 
-  void Convert( Rai_u32 &u32 )                         throw( RaiMsgException );
+  void Convert( Rai_u32 &u32 );
 
-  void Convert( Rai_i64 &i64 )                         throw( RaiMsgException );
+  void Convert( Rai_i64 &i64 );
 
-  void Convert( Rai_u64 &u64 )                         throw( RaiMsgException );
+  void Convert( Rai_u64 &u64 );
 
-  void Convert( Rai_f32 &f32 )                         throw( RaiMsgException );
+  void Convert( Rai_f32 &f32 );
 
-  void Convert( Rai_f64 &f64 )                         throw( RaiMsgException );
+  void Convert( Rai_f64 &f64 );
 
-  void Convert( Rai_f32 &f32,  ConvertCtx &ctx )    throw( RaiMsgException );
+  void Convert( Rai_f32 &f32,  ConvertCtx &ctx );
 
-  void Convert( Rai_f64 &f64,  ConvertCtx &ctx )    throw( RaiMsgException );
+  void Convert( Rai_f64 &f64,  ConvertCtx &ctx );
 
-  void Convert( char *str,  RaiMsg_size limit )        throw( RaiMsgException );
+  void Convert( char *str,  RaiMsg_size limit );
 
-  void Get( bool &b ) throw( RaiMsgException ) {
+  void Get( bool &b ) {
     if ( this->type == RAIMSG_BOOLEAN && this->size == 1 )
       b = ( *(Rai_u8 *) this->data ? true : false );
     else
       this->Convert( b );
   }
-  void Get( Rai_i8 &i8 ) throw( RaiMsgException ) {
+  void Get( Rai_i8 &i8 ) {
     if ( ( this->type == RAIMSG_INT || this->type == RAIMSG_UINT ) &&
          this->size == 1 )
       i8 = *(Rai_i8 *) this->data;
     else
       this->Convert( i8 );
   }
-  void Get( Rai_u8 &u8 ) throw( RaiMsgException ) {
+  void Get( Rai_u8 &u8 ) {
     if ( ( this->type == RAIMSG_INT || this->type == RAIMSG_UINT ) &&
          this->size == 1 )
       u8 = *(Rai_u8 *) this->data;
     else
       this->Convert( u8 );
   }
-  void Get( Rai_i16 &i16 ) throw( RaiMsgException ) {
+  void Get( Rai_i16 &i16 ) {
     if ( ( this->type == RAIMSG_INT || this->type == RAIMSG_UINT ) &&
          this->size == 2 )
       rai::Unaligned::endianGetInt( (Rai_u8 *) this->data, i16 );
     else
       this->Convert( i16 );
   }
-  void Get( Rai_u16 &u16 ) throw( RaiMsgException ) {
+  void Get( Rai_u16 &u16 ) {
     if ( ( this->type == RAIMSG_INT || this->type == RAIMSG_UINT ) &&
          this->size == 2 )
       rai::Unaligned::endianGetInt( (Rai_u8 *) this->data, u16 );
     else
       this->Convert( u16 );
   }
-  void Get( Rai_i32 &i32 ) throw( RaiMsgException ) {
+  void Get( Rai_i32 &i32 ) {
     if ( ( this->type == RAIMSG_INT || this->type == RAIMSG_UINT ) &&
          this->size == 4 )
       rai::Unaligned::endianGetInt( (Rai_u8 *) this->data, i32 );
     else
       this->Convert( i32 );
   }
-  void Get( Rai_u32 &u32 ) throw( RaiMsgException ) {
+  void Get( Rai_u32 &u32 ) {
     if ( ( this->type == RAIMSG_INT || this->type == RAIMSG_UINT ) &&
         this->size == 4 )
       rai::Unaligned::endianGetInt( (Rai_u8 *) this->data, u32 );
     else
       this->Convert( u32 );
   }
-  void Get( Rai_i64 &i64 ) throw( RaiMsgException ) {
+  void Get( Rai_i64 &i64 ) {
     if ( ( this->type == RAIMSG_INT || this->type == RAIMSG_UINT ) &&
          this->size == 8 )
       rai::Unaligned::endianGetInt( (Rai_u8 *) this->data, i64 );
     else
       this->Convert( i64 );
   }
-  void Get( Rai_u64 &u64 ) throw( RaiMsgException ) {
+  void Get( Rai_u64 &u64 ) {
     if ( ( this->type == RAIMSG_INT || this->type == RAIMSG_UINT ) &&
          this->size == 8 )
       rai::Unaligned::endianGetInt( (Rai_u8 *) this->data, u64 );
     else
       this->Convert( u64 );
   }
-  void Get( Rai_f32 &f32 ) throw( RaiMsgException ) {
+  void Get( Rai_f32 &f32 ) {
     if ( this->type == RAIMSG_REAL && this->size == 4 )
       rai::Unaligned::endianGetFloat( (Rai_u8 *) this->data, f32 );
     else
       this->Convert( f32 );
   }
-  void Get( Rai_f64 &f64 ) throw( RaiMsgException ) {
+  void Get( Rai_f64 &f64 ) {
     if ( this->type == RAIMSG_REAL && this->size == 8 )
       rai::Unaligned::endianGetFloat( (Rai_u8 *) this->data, f64 );
     else
       this->Convert( f64 );
   }
-  void Get( rai::SassConst::MsgType &m ) throw( RaiMsgException ) {
+  void Get( rai::SassConst::MsgType &m ) {
     if ( this->type != RAIMSG_STRING ) {
       Rai_u16 tmp;
       this->Get( tmp );
@@ -341,7 +341,7 @@ struct RAIMSG_DLL_EXP RaiField {
       m = (rai::SassConst::MsgType) rai::SassConst::stringToMsgType( s );
     }
   }
-  void Get( rai::SassConst::RecStatus &r ) throw( RaiMsgException ) {
+  void Get( rai::SassConst::RecStatus &r ) {
     if ( this->type != RAIMSG_STRING ) {
       Rai_u16 tmp;
       this->Get( tmp );
@@ -353,19 +353,19 @@ struct RAIMSG_DLL_EXP RaiField {
       r = (rai::SassConst::RecStatus) rai::SassConst::stringToRecStatus( s );
     }
   }
-  void Get( const char *&str ) throw( RaiMsgException ) {
+  void Get( const char *&str ) {
     if ( this->type == RAIMSG_STRING || this->type == RAIMSG_OPAQUE )
       str = (char *) this->data;
     else
       throw RaiMsgErr::getErr( RaiMsgErr::NOT_STRING_FIELD );
   }
-  void Get( const byte *&str ) throw( RaiMsgException ) {
+  void Get( const byte *&str ) {
     if ( this->type == RAIMSG_STRING || this->type == RAIMSG_OPAQUE )
       str = (byte *) this->data;
     else
       throw RaiMsgErr::getErr( RaiMsgErr::NOT_STRING_FIELD );
   }
-  void Get( char *str,  unsigned int limit ) throw( RaiMsgException ) {
+  void Get( char *str,  unsigned int limit ) {
     if ( this->type == RAIMSG_STRING || this->type == RAIMSG_OPAQUE ) {
       if ( limit > this->size ) {
         ::memcpy( str, this->data, this->size );
@@ -380,21 +380,21 @@ struct RAIMSG_DLL_EXP RaiField {
     }
   }
   void Get( RaiMsg_type ftype,  RaiMsg_size fsize,
-            RaiMsg_data fdata ) throw( RaiException ) {
+            RaiMsg_data fdata ) {
     RaiField_data tmp;
     RaiField::Convert( ftype, fsize, fdata, this->type, this->size,
                        this->AlignData( tmp ) );
   }
-  void Get( RaiMsg &msg ) throw( RaiException );
+  void Get( RaiMsg &msg );
 
-  void GetHint( bool &b ) throw( RaiMsgException ) {
+  void GetHint( bool &b ) {
     if ( this->type != RAIMSG_ARRAY && this->type != RAIMSG_PARTIAL &&
          this->hintType == RAIMSG_BOOLEAN && this->hintSize == 1 )
       b = ( *(Rai_u8 *) this->hintData ? true : false );
     else
       this->HintConvert( b );
   }
-  void GetHint( Rai_i8 &i8 ) throw( RaiMsgException ) {
+  void GetHint( Rai_i8 &i8 ) {
     if ( this->type != RAIMSG_ARRAY && this->type != RAIMSG_PARTIAL &&
          ( this->hintType == RAIMSG_INT || this->hintType == RAIMSG_UINT ) &&
          this->hintSize == 1 )
@@ -402,7 +402,7 @@ struct RAIMSG_DLL_EXP RaiField {
     else
       this->HintConvert( i8 );
   }
-  void GetHint( Rai_u8 &u8 ) throw( RaiMsgException ) {
+  void GetHint( Rai_u8 &u8 ) {
     if ( this->type != RAIMSG_ARRAY && this->type != RAIMSG_PARTIAL &&
          ( this->hintType == RAIMSG_INT || this->hintType == RAIMSG_UINT ) &&
          this->hintSize == 1 )
@@ -410,7 +410,7 @@ struct RAIMSG_DLL_EXP RaiField {
     else
       this->HintConvert( u8 );
   }
-  void GetHint( Rai_i16 &i16 ) throw( RaiMsgException ) {
+  void GetHint( Rai_i16 &i16 ) {
     if ( this->type != RAIMSG_ARRAY && this->type != RAIMSG_PARTIAL &&
          ( this->hintType == RAIMSG_INT || this->hintType == RAIMSG_UINT ) &&
          this->hintSize == 2 )
@@ -418,7 +418,7 @@ struct RAIMSG_DLL_EXP RaiField {
     else
       this->HintConvert( i16 );
   }
-  void GetHint( Rai_u16 &u16 ) throw( RaiMsgException ) {
+  void GetHint( Rai_u16 &u16 ) {
     if ( this->type != RAIMSG_ARRAY && this->type != RAIMSG_PARTIAL &&
          ( this->hintType == RAIMSG_INT || this->hintType == RAIMSG_UINT ) &&
          this->hintSize == 2 )
@@ -426,7 +426,7 @@ struct RAIMSG_DLL_EXP RaiField {
     else
       this->HintConvert( u16 );
   }
-  void GetHint( Rai_i32 &i32 ) throw( RaiMsgException ) {
+  void GetHint( Rai_i32 &i32 ) {
     if ( this->type != RAIMSG_ARRAY && this->type != RAIMSG_PARTIAL &&
          ( this->hintType == RAIMSG_INT || this->hintType == RAIMSG_UINT ) &&
          this->hintSize == 4 )
@@ -434,7 +434,7 @@ struct RAIMSG_DLL_EXP RaiField {
     else
       this->HintConvert( i32 );
   }
-  void GetHint( Rai_u32 &u32 ) throw( RaiMsgException ) {
+  void GetHint( Rai_u32 &u32 ) {
     if ( this->type != RAIMSG_ARRAY && this->type != RAIMSG_PARTIAL &&
          ( this->hintType == RAIMSG_INT || this->hintType == RAIMSG_UINT ) &&
          this->hintSize == 4 )
@@ -442,7 +442,7 @@ struct RAIMSG_DLL_EXP RaiField {
     else
       this->HintConvert( u32 );
   }
-  void GetHint( Rai_i64 &i64 ) throw( RaiMsgException ) {
+  void GetHint( Rai_i64 &i64 ) {
     if ( this->type != RAIMSG_ARRAY && this->type != RAIMSG_PARTIAL &&
          ( this->hintType == RAIMSG_INT || this->hintType == RAIMSG_UINT ) &&
          this->hintSize == 8 )
@@ -450,7 +450,7 @@ struct RAIMSG_DLL_EXP RaiField {
     else
       this->HintConvert( i64 );
   }
-  void GetHint( Rai_u64 &u64 ) throw( RaiMsgException ) {
+  void GetHint( Rai_u64 &u64 ) {
     if ( this->type != RAIMSG_ARRAY && this->type != RAIMSG_PARTIAL &&
          ( this->hintType == RAIMSG_INT || this->hintType == RAIMSG_UINT ) &&
          this->hintSize == 8 )
@@ -458,63 +458,63 @@ struct RAIMSG_DLL_EXP RaiField {
     else
       this->HintConvert( u64 );
   }
-  void GetHint( Rai_f32 &f32 ) throw( RaiMsgException ) {
+  void GetHint( Rai_f32 &f32 ) {
     if ( this->type != RAIMSG_ARRAY && this->type != RAIMSG_PARTIAL &&
          this->hintType == RAIMSG_REAL && this->hintSize == 4 )
       rai::Unaligned::endianGetFloat( (Rai_u8 *) this->hintData, f32 );
     else
       this->HintConvert( f32 );
   }
-  void GetHint( Rai_f64 &f64 ) throw( RaiMsgException ) {
+  void GetHint( Rai_f64 &f64 ) {
     if ( this->type != RAIMSG_ARRAY && this->type != RAIMSG_PARTIAL &&
          this->hintType == RAIMSG_REAL && this->hintSize == 8 )
       rai::Unaligned::endianGetFloat( (Rai_u8 *) this->hintData, f64 );
     else
       this->HintConvert( f64 );
   }
-  void HintConvert( bool &b )                          throw( RaiMsgException );
+  void HintConvert( bool &b );
 
-  void HintConvert( Rai_i8 &i8 )                       throw( RaiMsgException );
+  void HintConvert( Rai_i8 &i8 );
 
-  void HintConvert( Rai_u8 &u8 )                       throw( RaiMsgException );
+  void HintConvert( Rai_u8 &u8 );
 
-  void HintConvert( Rai_i16 &i16 )                     throw( RaiMsgException );
+  void HintConvert( Rai_i16 &i16 );
 
-  void HintConvert( Rai_u16 &u16 )                     throw( RaiMsgException );
+  void HintConvert( Rai_u16 &u16 );
 
-  void HintConvert( Rai_i32 &i32 )                     throw( RaiMsgException );
+  void HintConvert( Rai_i32 &i32 );
 
-  void HintConvert( Rai_u32 &u32 )                     throw( RaiMsgException );
+  void HintConvert( Rai_u32 &u32 );
 
-  void HintConvert( Rai_i64 &i64 )                     throw( RaiMsgException );
+  void HintConvert( Rai_i64 &i64 );
 
-  void HintConvert( Rai_u64 &u64 )                     throw( RaiMsgException );
+  void HintConvert( Rai_u64 &u64 );
 
-  void HintConvert( Rai_f32 &f32 )                     throw( RaiMsgException );
+  void HintConvert( Rai_f32 &f32 );
 
-  void HintConvert( Rai_f64 &f64 )                     throw( RaiMsgException );
+  void HintConvert( Rai_f64 &f64 );
 
-  void HintConvert( char *str,  RaiMsg_size limit )    throw( RaiMsgException );
+  void HintConvert( char *str,  RaiMsg_size limit );
 
   void HintConvert( const char * ) {}
 
   void HintConvert( RaiMsg_type dest_type,  RaiMsg_size dest_size,
-                    RaiMsg_data dest_data )            throw( RaiMsgException );
-  RaiMsg_size PackSize( RaiMsg_protocol proto )        throw( RaiMsgException );
+                    RaiMsg_data dest_data );
+  RaiMsg_size PackSize( RaiMsg_protocol proto );
 
-  RaiMsg_size PackSize( void ) throw( RaiMsgException ) {
+  RaiMsg_size PackSize( void ) {
     return this->PackSize( RAIMSG_PROTO );
   }
-  void Pack( RaiMsg_protocol proto,  Rai_u8 *to_ptr )  throw( RaiMsgException );
+  void Pack( RaiMsg_protocol proto,  Rai_u8 *to_ptr );
 
-  void Pack( Rai_u8 *to_ptr ) throw( RaiMsgException ) {
+  void Pack( Rai_u8 *to_ptr ) {
     return this->Pack( RAIMSG_PROTO, to_ptr );
   }
-  void UnPack( Rai_u8 *from_ptr )                      throw( RaiMsgException );
+  void UnPack( Rai_u8 *from_ptr );
 
   Rai_u8 *UnPack( RaiMsg_protocol proto,  Rai_u8 *from_ptr,
-                  unsigned int length )                throw( RaiMsgException );
-  void Update( RaiField *field_ptr )                   throw( RaiMsgException );
+                  unsigned int length );
+  void Update( RaiField *field_ptr );
 
   static inline unsigned int FNAME_LEN( RaiMsg_name fname ) {
     return ( fname == NULL ) ? 0 : (unsigned int) ::strlen( fname ) + 1;
@@ -552,7 +552,7 @@ struct RAIMSG_DLL_EXP RaiField {
   void Update( RaiMsg_name fname,  const char *str ) {
     this->UpdateEx( fname, FNAME_LEN( fname ), str );
   }
-  void Update( RaiMsg_name fname,  RaiMsg *msg_ptr ) throw( RaiMsgException ) {
+  void Update( RaiMsg_name fname,  RaiMsg *msg_ptr ) {
     this->UpdateEx( fname, FNAME_LEN( fname ), msg_ptr );
   }
   void Update( RaiMsg_name fname,  bool b ) {
@@ -568,40 +568,40 @@ struct RAIMSG_DLL_EXP RaiField {
   /* update array data, blob with element size and type */
   void Update( RaiMsg_name fname,  RaiMsg_data array_data,
                RaiMsg_size num_entries,  RaiMsg_type entry_type,
-               RaiMsg_size entry_size )                throw( RaiMsgException );
+               RaiMsg_size entry_size );
   /* same as above except with field name length */
   void UpdateEx( RaiMsg_name fname,  RaiMsg_size fnameLen,
                  RaiMsg_data array_data,  RaiMsg_size num_entries,
                  RaiMsg_type entry_type,  RaiMsg_size entry_size )
-                                                       throw( RaiMsgException );
+;
   /* update anthing except array and partial, fdata is a pointer, but not a
    * pointer to a pointer in the case of a string and opaque data */
   void Update( RaiMsg_name fname,  RaiMsg_type ftype,
-               RaiMsg_size fsize,  RaiMsg_data fdata ) throw( RaiMsgException );
+               RaiMsg_size fsize,  RaiMsg_data fdata );
   /* same as above except with field name length */
   void UpdateEx( RaiMsg_name fname,  RaiMsg_size fnameLen,  RaiMsg_type ftype,
                  RaiMsg_size fsize,  RaiMsg_data fdata )
-                                                       throw( RaiMsgException );
+;
   /* same as above except data is already in big endian wire format */
   void UpdateRaw( RaiMsg_name fname,  RaiMsg_size fnameLen,  RaiMsg_type ftype,
                   RaiMsg_size fsize,  RaiMsg_data fdata )
-                                                       throw( RaiMsgException );
+;
   /* update any data except array and partion */
   void Update( RaiMsg_name fname,  RaiMsg_type ftype,
                RaiMsg_size fsize,  RaiMsg_data fdata,
                RaiMsg_type hint_type,  RaiMsg_size hint_size,
-               RaiMsg_data hint_data )                 throw( RaiMsgException );
+               RaiMsg_data hint_data );
   /* with name len */
   void UpdateEx( RaiMsg_name fname,  RaiMsg_size fnameLen,
                  RaiMsg_type ftype,  RaiMsg_size fsize,
                  RaiMsg_data fdata,  RaiMsg_type hint_type,
                  RaiMsg_size hint_size,  RaiMsg_data hint_data )
-                                                       throw( RaiMsgException );
+;
   /* same as above except data is already big endian */
   void UpdateRaw( RaiMsg_name fname,  RaiMsg_size fnameLen,  RaiMsg_type ftype,
                   RaiMsg_size fsize,  RaiMsg_data fdata,
                   RaiMsg_type hint_type,  RaiMsg_size hint_size,
-                  RaiMsg_data hint_data )              throw( RaiMsgException );
+                  RaiMsg_data hint_data );
   void Rename( RaiMsg_name fname ) {
     this->RenameEx( fname, FNAME_LEN( fname ) );
   }
@@ -632,34 +632,34 @@ struct RAIMSG_DLL_EXP RaiField {
   void UpdateEx( RaiMsg_name fname,  RaiMsg_size fnameLen,  const char *str );
 
   void UpdateEx( RaiMsg_name fname,  RaiMsg_size fnameLen,  RaiMsg *msg_ptr )
-                                                       throw( RaiMsgException );
+;
   void UpdateEx( RaiMsg_name fname,  RaiMsg_size fnameLen,  bool b );
 
-  bool Find( RaiMsg *msg,  RaiMsg_name fname ) throw( RaiMsgException ) {
+  bool Find( RaiMsg *msg,  RaiMsg_name fname ) {
     return this->FindEx( msg, fname, FNAME_LEN( fname ) );
   }
   bool FindEx( RaiMsg *msg,  RaiMsg_name fname,  RaiMsg_size fnameLen )
-                                                       throw( RaiMsgException );
-  bool FindFid( RaiMsg *msg,  Rai_u16 fid )            throw( RaiMsgException );
+;
+  bool FindFid( RaiMsg *msg,  Rai_u16 fid );
 
-  bool Find( RaiMsg *msg,  const RaiMsg_dict *entry )  throw( RaiMsgException );
+  bool Find( RaiMsg *msg,  const RaiMsg_dict *entry );
 
-  bool First( RaiMsg *msg )                            throw( RaiMsgException );
+  bool First( RaiMsg *msg );
 
-  bool Next( void )                                    throw( RaiMsgException );
+  bool Next( void );
 
-  bool First( RaiMsg *msg,  const RaiMsg_dict *&entry )throw( RaiMsgException );
+  bool First( RaiMsg *msg,  const RaiMsg_dict *&entry );
 
-  bool Next( const RaiMsg_dict *&entry )               throw( RaiMsgException );
+  bool Next( const RaiMsg_dict *&entry );
 
   bool First( RaiMsg *msg,  const RaiMsg_form *form,
-              const RaiMsg_dict *&entry )              throw( RaiMsgException );
+              const RaiMsg_dict *&entry );
   bool Next( const RaiMsg_form *form,  const RaiMsg_dict *&entry )
-                                                       throw( RaiMsgException );
+;
   /* return true and get value if has first field and it's named fname */
   template<class T>
   bool First( RaiMsg *msg,  const char *fname,
-              T &val ) throw( RaiMsgException ) {
+              T &val ) {
     if ( this->First( msg ) && this->isNamed( fname ) ) {
       this->Get( val );
       return true;
@@ -668,7 +668,7 @@ struct RAIMSG_DLL_EXP RaiField {
   }
   /* return true and get value if has next field and it's named fname */
   template<class T>
-  bool Next( const char *fname,  T &val ) throw( RaiMsgException ) {
+  bool Next( const char *fname,  T &val ) {
     if ( this->Next() && this->isNamed( fname ) ) {
       this->Get( val );
       return true;
@@ -684,18 +684,18 @@ struct RAIMSG_DLL_EXP RaiField {
     fieldStart = this->fieldStart;
   }
   void SetPointer( RaiMsg *msg,  RaiMsg_size fieldStart )
-                                                       throw( RaiMsgException );
+;
   /* format message to stream, default is 'PrintTib' format */
   void Print( rai::OutputStream *output_file,
               Rai_u32 field_newlines       = 1,
               const char  * fname_format   = "%-14s : ",
               Rai_u32 print_opaques        = 1,
               const char  * debug_format   = "%-7s %3d : ",
-              const char  * debug_hformat  = NULL )    throw( RaiMsgException );
+              const char  * debug_hformat  = NULL );
 
   void PrintXML( rai::OutputStream *output_file,
                  Rai_u32 attr_flags = 0,
-                 Rai_u32 field_newlines = 1 )          throw( RaiMsgException );
+                 Rai_u32 field_newlines = 1 );
   /* return true when mem region intersects field buffer */
   bool Overlaps( const RaiMsg_data p2,  RaiMsg_size s2 ) const;
   /* return true when field is in the message buffer */
@@ -712,17 +712,17 @@ struct RAIMSG_DLL_EXP RaiField {
   RaiMsg_data CopyTo( RaiField &toFld,  Rai_u8 *buf = NULL,
                       RaiMsg_size bufSize = 0,
                       const RaiMsg_dict *entry = NULL )
-                                                       throw( RaiMsgException );
+;
   /* Copy field to new field, use static buffer if bufSize != 0, buf should
    * be aligned so that "(RaiField *) buf" does not cause unaligned memory
    * fault.  BufSize should be sizeof( RaiField ) + field.CopySize() */
   RaiField *Copy( Rai_u8 *buf = NULL,  RaiMsg_size bufSize = 0,
-                  const RaiMsg_dict *entry = NULL )    throw( RaiMsgException );
+                  const RaiMsg_dict *entry = NULL );
   /* Copy field to new field, like other CopyTo() except size boundary is not
    * checked.  For use with CopySize() to allocate buffer or determine static
    * buffer is big enough ( sizeof( buf ) >= field.CopySize() ) */
   RaiField *CopyTo( RaiField &toFld,  Rai_u8 *buf,
-                    const RaiMsg_dict *entry = NULL )  throw( RaiMsgException );
+                    const RaiMsg_dict *entry = NULL );
 };
 
 

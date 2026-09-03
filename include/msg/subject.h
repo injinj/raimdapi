@@ -51,9 +51,9 @@ class RAIMSG_DLL_EXP Subject {
       subj.bufLen     = 0;
       subj.allocFlag  = false;
     }
-    void copy( const Subject &subj )                            throw( Error );
+    void copy( const Subject &subj );
 
-    static void nullReference( void )                           throw( Error );
+    static void nullReference( void );
 
     static unsigned int computeHash( const byte *buf,  unsigned int len );
 
@@ -119,15 +119,15 @@ class RAIMSG_DLL_EXP MsaSubject : public Subject {
     SYS_OPS( MsaSubject );
     MsaSubject() {}
     /* set from another subject, must use static buffers or both will free */
-    void set( MsaSubject &subj ) throw( Error ) {
+    void set( MsaSubject &subj ) {
       this->set( subj.buf, subj.length() );
       this->hashVal = subj.hashVal;
     }
     /* set the buf and len ptrs from parameters, for comparing and decoding */
     void set( byte *buf,  unsigned int bufLen,  bool isAlloced = false )
-                                                                throw( Error );
+;
     /* allocate and copy from subj */
-    void copy( const MsaSubject &subj ) throw( Error ) {
+    void copy( const MsaSubject &subj ) {
       this->Subject::copy( subj );
     }
     /* move buffer from subj to this, reset subj buffer so both don't free */
@@ -136,43 +136,43 @@ class RAIMSG_DLL_EXP MsaSubject : public Subject {
     bool isWildcard( void ) const;
     /* decode binary into c string buffer, returns length of subject used */
     unsigned int decode( char *subject,  unsigned int maxSubjLen ) const
-    /* same as decode(), but return a string ptr */             throw( Error );
-    char *toString( char *buf,  unsigned int bufLen ) const throw( Error ) {
+    /* same as decode(), but return a string ptr */;
+    char *toString( char *buf,  unsigned int bufLen ) const {
       this->decode( buf, bufLen );
       return buf;
     }
     /* allocate space for subject and copy to it */
-    unsigned int encode( const char *subject )                  throw( Error );
+    unsigned int encode( const char *subject );
     /* make sure bufSize is big enough and copy it */
     unsigned int encode( const char *segments[ 4 ],  unsigned int lens[ 4 ],
                          byte *toBuf = NULL,  unsigned int bufSize = 0 )
-    /* make sure subject is valid, return length of encoded */  throw( Error );
-    static unsigned int validate( unsigned int lens[ 4 ] )      throw( Error );
+    /* make sure subject is valid, return length of encoded */;
+    static unsigned int validate( unsigned int lens[ 4 ] );
     /* convert to sass subject, using toBuf */
     unsigned int convert( const RaiSubject &subj,  bool isWild,
                           byte *toBuf = NULL,  unsigned int bufLen = 0 )
-    /* the binary length of subject */                          throw( Error );
-    unsigned int length( void ) const throw( Error ) {
+    /* the binary length of subject */;
+    unsigned int length( void ) const {
       if ( this->buf == NULL )
         this->Subject::nullReference();
       return this->bufLen;
     }
-    unsigned int queryLength( void ) const                      throw( Error );
+    unsigned int queryLength( void ) const;
 
     unsigned int copyTo( byte *toBuf,  unsigned int toBufLen ) const
-                                                                throw( Error );
+;
     unsigned int copyQueryTo( byte *toBuf,  unsigned int toBufLen ) const
-                                                                throw( Error );
+;
     bool equals( const MsaSubject &subj ) const;
 
     /* return a ptr into the buffer, which is a c style string */
-    const char *segment( unsigned int segNum ) const            throw( Error );
+    const char *segment( unsigned int segNum ) const;
 
     bool matches( const MsaSubject &subj ) const;
 
-    unsigned int hash( void ) const                             throw( Error );
+    unsigned int hash( void ) const;
 
-    static unsigned int hashQuery( unsigned int hash )          throw( Error );
+    static unsigned int hashQuery( unsigned int hash );
 
     /* return true if hash1 == hash2 or if hash2 is within wildard hash1 */
     static bool hashMatches( unsigned int hash1, unsigned int hash2 );
@@ -197,90 +197,90 @@ class RAIMSG_DLL_EXP SassSubject : public Subject {
     SYS_OPS( SassSubject );
     SassSubject() {}
     /* set from another subject, must use static buffers or both will free */
-    void set( SassSubject &subj ) throw( Error ) {
+    void set( SassSubject &subj ) {
       this->set( subj.buf, subj.length() );
       this->hashVal = subj.hashVal;
     }
     /* set the buf and len ptrs from parameters, for comparing and decoding */
     void set( byte *buf,  unsigned int bufLen,  bool isAlloced = false )
-                                                                throw( Error );
+;
     /* allocate and copy from subj */
-    void copy( const SassSubject &subj ) throw( Error ) {
+    void copy( const SassSubject &subj ) {
       this->Subject::copy( subj );
     }
     /* copy from subj to static buffer */
     void copy( const SassSubject &subj,  byte *toBuf,  unsigned int toBufLen )
-                                                                throw( Error );
+;
     /* move buffer from subj to this, reset subj buffer so both don't free */
     void move( SassSubject &subj );
     /* if has empty segments */
     bool isWildcard( void ) const;
     /* decode binary into c string buffer, returns length of subject used */
     unsigned int decode( char *subject,  unsigned int maxSubjLen ) const
-    /* same as decode(), but return a string ptr */             throw( Error );
-    char *toString( char *buf,  unsigned int bufLen ) const throw( Error ) {
+    /* same as decode(), but return a string ptr */;
+    char *toString( char *buf,  unsigned int bufLen ) const {
       this->decode( buf, bufLen );
       return buf;
     }
     /* convert XYZ.N.M.O to XYZ...QUERY string */
     unsigned int decodeQuery( char *subject,  unsigned int maxSubjLen ) const
-                                                                throw( Error );
-    char *queryToString( char *buf,  unsigned int bufLen ) const throw( Error ) {
+;
+    char *queryToString( char *buf,  unsigned int bufLen ) const {
       this->decodeQuery( buf, bufLen );
       return buf;
     }
-    static unsigned int validate( const char *subject )         throw( Error );
+    static unsigned int validate( const char *subject );
     /* make sure bufSize is big enough for subject and copy to it */
     unsigned int encode( const char *subject,  byte *toBuf = NULL,
-                         unsigned int bufSize = 0 )             throw( Error );
+                         unsigned int bufSize = 0 );
     /* make sure subject is valid, return length of encoded */
-    static unsigned int validate( const char *segments[ 4 ] )   throw( Error );
+    static unsigned int validate( const char *segments[ 4 ] );
     /* make sure bufSize is big enough and copy it */
     unsigned int encode( const char *segments[ 4 ],  byte *toBuf = NULL,
-                         unsigned int bufSize = 0 )             throw( Error );
+                         unsigned int bufSize = 0 );
     /* make sure subject is valid, return length of encoded */
-    static unsigned int validate( unsigned int lens[ 4 ] )      throw( Error );
+    static unsigned int validate( unsigned int lens[ 4 ] );
     /* make sure bufSize is big enough and copy it */
     unsigned int encode( const char *segments[ 4 ],  unsigned int lens[ 4 ],
                          byte *toBuf = NULL,  unsigned int bufSize = 0 )
-    /* convert to sass subject, using toBuf */                  throw( Error );
+    /* convert to sass subject, using toBuf */;
     unsigned int convert( const RaiSubject &subj,  bool isWild,
                           byte *toBuf = NULL,  unsigned int bufLen = 0 )
-    /* the binary length of subject */                          throw( Error );
-    unsigned int length( void ) const throw( Error ) {
+    /* the binary length of subject */;
+    unsigned int length( void ) const {
       if ( this->buf == NULL )
         this->Subject::nullReference();
       return this->bufLen;
     }
     /* the binary length of subject, in ci SUB..QUERY style */
-    unsigned int queryLength( void ) const                      throw( Error );
+    unsigned int queryLength( void ) const;
     /* copy binary image to buf */
     unsigned int copyTo( byte *toBuf,  unsigned int toBufLen ) const
-    /* copy binary image of ci SUB..QUERY */                    throw( Error );
+    /* copy binary image of ci SUB..QUERY */;
     unsigned int copyQueryTo( byte *toBuf,  unsigned int toBufLen ) const
-    /* compare in strcmp sense */                               throw( Error );
+    /* compare in strcmp sense */;
     bool equals( const SassSubject &subj ) const;
     /* compare, if segment is empty, is wildcard and matches anything */
     bool matches( const SassSubject &subj ) const;
     /* return a ptr into the buffer, which is a c style string */
-    const char *segment( unsigned int segNum ) const            throw( Error );
+    const char *segment( unsigned int segNum ) const;
     /* return count of segments in copied into segs[] array */
     unsigned int getSegments( const char **segs,  unsigned int maxSegs ) const
-                                                                throw( Error );
+;
     unsigned int getSegments( const char **segs,  unsigned int *lens,
-                              unsigned int maxSegs ) const      throw( Error );
+                              unsigned int maxSegs ) const;
     /* return count of segments, 0 if is empty */
     unsigned int segmentCount( void ) const;
     /* the ci hash, which divides the lower 22 bits in to 4 pieces */
-    unsigned int hash( void ) const                             throw( Error );
+    unsigned int hash( void ) const;
     /* a real hash */
-    unsigned int hash2( void ) throw( RaiException ) {
+    unsigned int hash2( void ) {
       if ( this->hashVal == 0 )
         this->hashVal = rai::Subject::computeHash( this->buf, this->length() );
       return this->hashVal;
     }
     /* the ci SUB..QUERY hash */
-    static unsigned int hashQuery( unsigned int hash )          throw( Error );
+    static unsigned int hashQuery( unsigned int hash );
 };
 } // namespace rai
 
@@ -300,10 +300,10 @@ class RAIMSG_DLL_EXP RaiSubject : public rai::Subject {
     /* set subject buffer, return 0 if not enough space */
     unsigned int staticLayout( const char *subject,  byte *toBuf,
                                unsigned int toBufLen,
-                               const char sep='.' )       throw( RaiException );
+                               const char sep='.' );
     unsigned int staticLayout2( const char *subject,  unsigned int maxLen,
                                 byte *toBuf,  unsigned int toBufLen,
-                                const char sep='.' )      throw( RaiException );
+                                const char sep='.' );
     static unsigned int layout( const char **segments,  unsigned int *lens,
                                 unsigned int segCount,  byte *toBuf );
   public:
@@ -312,30 +312,30 @@ class RAIMSG_DLL_EXP RaiSubject : public rai::Subject {
     SYS_OPS( RaiSubject );
     RaiSubject() {}
     /* set from another subject, must use static buffers or both will free */
-    void set( RaiSubject &subj ) throw( RaiException ) {
+    void set( RaiSubject &subj ) {
       this->set( subj.buf, subj.length() );
       this->hashVal = subj.hashVal;
     }
     /* set the buf and len ptrs from parameters, for comparing and decoding */
     void set( byte *buf,  unsigned int bufLen,  unsigned int hashVal,
-              bool isAlloced ) throw( RaiException ) {
+              bool isAlloced ) {
       this->set( buf, bufLen, isAlloced );
       this->hashVal = hashVal;
     }
     /* set the buf and len ptrs from parameters, for comparing and decoding */
     void set( byte *buf,  unsigned int bufLen,  bool isAlloced = false )
-                                                          throw( RaiException );
+;
     /* allocate and copy from subj */
-    void copy( const RaiSubject &subj ) throw( RaiException ) {
+    void copy( const RaiSubject &subj ) {
       this->rai::Subject::copy( subj );
     }
     /* copy from subj to static buffer */
     void copy( const RaiSubject &subj,  byte *toBuf,  unsigned int toBufLen )
-                                                          throw( RaiException );
+;
     /* move buffer from subj to this, reset subj buffer so both don't free */
     void move( RaiSubject &subj );
     /* the binary length of subject */
-    unsigned int length( void ) const throw( RaiException ) {
+    unsigned int length( void ) const {
       if ( this->buf == NULL )
         this->rai::Subject::nullReference();
       return this->bufLen;
@@ -344,58 +344,58 @@ class RAIMSG_DLL_EXP RaiSubject : public rai::Subject {
     bool isWildcard( void ) const;
     /* decode binary buffer at ptr into string buffer */
     unsigned int decode( char *subject,  unsigned int maxSubjLen,
-                         const char sep = '.' ) const     throw( RaiException );
+                         const char sep = '.' ) const;
     /* same as decode(), but return a string ptr */
     char *toString( char *buf,  unsigned int bufLen,  const char sep='.' ) const
-                                                         throw( RaiException ) {
+ {
       this->decode( buf, bufLen, sep );
       return buf;
     }
     /* make sure subject is valid, return length of encoded and num segments */
     static unsigned int validate( const char *subject,  unsigned int &numSegs,
-                                  const char sep='.')     throw( RaiException );
+                                  const char sep='.');
     static unsigned int validate2( const char *subject,  unsigned int maxLen,
                                    unsigned int &numSegs,  const char sep= '.' )
-                                                          throw( RaiException );
+;
     static unsigned int encodedSize( const char *subject,  const char sep= '.' )
-                                                         throw( RaiException ) {
+ {
       unsigned int numSegs;
       return RaiSubject::validate( subject, numSegs, sep );
     }
     /* make sure bufSize is big enough for subject and copy to it */
     unsigned int encode( const char *subject,  byte *toBuf = NULL,
                          unsigned int bufSize = 0,  const char sep = '.' )
-                                                          throw( RaiException );
+;
     unsigned int encode2( const char *subject,  unsigned int maxLen,
                           byte *toBuf = NULL,  unsigned int bufSize = 0,
-                          const char sep = '.' )          throw( RaiException );
+                          const char sep = '.' );
     /* make sure subject is valid, return length of encoded */
     static unsigned int validate( const char **segments,  unsigned int segCount)
-                                                          throw( RaiException );
+;
     /* make sure bufSize is big enough and copy it */
     unsigned int encode( const char **segments,  unsigned int segCount,
                          byte *toBuf = NULL,  unsigned int bufSize = 0 )
-                                                          throw( RaiException );
+;
     static unsigned int validate( unsigned int *lens,
-                                  unsigned int segCount ) throw( RaiException );
+                                  unsigned int segCount );
     unsigned int encode( const char **segments,  unsigned int *lens,
                          unsigned int segCount,  byte *toBuf = NULL,
-                         unsigned int bufSize = 0 )       throw( RaiException );
+                         unsigned int bufSize = 0 );
     /* convert to rv subject, using toBuf */
     unsigned int convert( const rai::SassSubject &subj,  bool isWild,
                           byte *toBuf = NULL,  unsigned int bufLen = 0 )
-                                                          throw( RaiException );
+;
     /* convert to rv subject, using toBuf */
     unsigned int convert( const rai::MsaSubject &subj,  bool isWild,
                           byte *toBuf = NULL,  unsigned int bufLen = 0 )
-                                                          throw( RaiException );
+;
     /* convert to rv subject, adding prefix, using toBuf */
     unsigned int convert2( const rai::SassSubject &subj,  const char * prefix, 
                           bool isWild, byte *toBuf = NULL,
-                          unsigned int bufLen = 0 )       throw( RaiException );
+                          unsigned int bufLen = 0 );
     /* copy binary image to buf */
     unsigned int copyTo( byte *toBuf,  unsigned int toBufLen ) const
-                                                          throw( RaiException );
+;
     /* compare in strcmp sense */
     bool equals( const RaiSubject &subj ) const;
     /* compare, if segment is empty, is wildcard and matches anything */
@@ -410,46 +410,46 @@ class RAIMSG_DLL_EXP RaiSubject : public rai::Subject {
       return false;
     }
     /* return a ptr into the buffer, which is a c style string */
-    const char *segment( unsigned int segNum ) const      throw( RaiException );
+    const char *segment( unsigned int segNum ) const;
     /* return count of segments in copied into segs[] array */
     unsigned int getSegments( const char **segs,  unsigned int maxSegs ) const
-                                                          throw( RaiException );
+;
     unsigned int getSegments( const char **segs,  unsigned int *lens,
-                              unsigned int maxSegs ) const throw( RaiException );
+                              unsigned int maxSegs ) const;
     /* return count of segments, 0 if is empty */
     unsigned int segmentCount( void ) const;
     /* concatenate subjects, return length */
     unsigned int concat( RaiSubject &subj1,  RaiSubject &subj2,
                          byte *toBuf = NULL,  unsigned int bufSize = 0 )
-                                                          throw( RaiException );
-    unsigned int hash( void ) throw( RaiException ) {
+;
+    unsigned int hash( void ) {
       if ( this->hashVal == 0 )
         this->hashVal = rai::Subject::computeHash( this->buf, this->length() );
       return this->hashVal;
     }
     unsigned int toRIC( char *ricBuf,  unsigned int maxLen,
                         bool dontMapCaretToDot,  bool dontAppendNaE )
-                                                          throw( RaiException );
+;
     unsigned int toRIC( char *ricBuf,  unsigned int maxLen,
                         const char *sector,  bool dontMapCaretToDot,
-                        bool dontAppendNaE )              throw( RaiException );
+                        bool dontAppendNaE );
     unsigned int toRIC( char *ricBuf,  unsigned int maxLen,
                         unsigned int prefixSegs,  bool dontMapCaretToDot,
-                        bool dontAppendNaE )              throw( RaiException );
+                        bool dontAppendNaE );
     unsigned int toRIC2( const char **seg,  unsigned int *lens,
                          unsigned int nSegs,  char *ricBuf,
                          unsigned int off,  unsigned int maxLen,
                          bool dontMapCaretToDot,  bool dontAppendNaE )
-                                                          throw( RaiException );
+;
     unsigned int encodeRIC( const char *prefix,  const char *ric,
                             byte *toBuf,  unsigned int bufLen,
                             bool dontMapDotToCaret,
-                            bool dontAppendNaE )          throw( RaiException );
+                            bool dontAppendNaE );
     unsigned int encodeRIC( const char *prefix,  const char *sector,
                             const char *ric,  byte *toBuf,  unsigned int bufLen,
                             bool dontMapDotToCaret,
-                            bool dontAppendNaE )          throw( RaiException );
-    static RaiSubject *create( const char *s )            throw( RaiException );
+                            bool dontAppendNaE );
+    static RaiSubject *create( const char *s );
 };
 
 namespace rai {

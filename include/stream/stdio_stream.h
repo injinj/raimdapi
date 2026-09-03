@@ -21,28 +21,28 @@ namespace rai {
 class RAIBASE_DLL_EXP StdioInputStream : public FileInputStream {
   protected:
     virtual unsigned int fillBuf( byte *buf,  unsigned int bufLen )
-                                                             throw( Error );
+;
   public:
     SYS_OPS( StdioInputStream );
     StdioInputStream( File *file,  unsigned int bufLen );
 
-    virtual bool available( void )                           throw( Error );
+    virtual bool available( void );
 
-    static InputStream * createStdin( unsigned int bufLen )  throw( Error );
+    static InputStream * createStdin( unsigned int bufLen );
 };
 
 
 class RAIBASE_DLL_EXP StdioOutputStream : public FileOutputStream {
   protected:
     virtual unsigned int emptyBuf( const byte *buf,  unsigned int bufLen )
-                                                              throw( Error );
+;
   public:
     SYS_OPS( StdioOutputStream );
     StdioOutputStream( File *file,  unsigned int bufLen,  bool lineBuffered );
 
-    static OutputStream * createStdout( unsigned int bufLen ) throw( Error );
+    static OutputStream * createStdout( unsigned int bufLen );
 
-    static OutputStream * createStderr( unsigned int bufLen ) throw( Error );
+    static OutputStream * createStderr( unsigned int bufLen );
 };
 } // namespace rai
 

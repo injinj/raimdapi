@@ -13,7 +13,7 @@ using namespace rai;
 ByteArrayInputStream::ByteArrayInputStream( const byte *data,
                                             unsigned int dataLen,
                                             bool copyData,
-                                           bool dataIsAlloced ) throw( Error ) :
+                                           bool dataIsAlloced ) :
                       InputStream( 0U, false, (StreamOffset) 0UL )
 {
   this->data         = NULL;
@@ -34,7 +34,7 @@ ByteArrayInputStream::ByteArrayInputStream( const byte *data,
 
 
 ByteArrayInputStream::ByteArrayInputStream( ByteArrayOutputStream &bout )
-                    throw( Error ) : InputStream( 0U, false, (StreamOffset) 0 )
+ : InputStream( 0U, false, (StreamOffset) 0 )
 {
   unsigned int n;
   byte       * buf;
@@ -65,7 +65,7 @@ ByteArrayInputStream::~ByteArrayInputStream()
 
 
 bool
-ByteArrayInputStream::available( void ) throw( Error )
+ByteArrayInputStream::available( void )
 {
   if ( this->dataOff < this->dataLen || this->InputStream::available() )
     return true;
@@ -74,7 +74,7 @@ ByteArrayInputStream::available( void ) throw( Error )
 
 
 unsigned int
-ByteArrayInputStream::fillBuf( byte *buf,  unsigned int bufLen ) throw( Error )
+ByteArrayInputStream::fillBuf( byte *buf,  unsigned int bufLen )
 {
   if ( bufLen > this->dataLen - this->dataOff )
     bufLen = this->dataLen - this->dataOff;
@@ -88,7 +88,7 @@ ByteArrayInputStream::fillBuf( byte *buf,  unsigned int bufLen ) throw( Error )
 
 StreamOffset
 ByteArrayInputStream::seekSet( StreamSeekOffset offset,  int whence )
-                      throw( Error )
+
 {
   switch( whence ) {
     case IOStream::IO_SEEK_SET:
@@ -150,7 +150,7 @@ ByteArrayOutputStream::~ByteArrayOutputStream()
 
 unsigned int
 ByteArrayOutputStream::emptyBuf( const byte *buf,  unsigned int bufLen )
-                       throw( Error )
+
 {
   unsigned int newLen;
   int          status;
@@ -186,7 +186,7 @@ ByteArrayOutputStream::emptyBuf( const byte *buf,  unsigned int bufLen )
 
 StreamOffset
 ByteArrayOutputStream::seekSet( StreamSeekOffset offset,  int whence )
-                       throw( Error )
+
 {
   this->flush();
 

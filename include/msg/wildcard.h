@@ -56,9 +56,9 @@ struct RAIMSG_DLL_EXP WildMatchState {
            ( ( s == NULL ) ? &this->trans[ this->idx[ 0 ] ] :
                              &this->trans[ this->idx[ (byte) *s ] ] );
   }
-  void reindex( void )                                         throw( Error );
+  void reindex( void );
 
-  void copy( WildMatchState &state )                           throw( Error );
+  void copy( WildMatchState &state );
 };
 
 
@@ -75,13 +75,13 @@ struct RAIMSG_DLL_EXP WildTransition {
     return ( this->match[ 0 ] == 0 ||
              ( this->match[ 0 ] == '>' && this->match[ 1 ] == '\0' ) );
   }
-  static WildTransition *create( const char *s )               throw( Error );
+  static WildTransition *create( const char *s );
 
   static void release( WildTransition *t );
 
   static void releaseAll( WildTransition *t );
 
-  static WildTransition *copy( WildTransition *t )             throw( Error );
+  static WildTransition *copy( WildTransition *t );
 };
 
 
@@ -99,9 +99,9 @@ struct RAIMSG_DLL_EXP WildStartState {
     return this->state.trans == NULL;
   };
   /*! Add a wildcard end state, segs terminated by NULL */
-  void addWildcard( const char **segs,  WildEndState *end )    throw( Error );
+  void addWildcard( const char **segs,  WildEndState *end );
   /*! Add a wildcard end state, rai subject format */
-  void addWildcard( const byte *subjbuf,  WildEndState *end )  throw( Error );
+  void addWildcard( const byte *subjbuf,  WildEndState *end );
   /*! Get a wildcard end state if it exists, segs terminated by NULL */
   bool getWildcard( const char **segs,  WildEndState *&end );
   /*! Get a wildcard end state, rai subject format */
@@ -113,7 +113,7 @@ struct RAIMSG_DLL_EXP WildStartState {
   /*! Test validity of each of the end states prunable( closure ), rm if true */
   bool pruneWildcards( void *closure = NULL );
   /*! Copy & allocate everything */
-  void copy( WildStartState &start ) throw( Error ) {
+  void copy( WildStartState &start ) {
     this->state.copy( start.state );
   };
 };

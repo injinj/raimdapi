@@ -1086,7 +1086,7 @@ struct RSA_Hash : public HashContext {
   }
   virtual bool selftest( void ) = 0;
 
-  virtual HashContext *dup( void ) throw( Error ) = 0;
+  virtual HashContext *dup( void ) = 0;
 
   virtual HashContext *dup2( void *p,  unsigned int &sz ) = 0;
 };
@@ -1258,7 +1258,7 @@ struct MD4Ctx : public RSA_Hash<128, 512/8, true, unsigned int> {
   SYS_OPS( MD4Ctx );
   MD4Ctx() {}
   virtual ~MD4Ctx() {}
-  virtual HashContext *dup( void ) throw( Error ) {
+  virtual HashContext *dup( void ) {
     return NEW MD4Ctx();
   }
   virtual HashContext *dup2( void *p,  unsigned int &sz ) {
@@ -1521,7 +1521,7 @@ struct MD5Ctx : public RSA_Hash<128, 512/8, true, unsigned int> {
   SYS_OPS( MD5Ctx );
   MD5Ctx() {}
   virtual ~MD5Ctx() {}
-  virtual HashContext *dup( void ) throw( Error ) {
+  virtual HashContext *dup( void ) {
     return NEW MD5Ctx();
   }
   virtual HashContext *dup2( void *p, unsigned int &sz ) {
@@ -1685,7 +1685,7 @@ struct SHA1Ctx : public RSA_Hash<160, 512/8, false, unsigned int> {
   SYS_OPS( SHA1Ctx );
   SHA1Ctx() {}
   virtual ~SHA1Ctx() {}
-  virtual HashContext *dup( void ) throw( Error ) {
+  virtual HashContext *dup( void ) {
     return NEW SHA1Ctx();
   }
   virtual HashContext *dup2( void *p, unsigned int &sz ) {
@@ -1952,7 +1952,7 @@ struct RIPEMD128Ctx : public RSA_Hash<128, 512/8, true, unsigned int> {
   SYS_OPS( RIPEMD128Ctx );
   RIPEMD128Ctx() {}
   virtual ~RIPEMD128Ctx() {}
-  virtual HashContext *dup( void ) throw( Error ) {
+  virtual HashContext *dup( void ) {
     return NEW RIPEMD128Ctx();
   }
   virtual HashContext *dup2( void *p, unsigned int &sz ) {
@@ -2310,7 +2310,7 @@ struct RIPEMD160Ctx : public RSA_Hash<160, 512/8, true, unsigned int> {
   SYS_OPS( RIPEMD160Ctx );
   RIPEMD160Ctx() {}
   virtual ~RIPEMD160Ctx() {}
-  virtual HashContext *dup( void ) throw( Error ) {
+  virtual HashContext *dup( void ) {
     return NEW RIPEMD160Ctx();
   }
   virtual HashContext *dup2( void *p, unsigned int &sz ) {
@@ -2507,7 +2507,7 @@ struct SHA256Ctx : public RSA_Hash<256, 512/8, false, unsigned int> {
   SYS_OPS( SHA256Ctx );
   SHA256Ctx() {}
   virtual ~SHA256Ctx() {}
-  virtual HashContext *dup( void ) throw( Error ) {
+  virtual HashContext *dup( void ) {
     return NEW SHA256Ctx();
   }
   virtual HashContext *dup2( void *p, unsigned int &sz ) {
@@ -2662,7 +2662,7 @@ struct SHA512Ctx : public RSA_Hash<512, 1024/8, false, ullong> {
   SYS_OPS( SHA512Ctx );
   SHA512Ctx() {}
   virtual ~SHA512Ctx() {}
-  virtual HashContext *dup( void ) throw( Error ) {
+  virtual HashContext *dup( void ) {
     return NEW SHA512Ctx();
   }
   virtual HashContext *dup2( void *p, unsigned int &sz ) {
@@ -2732,7 +2732,7 @@ Hash512::sha2( const byte *buf,  unsigned int bufLen,  void *digest )
 
 
 HashContext *
-HashContext::create( HashType type ) throw( Error )
+HashContext::create( HashType type )
 {
   if ( type == MD4 )
     return NEW MD4Ctx();
@@ -2828,7 +2828,7 @@ struct HMACCtx : public HashContext {
   virtual bool selftest( void ) {
     return true; /* need to know the underlying hash */
   }
-  virtual HashContext *dup( void ) throw( Error ) {
+  virtual HashContext *dup( void ) {
     HMACCtx *hmac = NEW HMACCtx( this->ctx->dup(), NULL, 0, true );
     ::memcpy( hmac->iPad, this->iPad, this->blksz );
     ::memcpy( hmac->oPad, this->oPad, this->blksz );
@@ -2854,7 +2854,7 @@ struct HMACCtx : public HashContext {
 
 HashContext *
 HashContext::createHMAC( HashType type,  const byte *key,
-                         unsigned int keyLen ) throw( Error )
+                         unsigned int keyLen )
 {
   HashContext *ctx = HashContext::create( type );
   if ( ctx == NULL )

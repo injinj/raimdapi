@@ -30,7 +30,7 @@ class Array {
                  tail,    /* the position + 1 of the last element in the list */
                  growBy;  /* reallocation increment */
 
-    void grow( void ) throw( Error )
+    void grow( void )
     {
       unsigned int i,
                    j,
@@ -78,7 +78,7 @@ class Array {
     };
 
     /* Add element to the tail of the array */
-    void pushTail( ElemType ptr ) throw( Error )
+    void pushTail( ElemType ptr )
     {
       if ( this->count == this->arSize )
         this->grow();
@@ -89,7 +89,7 @@ class Array {
     };
 
     /* Add element to the head of the array */
-    void pushHead( ElemType ptr ) throw( Error )
+    void pushHead( ElemType ptr )
     {
       if ( this->count == this->arSize )
         this->grow();
@@ -114,7 +114,7 @@ class Array {
     };
 
     /* Remove tail element */
-    ElemType popTail( void ) throw( Error )
+    ElemType popTail( void )
     {
       if ( this->count > 0 ) {
         ElemType p;
@@ -222,7 +222,7 @@ class Array {
 
   public:
     /* getElem with range checking */
-    ElemType get( unsigned int num ) throw( Error )
+    ElemType get( unsigned int num )
     {
       if ( num >= this->count )
         throw ArrayErr::getErr( ArrayErr::BAD_INDEX );
@@ -230,7 +230,7 @@ class Array {
     };
 
     /* putElem with range checking */
-    ElemType put( unsigned int num,  ElemType ptr ) throw( Error )
+    ElemType put( unsigned int num,  ElemType ptr )
     {
       if ( num >= this->count )
         throw ArrayErr::getErr( ArrayErr::BAD_INDEX );
@@ -238,7 +238,7 @@ class Array {
     };
 
     /* insertElem with range checking */
-    void insert( ElemType ptr,  unsigned int num ) throw( Error )
+    void insert( ElemType ptr,  unsigned int num )
     {
       if ( num > this->count )
         throw ArrayErr::getErr( ArrayErr::BAD_INDEX );
@@ -246,7 +246,7 @@ class Array {
     };
 
     /* removeElem with range checking ) */
-    ElemType remove( unsigned int num ) throw( Error )
+    ElemType remove( unsigned int num )
     {
       if ( num >= this->count )
         throw ArrayErr::getErr( ArrayErr::BAD_INDEX );
@@ -284,7 +284,7 @@ class Array {
     };
 
     /* Delete element at positions, 0 <= num[ ... ] <= length() */
-    void remove( unsigned int *num,  unsigned int numCount ) throw( Error )
+    void remove( unsigned int *num,  unsigned int numCount )
     {
       unsigned int i,
                    j,
@@ -351,7 +351,7 @@ class QueueArray : public Array<ElemType>
     QueueArray( unsigned int growBy = 5 ) : Array<ElemType>( growBy ) {};
 
     /* push, queuelike */
-    void push( ElemType ptr ) throw( Error ) { this->pushTail( ptr ); };
+    void push( ElemType ptr ) { this->pushTail( ptr ); };
 
     /* pop, queuelike */
     ElemType pop( void ) { return this->popHead(); };
@@ -365,7 +365,7 @@ class StackArray : public Array<ElemType>
     StackArray( unsigned int growBy = 5 ) : Array<ElemType>( growBy ) {};
 
     /* push, stacklike */
-    void push( ElemType ptr ) throw( Error ) { this->pushTail( ptr ); };
+    void push( ElemType ptr ) { this->pushTail( ptr ); };
 
     /* pop, stacklike */
     ElemType pop( void ) { return this->popTail(); };
@@ -465,7 +465,7 @@ class HeapSortArray : public CompareArray<ElemType>
       : CompareArray<ElemType>( growBy ) {};
 
     /* push, heapsort like */
-    void push( ElemType ptr ) throw( Error )
+    void push( ElemType ptr )
     {
       unsigned int insertPoint,
                    parent;
@@ -495,7 +495,7 @@ class HeapSortArray : public CompareArray<ElemType>
     };
 
     /* pop, heapsort like */
-    ElemType pop( void ) throw( Error )
+    ElemType pop( void )
     {
       ElemType     topElem,
                    bottomElem,
@@ -542,7 +542,7 @@ class SortedArray : public CompareArray<ElemType>
       : CompareArray<ElemType>( growBy ) { this->unique = unique; };
 
     /* binary sorted insert */
-    bool insert( ElemType ptr ) throw( Error )
+    bool insert( ElemType ptr )
     {
       unsigned int len,
                    size,

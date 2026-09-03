@@ -86,7 +86,7 @@ struct RaiSub2Args {
     msgCnt_arg( "msgCount", 0, "<num>",
                 "Quit after receiving num messages" ) {}
 
-  void getArgs( rai::Args &args ) const throw( RaiException ) {
+  void getArgs( rai::Args &args ) const {
     args.add( &subject_arg, rai::COMMAND_ARG | rai::RESOURCE_ARG |
                             rai::LIST_ARG );
     args.add( &snap_arg );
@@ -141,7 +141,7 @@ struct RaiSub2HT {
     return key;
   }
 
-  void resizeHT( void ) throw( RaiException ) {
+  void resizeHT( void ) {
     unsigned int i, n = this->htSize, newSize = ( n == 0 ? 8 : n * 2 );
     REALLOC( newSize * sizeof( this->subHT[ 0 ] ), &this->subHT );
     ::memset( &this->subHT[ n ], 0, sizeof( this->subHT[ 0 ] ) * ( newSize -n));
@@ -162,7 +162,7 @@ struct RaiSub2HT {
   }
 
   void addHT( const char *subject,
-              RaiSubscribe *newSub ) throw( RaiException ) {
+              RaiSubscribe *newSub ) {
     unsigned int h = RaiSub2HT::hash( subject ),
                  n = this->nSubs;
     if ( n == this->htSize / 2 + this->htSize / 4 )
@@ -533,7 +533,7 @@ struct RaiSub2 : public RaiMsgCallback, public RaiDataLossCallback,
     }
   }
 
-  void renameSaveFile( void ) throw( RaiException ) {
+  void renameSaveFile( void ) {
     char saveName2[ 1024 ];
 
     ::strncpy( saveName2, this->saveName, sizeof( saveName2 ) );
@@ -546,7 +546,7 @@ struct RaiSub2 : public RaiMsgCallback, public RaiDataLossCallback,
   }
 
   /* get arg values for subs, dictionary, setup timers and in/out streams */
-  bool init( RaiApi *apip,  rai::Args &args ) throw( RaiException ) {
+  bool init( RaiApi *apip,  rai::Args &args ) {
     this->api = apip;
     try {
       RaiSub2Args subargs;
@@ -699,7 +699,7 @@ struct RaiSub2 : public RaiMsgCallback, public RaiDataLossCallback,
     return false;
   }
 
-  void setSnapMsg( const char *str ) throw( RaiException ) {
+  void setSnapMsg( const char *str ) {
     if ( str != NULL ) {
       rai::StringToMsg strToMsg;
       this->snapMsg = NEW RaiMsg( RAIMSG_PROTO );
@@ -856,7 +856,7 @@ struct RaiSub2 : public RaiMsgCallback, public RaiDataLossCallback,
   }
 
   /* thread from service for dispatch loop */
-  void serviceRun( void ) throw( RaiException ) {
+  void serviceRun( void ) {
     this->subthr.start();
     this->dispatchLoop();
   }
@@ -882,7 +882,7 @@ struct RaiSub2 : public RaiMsgCallback, public RaiDataLossCallback,
 
   /* Subscribe subjects, then wait for quit (ctrl-c) or until message 
    * count received */
-  void subLoop( void ) throw( RaiException ) {
+  void subLoop( void ) {
     RaiSubscribe::RaiSubParameter parm =
       this->doSnapshot ? RaiSubscribe::SNAP :
       this->doListen   ? RaiSubscribe::UPDATE : RaiSubscribe::BOTH;
@@ -987,7 +987,7 @@ struct RaiSub2 : public RaiMsgCallback, public RaiDataLossCallback,
 
 /* dll entry point, determined by service file name: rai_service_raisub2.so */
 extern "C" RAI_DLL_EXPORT void
-RAISUB2_ServiceInitialize( void ) throw( RaiException )
+RAISUB2_ServiceInitialize( void )
 {
   rai::ServiceFactory * fact = NEW
     T_RaiApiServiceFactory< RaiSub2Args,

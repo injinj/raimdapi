@@ -36,16 +36,16 @@ struct RaiApi_tibrv : public RaiApi {
 
   virtual const char *GetApiName( void ) { return "tibrv"; }
 
-  virtual void GetArgs( Args &args )                  throw( RaiException );
+  virtual void GetArgs( Args &args );
     
-  virtual void ParseArgs( Args &args )                throw( RaiException );
+  virtual void ParseArgs( Args &args );
 
-  virtual RaiSession *CreateSession( void )           throw( RaiException );
+  virtual RaiSession *CreateSession( void );
 
   virtual void Close( void );
 
   virtual bool SetIoctl( const char *parameter,  const void *value )
-                                                      throw( RaiException );
+;
   virtual bool GetIoctl( const char *parameter,  void *value );
 
   static RaiException getRvErr( tibrv_status status );
@@ -73,22 +73,22 @@ struct RaiSession_tibrv : public RaiSession, public Thread {
   virtual ~RaiSession_tibrv();
 
   /* RaiSession */
-  virtual void Start( void )                          throw( RaiException );
+  virtual void Start( void );
 
-  virtual RaiQueue *CreateQueue( bool direct )        throw( RaiException );
+  virtual RaiQueue *CreateQueue( bool direct );
 
-  virtual RaiPublish *CreatePublish( bool autoInc )   throw( RaiException );
+  virtual RaiPublish *CreatePublish( bool autoInc );
 
-  virtual RaiDict *CreateDict( void )                 throw( RaiException );
+  virtual RaiDict *CreateDict( void );
 
   virtual void Destroy( void );
 
-  virtual RaiEntitlement *Login( const char *user )   throw( RaiException );
+  virtual RaiEntitlement *Login( const char *user );
 
   virtual void SetDataLossCB( RaiDataLossCallback *cb,  void *closure )
-                                                      throw( RaiException );
+;
   virtual void NotifyStatus( Rai_u16 msgType,  Rai_u16 recStatus )
-                                                      throw( RaiException );
+;
   virtual RaiApi *GetApi( void ) { return &this->api; }
 
   /* Thread */
@@ -124,14 +124,14 @@ struct RaiQueue_tibrv : public RaiQueue {
 
   /* RaiQueue */
   virtual RaiTimer *CreateTimer( RaiTimerCallback *cb,  void *closure )
-                                                      throw( RaiException );
+;
   virtual RaiSubscribe *CreateSubscribe( RaiMsgCallback *cb,  void *closure )
-                                                      throw( RaiException );
+;
   virtual RaiInteractivePublish *CreateInteractivePublish(
                                       RaiSubscribeCallback *cb,
-                                      void *closure ) throw( RaiException );
+                                      void *closure );
   virtual void NotifyStatus( Rai_u16 msgType,  Rai_u16 recStatus )
-                                                      throw( RaiException );
+;
   struct AppEvent {
     tibrvEvent       rvE;
     RaiAppCallback * cb;
@@ -144,14 +144,14 @@ struct RaiQueue_tibrv : public RaiQueue {
   };
   virtual void QueueEvent( RaiAppCallback *cb,  void *eventData,
                            Rai_i32 eventEnum,  Rai_u8 eventPriority,
-                           Rai_u32 expireMSecs )      throw( RaiException );
+                           Rai_u32 expireMSecs );
   RaiException sendStatusMsg( RaiMsg &msg, RaiSubscribe::RaiSubState recvState,
                               Rai_u16 msgType,  Rai_u16 recStatus );
-  virtual void Mainloop( void )                       throw( RaiException );
+  virtual void Mainloop( void );
 
-  virtual void TimedDispatch( Rai_u32 ivalMSecs )     throw( RaiException );
+  virtual void TimedDispatch( Rai_u32 ivalMSecs );
 
-  virtual void Dispatch( void )                       throw( RaiException );
+  virtual void Dispatch( void );
 
   virtual Rai_u32 GetDepth( void );
 
@@ -181,7 +181,7 @@ struct RaiDict_tibrv : public RaiDict {
 
   /* RaiDict */
   virtual void Load( Rai_u32 timeoutSecs,  const char *dictSubject,
-                     bool loadWait )                  throw( RaiException );
+                     bool loadWait );
   virtual bool HaveDict( void ) {
     return this->complete;
   }
@@ -207,13 +207,13 @@ struct RaiTimer_tibrv : public RaiTimer {
   virtual ~RaiTimer_tibrv();
 
   /* RaiTimer */
-  virtual void Start( void )                          throw( RaiException );
+  virtual void Start( void );
 
   virtual void Stop( void );
 
-  virtual TimeMSecs  GetInterval( void )              throw( RaiException );
+  virtual TimeMSecs  GetInterval( void );
 
-  virtual void SetInterval( TimeMSecs  interval )     throw( RaiException );
+  virtual void SetInterval( TimeMSecs  interval );
 
   virtual RaiQueue *GetQueue( void ) { return &this->q; }
 
@@ -247,12 +247,12 @@ struct RaiSubscribe_tibrv : public RaiSubscribe {
   virtual ~RaiSubscribe_tibrv();
 
   virtual void Start( const char *subject,  RaiSubParameter parm,
-                      Rai_u32 timeoutMSecs )          throw( RaiException );
-  void sendSubRequest( void )                         throw( RaiException );
+                      Rai_u32 timeoutMSecs );
+  void sendSubRequest( void );
 
-  virtual void Cancel( void )                         throw( RaiException );
+  virtual void Cancel( void );
   
-  virtual void Refresh( Rai_u32 timeoutMSecs )        throw( RaiException );
+  virtual void Refresh( Rai_u32 timeoutMSecs );
 
   virtual const char *Subject( void );
   
@@ -260,7 +260,7 @@ struct RaiSubscribe_tibrv : public RaiSubscribe {
 
   virtual RaiQueue *GetQueue( void ) { return &this->q; }
   /* Set extra parameters passed with subscription at Start(), null erases */
-  virtual void SetExtra( RaiMsg *ex )                 throw( RaiException );
+  virtual void SetExtra( RaiMsg *ex );
 
   static void onMsg( tibrvEvent id,  tibrvMsg msg,  void *cl );
 };
@@ -290,7 +290,7 @@ struct RaiPublish_tibrv : public RaiPublish {
 
   virtual void Publish( const char *subject,  const void *buffer,  
                         Rai_u32 size,  TimeNSecs stamp,
-                        Rai_u32 msgTypeId )           throw( RaiException );
+                        Rai_u32 msgTypeId );
   virtual void Destroy( void );
 
   virtual RaiSession *GetSession( void ) { return &this->session; }
@@ -318,12 +318,12 @@ struct RaiInteractivePublish_tibrv : public RaiInteractivePublish,
 
   virtual void Publish( const char *subject,  const void *buffer,  
                         Rai_u32 size,  TimeNSecs stamp,
-                        Rai_u32 msgTypeId )            throw( RaiException );
+                        Rai_u32 msgTypeId );
   virtual void Destroy( void );
 
   virtual RaiSession *GetSession( void ) { return &this->session; }
 
-  virtual void InteractiveStart( const char *subject ) throw( RaiException );
+  virtual void InteractiveStart( const char *subject );
 
   virtual void InteractiveCancel( void );
 
@@ -365,7 +365,7 @@ static const char network_arg[]     = "network",
                   daemon_arg[]      = "daemon",
                   snap_prefix_arg[] = "snapPrefix";
 void
-RaiApi_tibrv::GetArgs( Args &args ) throw( RaiException )
+RaiApi_tibrv::GetArgs( Args &args )
 {
   static StringArg network( network_arg, NULL, "<network>",
                             "RV network of interface to use" );
@@ -385,7 +385,7 @@ RaiApi_tibrv::GetArgs( Args &args ) throw( RaiException )
 
     
 void
-RaiApi_tibrv::ParseArgs( Args &args ) throw( RaiException )
+RaiApi_tibrv::ParseArgs( Args &args )
 {
   const char *s;
 
@@ -414,7 +414,7 @@ RaiApi_tibrv::Close( void )
 
 bool
 RaiApi_tibrv::SetIoctl( const char *parameter,
-                        const void *value ) throw( RaiException )
+                        const void *value )
 {
   if ( ::strcmp( parameter, daemon_arg ) == 0 )
     STRDUP( this->daemon, (const char *) value );
@@ -525,7 +525,7 @@ RaiSession_tibrv::rvSys_onMsg( tibrvEvent I,  tibrvMsg msg,  void *cl )
 
 
 RaiSession *
-RaiApi_tibrv::CreateSession( void ) throw( RaiException )
+RaiApi_tibrv::CreateSession( void )
 {
   RaiSession_tibrv * session;
   tibrv_status       status;
@@ -555,7 +555,7 @@ RaiApi_tibrv::CreateSession( void ) throw( RaiException )
 }
 
 void
-RaiSession_tibrv::Start( void ) throw( RaiException )
+RaiSession_tibrv::Start( void )
 {
   static const char RV_ERROR_SUBJECT[] = "_RV.ERROR.SYSTEM.>",
                     RV_WARN_SUBJECT[]  = "_RV.WARN.SYSTEM.>";
@@ -703,7 +703,7 @@ RaiSession_tibrv::~RaiSession_tibrv()
 
 
 RaiQueue *
-RaiSession_tibrv::CreateQueue( bool direct ) throw( RaiException )
+RaiSession_tibrv::CreateQueue( bool direct )
 {
   RaiQueue_tibrv * q;
   tibrvQueue       rvQ;
@@ -721,14 +721,14 @@ RaiSession_tibrv::CreateQueue( bool direct ) throw( RaiException )
 
 
 RaiPublish *
-RaiSession_tibrv::CreatePublish( bool autoInc ) throw( RaiException )
+RaiSession_tibrv::CreatePublish( bool autoInc )
 {
   return NEW RaiPublish_tibrv( *this, autoInc );
 }
 
 
 RaiDict *
-RaiSession_tibrv::CreateDict( void ) throw( RaiException )
+RaiSession_tibrv::CreateDict( void )
 {
   return NEW RaiDict_tibrv( *this );
 }
@@ -736,7 +736,7 @@ RaiSession_tibrv::CreateDict( void ) throw( RaiException )
 
 RaiTimer *
 RaiQueue_tibrv::CreateTimer( RaiTimerCallback *cb,
-                             void *closure ) throw( RaiException )
+                             void *closure )
 {
   return NEW RaiTimer_tibrv( *this, cb, closure );
 }
@@ -744,7 +744,7 @@ RaiQueue_tibrv::CreateTimer( RaiTimerCallback *cb,
 
 RaiSubscribe *
 RaiQueue_tibrv::CreateSubscribe( RaiMsgCallback *cb,
-                                 void *closure ) throw( RaiException )
+                                 void *closure )
 {
   return NEW RaiSubscribe_tibrv( *this, cb, closure );
 }
@@ -752,7 +752,7 @@ RaiQueue_tibrv::CreateSubscribe( RaiMsgCallback *cb,
 
 RaiInteractivePublish *
 RaiQueue_tibrv::CreateInteractivePublish( RaiSubscribeCallback *cb,
-                                          void *closure ) throw( RaiException )
+                                          void *closure )
 {
   return NEW RaiInteractivePublish_tibrv( *this, cb, closure );
 }
@@ -811,7 +811,7 @@ RaiQueue_tibrv::~RaiQueue_tibrv()
 
 
 void 
-RaiQueue_tibrv::Mainloop( void ) throw( RaiException )
+RaiQueue_tibrv::Mainloop( void )
 {
   tibrv_status status;
 
@@ -826,7 +826,7 @@ RaiQueue_tibrv::Mainloop( void ) throw( RaiException )
 
 
 void 
-RaiQueue_tibrv::TimedDispatch( Rai_u32 ivalMSecs ) throw( RaiException )
+RaiQueue_tibrv::TimedDispatch( Rai_u32 ivalMSecs )
 {
   tibrv_status status;
 
@@ -839,7 +839,7 @@ RaiQueue_tibrv::TimedDispatch( Rai_u32 ivalMSecs ) throw( RaiException )
 
 
 void 
-RaiQueue_tibrv::Dispatch( void ) throw( RaiException )
+RaiQueue_tibrv::Dispatch( void )
 {
   tibrv_status status;
 
@@ -865,7 +865,7 @@ RaiQueue_tibrv::GetDepth( void )
 
 
 RaiEntitlement *
-RaiSession_tibrv::Login( const char *user ) throw( RaiException )
+RaiSession_tibrv::Login( const char *user )
 {
   return NULL;
 }
@@ -873,7 +873,7 @@ RaiSession_tibrv::Login( const char *user ) throw( RaiException )
 
 void
 RaiSession_tibrv::SetDataLossCB( RaiDataLossCallback *cb,
-                                 void *closure ) throw( RaiException )
+                                 void *closure )
 {
   this->dataLossCl = closure;
   this->dataLossCb = cb;
@@ -882,7 +882,7 @@ RaiSession_tibrv::SetDataLossCB( RaiDataLossCallback *cb,
 
 static inline void
 create_status_msg( RaiMsg &msg,  RaiSubscribe::RaiSubState &recvState,
-                   Rai_u16 msgType,  Rai_u16 recStatus ) throw( RaiException )
+                   Rai_u16 msgType,  Rai_u16 recStatus )
 {
   recvState = RaiSubscribe::SassToSubState( msgType, recStatus );
 
@@ -902,7 +902,7 @@ create_status_msg( RaiMsg &msg,  RaiSubscribe::RaiSubState &recvState,
 
 void
 RaiQueue_tibrv::NotifyStatus( Rai_u16 msgType,
-                              Rai_u16 recStatus ) throw( RaiException )
+                              Rai_u16 recStatus )
 {
   RaiMsg msg;
   Error  e2;
@@ -920,7 +920,7 @@ RaiQueue_tibrv::NotifyStatus( Rai_u16 msgType,
 void
 RaiQueue_tibrv::QueueEvent( RaiAppCallback *cb,  void *eventData,
                             Rai_i32 eventEnum,  Rai_u8 eventPriority,
-                            Rai_u32 expireMSecs ) throw( RaiException )
+                            Rai_u32 expireMSecs )
 {
   tibrv_f64    rv_interval;
   tibrv_status status;
@@ -955,7 +955,7 @@ RaiQueue_tibrv::onAppTimer( tibrvEvent id,  tibrvMsg msg,  void *cl )
 
 void
 RaiSession_tibrv::NotifyStatus( Rai_u16 msgType,
-                                Rai_u16 recStatus ) throw( RaiException )
+                                Rai_u16 recStatus )
 {
   RaiMsg msg;
   Error  e, e2;
@@ -1078,7 +1078,7 @@ RaiDict_tibrv::onMsg( tibrvEvent id,  tibrvMsg msg,  void *cl )
 
 void
 RaiDict_tibrv::Load( Rai_u32 timeoutSecs,  const char *dictSubject,
-                     bool loadWait ) throw( RaiException )
+                     bool loadWait )
 {
   tibrv_status status;
   char         dictInBox[ 256 ];
@@ -1155,7 +1155,7 @@ RaiTimer_tibrv::onTimer( tibrvEvent I,  tibrvMsg msg,  void *cl )
 
 
 void
-RaiTimer_tibrv::Start( void ) throw( RaiException )
+RaiTimer_tibrv::Start( void )
 {
   tibrv_f64    rv_interval;
   tibrv_status status;
@@ -1184,14 +1184,14 @@ RaiTimer_tibrv::Stop( void )
 
 
 TimeMSecs
-RaiTimer_tibrv::GetInterval( void ) throw( RaiException )
+RaiTimer_tibrv::GetInterval( void )
 {
   return this->ival;
 }
 
 
 void
-RaiTimer_tibrv::SetInterval( TimeMSecs interval ) throw( RaiException )
+RaiTimer_tibrv::SetInterval( TimeMSecs interval )
 {
   tibrv_f64    rv_interval;
   tibrv_status status;
@@ -1318,7 +1318,7 @@ RaiSubscribe_tibrv::onMsg( tibrvEvent id,  tibrvMsg msg,  void *cl )
 
 void
 RaiSubscribe_tibrv::Start( const char *subject,  RaiSubParameter parm,
-                           Rai_u32 timeoutMSecs ) throw( RaiException )
+                           Rai_u32 timeoutMSecs )
 {
   tibrv_status status;
   const char * p;
@@ -1410,7 +1410,7 @@ convertToRvMsg( RaiMsg &rvmsg,  RaiMsg &raimsg )
 
 
 void
-RaiSubscribe_tibrv::sendSubRequest( void ) throw( RaiException )
+RaiSubscribe_tibrv::sendSubRequest( void )
 {
   char            snapSubjectName[ SassConst::MAX_SUBJECT_LEN ],
                   inboxName[ 256 ];
@@ -1492,7 +1492,7 @@ RaiSubscribe_tibrv::sendSubRequest( void ) throw( RaiException )
 
 
 void
-RaiSubscribe_tibrv::Refresh( Rai_u32 timeoutMSecs ) throw( RaiException )
+RaiSubscribe_tibrv::Refresh( Rai_u32 timeoutMSecs )
 {
   RaiException e2 = NULL;
 
@@ -1575,7 +1575,7 @@ RaiSubscribeTimer_tibrv::onTimer( tibrvEvent I,  tibrvMsg msg,  void *cl )
 
 
 void
-RaiSubscribe_tibrv::Cancel( void ) throw( RaiException )
+RaiSubscribe_tibrv::Cancel( void )
 {
   this->q.apiLock->lock();
   this->q.rmSubList( this );
@@ -1607,7 +1607,7 @@ RaiSubscribe_tibrv::InProgress( void )
 
 
 void
-RaiSubscribe_tibrv::SetExtra( RaiMsg *ex ) throw( RaiException )
+RaiSubscribe_tibrv::SetExtra( RaiMsg *ex )
 {
   if ( this->extra != NULL ) {
     delete this->extra;
@@ -1628,7 +1628,7 @@ RaiPublish_tibrv::~RaiPublish_tibrv()
 void
 RaiPublish_tibrv::Publish( const char *subject,  const void *buffer,  
                            Rai_u32 size,  TimeNSecs stamp,
-                           Rai_u32 msgTypeId ) throw( RaiException )
+                           Rai_u32 msgTypeId )
 {
   tibrvMsg     m = NULL;
   tibrv_status status; 
@@ -1723,7 +1723,7 @@ RaiInteractivePublish_tibrv::onMsg( RaiMsgEvent &event,  RaiMsg &msg,  void *cl 
 }
 
 void
-RaiInteractivePublish_tibrv::InteractiveStart(  const char *subject ) throw( RaiException )
+RaiInteractivePublish_tibrv::InteractiveStart(  const char *subject )
 {
   char subBuf[ SassConst::MAX_SUBJECT_LEN ];
   unsigned int len;
@@ -1781,7 +1781,7 @@ RaiInteractivePublish_tibrv::Destroy( void )
 void
 RaiInteractivePublish_tibrv::Publish( const char *subject,  const void *buffer,  
                                       Rai_u32 size,  TimeNSecs stamp,
-                                      Rai_u32 msgTypeId )  throw( RaiException )
+                                      Rai_u32 msgTypeId )
 {
   this->RaiPublish_tibrv::Publish( subject, buffer, size, stamp, msgTypeId );
 }

@@ -191,7 +191,7 @@ AllWildStack::next( WildEndState *&end )
 
 void
 WildStartState::addWildcard( const char **segs,  WildEndState *end )
-                throw( Error )
+
 {
   WildMatchState  * state;
   WildTransition ** trans;
@@ -289,7 +289,7 @@ getsegs( const byte *subjbuf,  const char **segs )
 
 void
 WildStartState::addWildcard( const byte *subjbuf,  WildEndState *end )
-                throw( Error )
+
 {
   const char * segs[ 256 ];
   this->addWildcard( getsegs( subjbuf, segs ), end );
@@ -537,7 +537,7 @@ WildStartState::pruneWildcards( void *closure )
 
 
 void
-WildMatchState::reindex( void ) throw( Error )
+WildMatchState::reindex( void )
 {
   WildTransition ** trans;
   unsigned int      i,
@@ -589,7 +589,7 @@ WildMatchState::reindex( void ) throw( Error )
 
 
 void
-WildMatchState::copy( WildMatchState &state ) throw( Error )
+WildMatchState::copy( WildMatchState &state )
 {
   WildTransition ** trans;
   unsigned short  * idx;
@@ -645,7 +645,7 @@ WildMatchState::releaseAll( void )
 
 
 WildTransition *
-WildTransition::create( const char *s ) throw( Error )
+WildTransition::create( const char *s )
 {
   WildTransition *t;
   MALLOC( sizeof( WildTransition ) + ( s == NULL ? 0 : ::strlen( s ) ), &t );
@@ -674,7 +674,7 @@ WildTransition::release( WildTransition *t )
 
 
 WildTransition *
-WildTransition::copy( WildTransition *t ) throw( Error )
+WildTransition::copy( WildTransition *t )
 {
   WildTransition *t2;
 

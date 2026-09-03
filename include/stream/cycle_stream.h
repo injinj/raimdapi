@@ -29,7 +29,7 @@ class RAIBASE_DLL_EXP CycleOutputStream : public OutputStream {
                  dataLen;
 
     virtual unsigned int emptyBuf( const byte *buf,  unsigned int bufLen )
-                                                               throw( Error );
+;
   public:
     SYS_OPS( CycleOutputStream );
 

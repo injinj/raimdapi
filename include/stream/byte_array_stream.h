@@ -31,19 +31,19 @@ class RAIBASE_DLL_EXP ByteArrayInputStream : public InputStream {
     bool         dataIsCopied;
 
     virtual unsigned int fillBuf( byte *buf,  unsigned int bufLen )
-                                                               throw( Error );
+;
 
   public:
     SYS_OPS( ByteArrayInputStream );
 
     ByteArrayInputStream( const byte *data,  unsigned int dataLen,
                           bool copyData = false,  bool dataIsAlloced = false )
-                                                               throw( Error );
-    ByteArrayInputStream( ByteArrayOutputStream &bout )        throw( Error );
+;
+    ByteArrayInputStream( ByteArrayOutputStream &bout );
     virtual ~ByteArrayInputStream();
-    virtual bool available( void )                             throw( Error );
+    virtual bool available( void );
     virtual StreamOffset seekSet( StreamSeekOffset offset,  int whence )
-                                                               throw( Error );
+;
 };
 
 
@@ -59,7 +59,7 @@ class RAIBASE_DLL_EXP ByteArrayOutputStream : public OutputStream {
     bool         dataIsAlloced;         // True: ByteStreamOutputStream owns data, false: user passed in fixed size buffer.
 
     virtual unsigned int emptyBuf( const byte *buf,  unsigned int bufLen )
-                                                               throw( Error );
+;
   public:
     SYS_OPS( ByteArrayOutputStream );
 
@@ -75,7 +75,7 @@ class RAIBASE_DLL_EXP ByteArrayOutputStream : public OutputStream {
     virtual ~ByteArrayOutputStream();
 
     virtual StreamOffset seekSet( StreamSeekOffset offset,  int whence )
-                                                               throw( Error );
+;
     unsigned int length( void ) {
       return this->dataOff;
     };
@@ -90,7 +90,7 @@ class RAIBASE_DLL_EXP ByteArrayOutputStream : public OutputStream {
     // Note that reset does not free allocated data.
     // This will leak memory if allocData is true. Call FREE() on the pointer set
     // by getData().
-    void reset( void ) throw( Error ) {
+    void reset( void ) {
       this->flush();
       this->dataOff = 0;
       this->streamOffset = 0;

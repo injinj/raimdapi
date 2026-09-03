@@ -180,7 +180,7 @@ class FileList : public HeapSortArray<FileTime *>
     virtual int compare( FileTime * ft1, FileTime * ft2 ) {
       return ( ft1->modTime == ft2->modTime ? 0 : ft1->modTime < ft2->modTime ? -1 : 1 );
     };
-    FileTime * addFile( const char * directory, const char * fileName ) throw( Error ) {
+    FileTime * addFile( const char * directory, const char * fileName ) {
       char path[1024];
       TimeMSecs modTime;
       ::strncpy( path, directory, sizeof(path) );
@@ -232,7 +232,7 @@ class LogRenamer {
       return files.length();
     }      
 
-    void renameWithTime() throw( Error ) {
+    void renameWithTime() {
       TimeMSecs         currTime;
       char              logFileName2[1024];
       int               len;
@@ -304,7 +304,7 @@ class LogRenamer {
       files.removeAll();
     }
 
-    void setPath( const char * path ) throw( Error ) {
+    void setPath( const char * path ) {
       unsigned int      len;
       char            * p;
       if ( ! path )
@@ -384,7 +384,7 @@ class LogRenamer {
       STRDUP( this->logTimeStampFmt, logTimeStampFmt );
     }
     
-    void rename(const char * path) throw( Error ) {
+    void rename(const char * path) {
       setPath( path );
 
       switch( rolloverType ) {
@@ -480,7 +480,7 @@ Log::levelToString( LogLevel level )
 }
 
 Log::LogRolloverType
-Log::parseLogRolloverType( const char *rolloverType ) throw( Error )
+Log::parseLogRolloverType( const char *rolloverType )
 {
   if ( StrUtil::strcasecmp( rolloverType, "date" ) == 0 ||
        StrUtil::strcasecmp( rolloverType, "time" ) == 0 )
@@ -492,7 +492,7 @@ Log::parseLogRolloverType( const char *rolloverType ) throw( Error )
 }
 
 const char *
-Log::logRolloverTypeToString( Log::LogRolloverType logRolloverType ) throw( Error )
+Log::logRolloverTypeToString( Log::LogRolloverType logRolloverType )
 {
   switch ( logRolloverType ) {
     case Log::ROLLOVER_DATE: return "date";
@@ -521,7 +521,7 @@ updateMinLevel( void )
 // Log to output stream
 void
 Log::openLog( OutputStream *os,  LogLevel level,  unsigned int verbosity,
-              bool useXml ) throw( Error )
+              bool useXml )
 {
   OutputStream * out;
   Error          e2;
@@ -1039,7 +1039,7 @@ rai_log_crash_handler( EXCEPTION_POINTERS *r )
 #endif
 
 static OutputStream *
-rai_open_log_file( const char *path ) throw( Error )
+rai_open_log_file( const char *path )
 {
   OutputStream * out  = NULL;
   File         * file = NULL;
@@ -1129,7 +1129,7 @@ Log::enableCrashLogging( bool enable )
 
 void
 Log::openLog( const char *path,  LogLevel level,  unsigned int verbosity,
-              bool useXml ) throw( Error )
+              bool useXml )
 {
   OutputStream * out;
   Error          e2;
@@ -1484,7 +1484,7 @@ Log::getLogBuf( byte *buf,  unsigned int bufLen,  unsigned int &cnt )
 
 
 static void
-printStartupTimestamp( TimeMSecs stamp ) throw( Error )
+printStartupTimestamp( TimeMSecs stamp )
 {
   const char *fmt;
   char dateBuf[ 80 ];
@@ -1500,7 +1500,7 @@ printStartupTimestamp( TimeMSecs stamp ) throw( Error )
 
 
 static void
-printShutdownTimestamp( void ) throw( Error )
+printShutdownTimestamp( void )
 {
   const char *fmt;
   char dateBuf[ 80 ];
@@ -1515,7 +1515,7 @@ printShutdownTimestamp( void ) throw( Error )
 
 
 static void
-printRotateTimestamp( void ) throw( Error )
+printRotateTimestamp( void )
 {
   const char *fmt;
   char dateBuf[ 80 ];
@@ -1530,7 +1530,7 @@ printRotateTimestamp( void ) throw( Error )
 
 
 static bool
-checkLogRotate( void ) throw( Error )
+checkLogRotate( void )
 {
   OutputStream * out;
   unsigned int   logVerb;
@@ -1645,7 +1645,7 @@ Log::setAutoRotate( bool turnOn )
 
 
 void
-Log::updateLogModifiedTime( TimeMSecs mtime ) throw( Error )
+Log::updateLogModifiedTime( TimeMSecs mtime )
 {
   Error e2 = NULL;
   rai_log_lock();
@@ -1662,7 +1662,7 @@ Log::updateLogModifiedTime( TimeMSecs mtime ) throw( Error )
 
 
 void
-Log::closeLog( void ) throw( Error )
+Log::closeLog( void )
 {
   OutputStream * out;
   Log::LogLevel  levelSave;
@@ -1716,7 +1716,7 @@ Log::unlock( void )
 }
 
 void
-Log::flush( void ) throw( Error )
+Log::flush( void )
 {
   rai_log_lock();
   try {
@@ -1896,7 +1896,7 @@ void
 Log::vprintLogOut( OutputStream *log,  unsigned int verb,  TimeMSecs stamp,
                    LogLevel level,  const char *file,  int lineno,  Error e,
                    const char *inst,  const char *fmt,  va_list ap )
-     throw( Error )
+
 {
   /* verbosity level produces:
    * 1: Nothing
@@ -1975,7 +1975,7 @@ void
 Log::vprintLogXml( OutputStream *log,  unsigned int verb,  TimeMSecs stamp,
                    LogLevel level,  const char *file,  int lineno,  Error e,
                    const char *inst,  const char *fmt,  va_list ap )
-     throw( Error )
+
 {
   log->puts( "<X " );
 

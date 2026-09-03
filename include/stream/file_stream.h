@@ -28,7 +28,7 @@ class RAIBASE_DLL_EXP FileInputStream : public InputStream {
     File * file;
 
     virtual unsigned int fillBuf( byte *buf,  unsigned int bufLen ) 
-                                                         throw( Error );
+;
   public:
     SYS_OPS( FileInputStream );
     FileInputStream( File *file,
@@ -37,21 +37,21 @@ class RAIBASE_DLL_EXP FileInputStream : public InputStream {
                      StreamOffset streamOffset = (StreamOffset) 0UL );
     virtual ~FileInputStream();
 
-    virtual void close( void )                                 throw( Error );
+    virtual void close( void );
 
-    virtual bool available( void )                             throw( Error );
+    virtual bool available( void );
 
     virtual StreamOffset seekSet( StreamSeekOffset offset,  int whence ) 
-                                                               throw( Error );
+;
     static InputStream * create( File *file,
                                unsigned int bufLen       = InputStream::BUF_LEN,
                                bool closePipe            = false,
                                StreamOffset streamOffset = (StreamOffset) 0UL )
-                                                               throw( Error );
+;
     static InputStream * open( const char *filepath,
                                unsigned int bufLen       = InputStream::BUF_LEN,
                                StreamOffset streamOffset = (StreamOffset) 0UL )
-                                                               throw( Error );
+;
 };
 
 
@@ -60,7 +60,7 @@ class RAIBASE_DLL_EXP FileOutputStream : public OutputStream {
     File * file;
 
     virtual unsigned int emptyBuf( const byte *buf,  unsigned int bufLen )
-                                                               throw( Error );
+;
   public:
     SYS_OPS( FileOutputStream );
     FileOutputStream( File *file,
@@ -70,25 +70,25 @@ class RAIBASE_DLL_EXP FileOutputStream : public OutputStream {
                       StreamOffset streamOffset = (StreamOffset) 0UL );
     virtual ~FileOutputStream();
 
-    virtual void close( void )                                 throw( Error );
+    virtual void close( void );
 
     virtual StreamOffset seekSet( StreamSeekOffset offset,  int whence )
-                                                               throw( Error );
+;
     static OutputStream * create( File *file,
                                 unsigned int bufLen   = OutputStream::BUF_LEN,
                                 bool lineBuffered     = false,
                                 bool closePipe        = false,
                                 StreamOffset streamOffset = (StreamOffset) 0UL )
-                                                               throw( Error );
+;
     static OutputStream * open( const char *filepath,
                                 unsigned int bufLen     = OutputStream::BUF_LEN,
                                 bool lineBuffered       = false,
                                 StreamOffset streamOffset = (StreamOffset) 0UL )
-                                                               throw( Error );
+;
     static OutputStream * append( const char *filepath,
                                   unsigned int bufLen   = OutputStream::BUF_LEN,
                                   bool lineBuffered     = false )
-                                                               throw( Error );
+;
 };
 } // namespace rai
 

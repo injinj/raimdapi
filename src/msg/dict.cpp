@@ -131,7 +131,7 @@ RaiMsg_config::parseDictionary( const char *tss_fields_fname,
                                 const char *tss_records_fname,
                                 const char *cfile_path,
                                 char path_sep,
-                                CFileLocator *loc ) throw( RaiMsgException )
+                                CFileLocator *loc )
 {
   CFileParser   * parser;
   CFileStrings  * strings;
@@ -175,7 +175,7 @@ RaiMsg_config::parseDictionary( const char *tss_fields_fname,
 
 
 RaiMsg_config *
-RaiMsg_config::parseDictionary( InputStream *in ) throw( RaiMsgException )
+RaiMsg_config::parseDictionary( InputStream *in )
 {
   CFileParser   * parser;
   CFileStrings  * strings;
@@ -211,7 +211,7 @@ tssFixEntry2( Rai_u32 &fnameLen,  Rai_u32 &dataType,  Rai_u32 &dataSize,
               bool &isPartial );
 
 RaiMsg_config *
-RaiMsg_config::parseDictionary( CFileExpr *expr ) throw( RaiMsgException )
+RaiMsg_config::parseDictionary( CFileExpr *expr )
 {
   CFileExpr         * defn,
                     * fields,
@@ -684,7 +684,7 @@ RaiMsg_config *
 RaiMsg_config::parseDictionary( InputStream *in, 
                                 const char *fname,
                                 const char *cfile_path,
-                                char path_sep ) throw( RaiMsgException )
+                                char path_sep )
 {
   CFileParser   * parser;
   CFileStrings  * strings;
@@ -724,7 +724,7 @@ RaiMsg_config::parseDictionary( InputStream *in,
 
 void
 RaiMsg_form::initFields( Rai_u16 *fid,  unsigned int fidCount,
-                         bool setFieldNames ) throw( RaiMsgException )
+                         bool setFieldNames )
 {
   RaiMsg_dict       * entry;
   const RaiMsg_dict * classEntry;
@@ -1004,7 +1004,7 @@ RaiMsg_config::getForm( const char *fname,  unsigned int fname_size ) const
 
 
 void
-RaiMsg_config::initAnonForms( void ) throw( RaiMsgException )
+RaiMsg_config::initAnonForms( void )
 {
   unsigned int j;
 
@@ -1036,7 +1036,7 @@ DBG_REF( const char *where,  const RaiMsg_formref *formRef )
 #endif
 #if 0
 const RaiMsg_form *
-RaiMsg_config::getHashedForm( Rai_u64 typeHash ) throw( RaiMsgException )
+RaiMsg_config::getHashedForm( Rai_u64 typeHash )
 {
   RaiMsg_formref * formRef;
 
@@ -1063,7 +1063,7 @@ RaiMsg_config::getHashedForm( Rai_u64 typeHash ) throw( RaiMsgException )
 
 const RaiMsg_form *
 RaiMsg_config::getAnonForm( Rai_u16 *fid,  unsigned int fidCount,
-                            bool mustExist ) throw( RaiMsgException )
+                            bool mustExist )
 {
   RaiMsg_formref    * formRef;
   RaiMsg_form       * newForm;
@@ -1228,7 +1228,7 @@ RaiMsg_config::refForm( const RaiMsg_form *form )
 
 
 void
-RaiMsg_config::describeMemory( RaiMsg &msg ) throw( RaiMsgException )
+RaiMsg_config::describeMemory( RaiMsg &msg )
 {
   Error e2 = NULL;
   msg.Append( "sass-dict-size", this->dictSize );
@@ -1253,7 +1253,7 @@ RaiMsg_config::describeMemory( RaiMsg &msg ) throw( RaiMsgException )
 
 const RaiMsg_form *
 RaiMsg_config::describeAnonForm( RaiMsg &msg,  const char *name )
-               throw( RaiMsgException )
+
 {
   const RaiMsg_form * form = NULL;
   RaiMsg_formref    * ref;
@@ -1391,7 +1391,7 @@ RaiMsg_dict::convertTssPrecision( Rai_f64 f64 )
 
 
 void
-RaiMsg_dict::convert( RaiField &field ) const throw( RaiMsgException )
+RaiMsg_dict::convert( RaiField &field ) const
 {
   static Rai_u8 sdateHint[ 2 ] = { 1U, 0 };
   static Rai_u8 stimeHint[ 2 ] = { 1U, 1U };
@@ -1495,7 +1495,7 @@ RaiMsg_dict::getFieldType( void ) const
 
 void
 RaiMsg_dict::pack( RaiField &field,  Rai_u8 *to_ptr ) const
-             throw( RaiMsgException )
+
 {
   Rai_u16       u16,
                 u16dt[ 3 ],
@@ -1763,7 +1763,7 @@ RaiMsg_dict::pack( RaiField &field,  Rai_u8 *to_ptr ) const
 
 void
 RaiMsg_dict::packPartial( RaiField &field,  Rai_u8 *to_ptr ) const
-             throw( RaiMsgException )
+
 {
   RaiMsg_size partialOff,
               partialLen;
@@ -1805,7 +1805,7 @@ RaiMsg_dict::packPartial( RaiField &field,  Rai_u8 *to_ptr ) const
 
 Rai_u8 *
 RaiMsg_dict::unpack( RaiField &field,  Rai_u8 *from_ptr,
-                     unsigned int length ) const throw( RaiMsgException )
+                     unsigned int length ) const
 {
   static Rai_u8 sdateHint[ 2 ] = { 1U, 0 };
   static Rai_u8 stimeHint[ 2 ] = { 1U, 1U };
@@ -1944,7 +1944,7 @@ RaiMsg_dict::unpack( RaiField &field,  Rai_u8 *from_ptr,
 
 void
 RaiMsg_config::packDataDictionary( RaiMsg &msg,  bool addForms ) const
-               throw( RaiMsgException )
+
 {
   RaiMsg_dict * ptr;
   RaiField      field;
@@ -2113,7 +2113,7 @@ tssFixEntry1( Rai_u32 fnameLen,  Rai_u32 dataType,  Rai_u32 dataSize,
 
 
 RaiMsg_config *
-RaiMsg_config::unpackDataDictionary( RaiMsg &msg ) throw( RaiMsgException )
+RaiMsg_config::unpackDataDictionary( RaiMsg &msg )
 {
   Rai_u16         fieldFid[ MAX_FID ],
                 * index;

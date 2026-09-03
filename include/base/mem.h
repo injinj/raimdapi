@@ -58,37 +58,37 @@ namespace Mem {
 
 //#define MEM_DEBUG
 #if defined( MEM_DEBUG ) || defined( MEM_SUMMARY )
-void initialize( void ) throw( Error );
+void initialize( void );
 
 void terminate( void );
 
 #if defined( MEM_SUMMARY )
-void initAllocSummary( void ) throw( Error );
+void initAllocSummary( void );
 
-void dumpAllocSummary( OutputStream *out ) throw( Error );
+void dumpAllocSummary( OutputStream *out );
 #endif
 
 /* alloc functions */
 /*extern void callocFL( unsigned int nBytes,  void *ptr,  const char *fn,
-                      unsigned int ln )                     throw( Error );*/
+                      unsigned int ln );*/
 extern void mallocFLC( size_t nBytes,  void *ptr,  const char *fileName,
                        unsigned int lineNum,  const char *className )
-                                                             throw( Error );
+;
 extern void reallocFL( size_t nBytes,  void *ptr,  const char *fileName,
-                       unsigned int ln )                     throw( Error );
+                       unsigned int ln );
 extern void freeFLC( void *ptr,  const char *fileName,  unsigned int lineNum,
                      const char *className );
 #if defined( MEM_DEBUG )
-extern void printAlloced( OutputStream *out )                throw( Error );
+extern void printAlloced( OutputStream *out );
 
-extern void findMem( void *ptr,  OutputStream *out )         throw( Error );
+extern void findMem( void *ptr,  OutputStream *out );
 
-extern void checkMem( void *ptr,  OutputStream *out )        throw( Error );
+extern void checkMem( void *ptr,  OutputStream *out );
 
-extern void printAllocedSummary( OutputStream *out )         throw( Error );
+extern void printAllocedSummary( OutputStream *out );
 #endif
 extern void copyStringFLC( char *&out,  const char *in,  const char *fileName,
-                           unsigned int lineNum )            throw( Error );
+                           unsigned int lineNum );
 
 extern bool           traceMemory;    /* if true, debug memory */
 extern size_t         memAlloced;     /* counts number of bytes allocated */
@@ -131,7 +131,7 @@ static inline void initialize( void ) {};
 
 static inline void terminate( void ) {};
 
-static inline void dumpAllocSummary( OutputStream *out ) throw( Error ) {};
+static inline void dumpAllocSummary( OutputStream *out ) {};
 
 #define MALLOC( N, P )  rai::Mem::doMalloc( N, P )
 #define REALLOC( N, P ) rai::Mem::doRealloc( N, P )
@@ -163,16 +163,16 @@ static inline void dumpAllocSummary( OutputStream *out ) throw( Error ) {};
     }
 
 RAIBASE_DLL_EXP
-void doMalloc( size_t n,  void *p )                          throw( Error );
+void doMalloc( size_t n,  void *p );
 
 RAIBASE_DLL_EXP
 void doFree( void *p );
 
 RAIBASE_DLL_EXP
-void doRealloc( size_t n,  void *p )                         throw( Error );
+void doRealloc( size_t n,  void *p );
 
 RAIBASE_DLL_EXP
-void doCopyString( char *&out,  const char *in )             throw( Error );
+void doCopyString( char *&out,  const char *in );
 
 #endif /* ! MEM_DEBUG */
 

@@ -99,7 +99,7 @@ Subject::clear( void )
 
 
 void
-Subject::nullReference( void ) throw( Error )
+Subject::nullReference( void )
 {
   throw SubjectErr::getErr( SubjectErr::SUBJECT_IS_NULL );
 }
@@ -138,7 +138,7 @@ MsaSubject::layout( const char *segments[ 4 ],  unsigned int lens[ 4 ],
 
 void
 MsaSubject::set( byte *buf,  unsigned int bufLen,  bool isAlloced )
-            throw( Error )
+
 {
   if ( bufLen >= 4 ) {
     unsigned int len = (unsigned int) buf[ 0 ] + (unsigned int) buf[ 1 ] +
@@ -157,7 +157,7 @@ MsaSubject::set( byte *buf,  unsigned int bufLen,  bool isAlloced )
 
 void
 SassSubject::set( byte *buf,  unsigned int bufLen,  bool isAlloced )
-             throw( Error )
+
 {
   if ( bufLen >= 5 && buf[ 0 ] == 4 ) {
     unsigned int len = (unsigned int) buf[ 1 ] + (unsigned int) buf[ 2 ] +
@@ -176,7 +176,7 @@ SassSubject::set( byte *buf,  unsigned int bufLen,  bool isAlloced )
 
 void
 RaiSubject::set( byte *buf,  unsigned int bufLen,  bool isAlloced )
-           throw( Error )
+
 {
   unsigned int len,
                segLen;
@@ -203,7 +203,7 @@ RaiSubject::set( byte *buf,  unsigned int bufLen,  bool isAlloced )
 
 
 void
-Subject::copy( const Subject &subj ) throw( Error )
+Subject::copy( const Subject &subj )
 {
   const byte * buf     = subj.buf; /* so that subj.copy( subj ) works */
   unsigned int bufLen  = subj.bufLen,
@@ -225,7 +225,7 @@ Subject::copy( const Subject &subj ) throw( Error )
 
 void
 SassSubject::copy( const SassSubject &subj,  byte *toBuf,
-                   unsigned int toBufLen ) throw( Error )
+                   unsigned int toBufLen )
 {
   if ( subj.bufLen > toBufLen )
     throw SubjectErr::getErr( SubjectErr::BUF_TOO_SMALL );
@@ -240,7 +240,7 @@ SassSubject::copy( const SassSubject &subj,  byte *toBuf,
 
 void
 RaiSubject::copy( const RaiSubject &subj,  byte *toBuf,
-                 unsigned int toBufLen ) throw( Error )
+                 unsigned int toBufLen )
 {
   if ( subj.bufLen > toBufLen )
     throw SubjectErr::getErr( SubjectErr::BUF_TOO_SMALL );
@@ -322,7 +322,7 @@ RaiSubject::isWildcard( void ) const
 
 unsigned int
 MsaSubject::decode( char *subject,  unsigned int maxSubjLen ) const
-            throw( Error )
+
 {
   unsigned int off,
                count,
@@ -366,7 +366,7 @@ MsaSubject::decode( char *subject,  unsigned int maxSubjLen ) const
 
 unsigned int
 SassSubject::decode( char *subject,  unsigned int maxSubjLen ) const
-             throw( Error )
+
 {
   unsigned int off,
                count,
@@ -413,7 +413,7 @@ SassSubject::decode( char *subject,  unsigned int maxSubjLen ) const
 
 unsigned int
 RaiSubject::decode( char *subject,  unsigned int maxSubjLen,
-                    const char sep ) const throw( Error )
+                    const char sep ) const
 {
   const byte * ptr = this->buf;
   unsigned int off;
@@ -447,7 +447,7 @@ RaiSubject::decode( char *subject,  unsigned int maxSubjLen,
 }
 
 unsigned int
-MsaSubject::encode( const char *subject ) throw( Error )
+MsaSubject::encode( const char *subject )
 {
   const char * ptr,
              * label,
@@ -500,7 +500,7 @@ MsaSubject::encode( const char *subject ) throw( Error )
 
 unsigned int
 MsaSubject::encode( const char *segments[ 4 ],  unsigned int lens[ 4 ],
-                     byte *toBuf, unsigned int bufSize ) throw( Error )
+                     byte *toBuf, unsigned int bufSize )
 {
   unsigned int len;
 
@@ -526,7 +526,7 @@ MsaSubject::encode( const char *segments[ 4 ],  unsigned int lens[ 4 ],
 }
 
 unsigned int
-MsaSubject::validate( unsigned int lens[ 4 ] ) throw( Error )
+MsaSubject::validate( unsigned int lens[ 4 ] )
 {
   unsigned int len,
                i;
@@ -542,7 +542,7 @@ MsaSubject::validate( unsigned int lens[ 4 ] ) throw( Error )
 
 unsigned int
 MsaSubject::convert( const RaiSubject &subj,  bool isWild,
-                      byte *toBuf,  unsigned int bufSize ) throw( Error )
+                      byte *toBuf,  unsigned int bufSize )
 {
   const char * segs[ SassConst::MAX_RV_SEGMENTS ];
   unsigned int lens[ SassConst::MAX_RV_SEGMENTS ],
@@ -579,7 +579,7 @@ MsaSubject::convert( const RaiSubject &subj,  bool isWild,
 }
 
 unsigned int
-SassSubject::validate( const char *subject ) throw( Error )
+SassSubject::validate( const char *subject )
 {
   const char * ptr,
              * label,
@@ -619,7 +619,7 @@ SassSubject::validate( const char *subject ) throw( Error )
 
 unsigned int
 SassSubject::encode( const char *subject,  byte *toBuf,  unsigned int bufSize )
-             throw( Error )
+
 {
   unsigned int len;
 
@@ -688,7 +688,7 @@ SassSubject::layout( const char *subject,  byte *toBuf )
 
 
 unsigned int
-SassSubject::validate( const char *segments[ 4 ] ) throw( Error )
+SassSubject::validate( const char *segments[ 4 ] )
 {
   unsigned int segLen,
                len,
@@ -711,7 +711,7 @@ SassSubject::validate( const char *segments[ 4 ] ) throw( Error )
 
 
 unsigned int
-SassSubject::validate( unsigned int lens[ 4 ] ) throw( Error )
+SassSubject::validate( unsigned int lens[ 4 ] )
 {
   unsigned int len,
                i;
@@ -728,7 +728,7 @@ SassSubject::validate( unsigned int lens[ 4 ] ) throw( Error )
 
 unsigned int
 SassSubject::encode( const char *segments[ 4 ],  byte *toBuf,
-                     unsigned int bufSize ) throw( Error )
+                     unsigned int bufSize )
 {
   unsigned int len;
 
@@ -756,7 +756,7 @@ SassSubject::encode( const char *segments[ 4 ],  byte *toBuf,
 
 unsigned int
 SassSubject::encode( const char *segments[ 4 ],  unsigned int lens[ 4 ],
-                     byte *toBuf, unsigned int bufSize ) throw( Error )
+                     byte *toBuf, unsigned int bufSize )
 {
   unsigned int len;
 
@@ -836,7 +836,7 @@ SassSubject::layout( const char *segments[ 4 ],  unsigned int lens[ 4 ],
 
 unsigned int
 RaiSubject::validate( const char *subject,  unsigned int &numSegs,
-                      const char sep ) throw( Error )
+                      const char sep )
 {
   register const char * ptr, * last;
   register unsigned int segCount, err;
@@ -877,7 +877,7 @@ RaiSubject::validate( const char *subject,  unsigned int &numSegs,
 
 unsigned int
 RaiSubject::validate2( const char *subject,  unsigned int maxLen,
-                       unsigned int &numSegs,  const char sep ) throw( Error )
+                       unsigned int &numSegs,  const char sep )
 {
   register const char * ptr, * last;
   register unsigned int segCount, err;
@@ -920,7 +920,7 @@ RaiSubject::validate2( const char *subject,  unsigned int maxLen,
 
 unsigned int
 RaiSubject::encode( const char *subject,  byte *toBuf,  unsigned int bufSize,
-                    const char sep ) throw( Error )
+                    const char sep )
 {
   unsigned int len,
                segCount;
@@ -954,7 +954,7 @@ RaiSubject::encode( const char *subject,  byte *toBuf,  unsigned int bufSize,
 
 unsigned int
 RaiSubject::encode2( const char *subject,  unsigned int maxLen,  byte *toBuf,
-                     unsigned int bufSize,  const char sep ) throw( Error )
+                     unsigned int bufSize,  const char sep )
 {
   unsigned int len,
                segCount;
@@ -1040,7 +1040,7 @@ RaiSubject::layout2( const char *subject,  unsigned int maxLen,
 
 unsigned int
 RaiSubject::staticLayout( const char *subject,  byte *toBuf,
-                  unsigned int toBufLen,  const char sep ) throw( RaiException )
+                  unsigned int toBufLen,  const char sep )
 {
   register const char * ptr, * last;
   register unsigned int off;
@@ -1098,7 +1098,7 @@ RaiSubject::staticLayout( const char *subject,  byte *toBuf,
 unsigned int
 RaiSubject::staticLayout2( const char *subject,  unsigned int maxLen,
                            byte *toBuf,  unsigned int toBufLen,
-                           const char sep ) throw( RaiException )
+                           const char sep )
 {
   register const char * ptr, * last;
   register unsigned int off;
@@ -1157,7 +1157,7 @@ RaiSubject::staticLayout2( const char *subject,  unsigned int maxLen,
 unsigned int
 RaiSubject::toRIC( char *ricBuf,  unsigned int maxLen,
                    const char *sector,  bool dontMapCaretToDot,
-                   bool dontAppendNaE ) throw( Error )
+                   bool dontAppendNaE )
 {
   const char * seg[ SassConst::MAX_RV_SEGMENTS ];
   unsigned int lens[ SassConst::MAX_RV_SEGMENTS ],
@@ -1190,7 +1190,7 @@ break_loop2:;
 
 unsigned int
 RaiSubject::toRIC( char *ricBuf,  unsigned int maxLen,  unsigned int prefixSegs,
-                   bool dontMapCaretToDot,  bool dontAppendNaE ) throw( Error )
+                   bool dontMapCaretToDot,  bool dontAppendNaE )
 {
   const char * seg[ SassConst::MAX_RV_SEGMENTS ];
   unsigned int lens[ SassConst::MAX_RV_SEGMENTS ],
@@ -1206,7 +1206,7 @@ RaiSubject::toRIC( char *ricBuf,  unsigned int maxLen,  unsigned int prefixSegs,
 
 unsigned int
 RaiSubject::toRIC( char *ricBuf,  unsigned int maxLen,
-                   bool dontMapCaretToDot,  bool dontAppendNaE ) throw( Error )
+                   bool dontMapCaretToDot,  bool dontAppendNaE )
 {
   const char * seg[ SassConst::MAX_RV_SEGMENTS ];
   unsigned int lens[ SassConst::MAX_RV_SEGMENTS ],
@@ -1274,7 +1274,7 @@ break_loop2:;
 unsigned int
 RaiSubject::toRIC2( const char **seg,  unsigned int *lens,  unsigned int nSegs,
                     char *ricBuf,  unsigned int off,  unsigned int maxLen,
-                    bool dontMapCaretToDot,  bool dontAppendNaE ) throw( Error )
+                    bool dontMapCaretToDot,  bool dontAppendNaE )
 {
   unsigned int i = 0, startOff = off;
   const char * p;
@@ -1316,7 +1316,7 @@ unsigned int
 RaiSubject::encodeRIC( const char *prefix,  const char *ric,
                        byte *toBuf,  unsigned int bufLen,
                        bool dontMapDotToCaret,
-                       bool dontAppendNaE ) throw( Error )
+                       bool dontAppendNaE )
 {
   const char * sector = "REC";
   if ( ric[ 0 ] == 'p' || ric[ 0 ] == 'j' ) {
@@ -1335,7 +1335,7 @@ unsigned int
 RaiSubject::encodeRIC( const char *prefix,  const char *sector,
                        const char *ric,  byte *toBuf,  unsigned int bufLen,
                        bool dontMapDotToCaret,
-                       bool dontAppendNaE ) throw( Error )
+                       bool dontAppendNaE )
 {
   unsigned int segLen[ SassConst::MAX_RV_SEGMENTS ];
   const char * seg[ SassConst::MAX_RV_SEGMENTS ],
@@ -1445,7 +1445,7 @@ RaiSubject::encodeRIC( const char *prefix,  const char *sector,
 
 
 RaiSubject *
-RaiSubject::create( const char *subject ) throw( Error )
+RaiSubject::create( const char *subject )
 {
   RaiSubject * s;
   unsigned int len,
@@ -1466,7 +1466,7 @@ RaiSubject::create( const char *subject ) throw( Error )
 
 unsigned int
 RaiSubject::validate( const char **segments,  unsigned int segCount )
-           throw( Error )
+
 {
   unsigned int i,
                len,
@@ -1492,7 +1492,7 @@ RaiSubject::validate( const char **segments,  unsigned int segCount )
 
 unsigned int
 RaiSubject::validate( unsigned int *lens,  unsigned int segCount )
-           throw( Error )
+
 {
   unsigned int i,
                len,
@@ -1518,7 +1518,7 @@ RaiSubject::validate( unsigned int *lens,  unsigned int segCount )
 
 unsigned int
 RaiSubject::encode( const char **segments,  unsigned int segCount,
-                    byte *toBuf,  unsigned int bufSize ) throw( Error )
+                    byte *toBuf,  unsigned int bufSize )
 {
   unsigned int len;
 
@@ -1547,7 +1547,7 @@ RaiSubject::encode( const char **segments,  unsigned int segCount,
 unsigned int
 RaiSubject::encode( const char **segments,  unsigned int *lens,
                     unsigned int segCount,  byte *toBuf,
-                    unsigned int bufSize ) throw( Error )
+                    unsigned int bufSize )
 {
   unsigned int len;
 
@@ -1624,7 +1624,7 @@ RaiSubject::layout( const char **segments,  unsigned int *lens,
 
 unsigned int
 RaiSubject::concat( RaiSubject &subj1,  RaiSubject &subj2,  byte *toBuf,
-                   unsigned int bufSize ) throw( Error )
+                   unsigned int bufSize )
 {
   const byte * buf1     = NULL,
              * buf2     = NULL;
@@ -1686,7 +1686,7 @@ RaiSubject::concat( RaiSubject &subj1,  RaiSubject &subj2,  byte *toBuf,
 
 unsigned int
 SassSubject::convert( const RaiSubject &subj,  bool isWild,
-                      byte *toBuf,  unsigned int bufSize ) throw( Error )
+                      byte *toBuf,  unsigned int bufSize )
 {
   const char * segs[ SassConst::MAX_RV_SEGMENTS ];
   unsigned int lens[ SassConst::MAX_RV_SEGMENTS ],
@@ -1725,7 +1725,7 @@ SassSubject::convert( const RaiSubject &subj,  bool isWild,
 
 unsigned int
 RaiSubject::convert( const SassSubject &subj,  bool isWild,  byte *toBuf,
-                    unsigned int bufSize ) throw( Error )
+                    unsigned int bufSize )
 {
   const char * segs[ 4 ];
   unsigned int i,
@@ -1758,7 +1758,7 @@ RaiSubject::convert( const SassSubject &subj,  bool isWild,  byte *toBuf,
 
 unsigned int
 RaiSubject::convert( const MsaSubject &subj,  bool isWild,  byte *toBuf,
-                    unsigned int bufSize ) throw( Error )
+                    unsigned int bufSize )
 {
   const char * segs[ 4 ];
   unsigned int i,
@@ -1792,7 +1792,7 @@ RaiSubject::convert( const MsaSubject &subj,  bool isWild,  byte *toBuf,
 
 unsigned int
 RaiSubject::convert2( const SassSubject &subj,  const char * prefix, bool isWild,  byte *toBuf,
-                    unsigned int bufSize ) throw( Error )
+                    unsigned int bufSize )
 {
   const char * segs[ 5 ];
   unsigned int i,
@@ -1826,7 +1826,7 @@ RaiSubject::convert2( const SassSubject &subj,  const char * prefix, bool isWild
 
 
 unsigned int
-MsaSubject::queryLength( void ) const throw( Error )
+MsaSubject::queryLength( void ) const
 {
   if ( this->buf == NULL )
     throw SubjectErr::getErr( SubjectErr::SUBJECT_IS_NULL );
@@ -1837,7 +1837,7 @@ MsaSubject::queryLength( void ) const throw( Error )
 
 
 unsigned int
-SassSubject::queryLength( void ) const throw( Error )
+SassSubject::queryLength( void ) const
 {
   if ( this->buf == NULL )
     throw SubjectErr::getErr( SubjectErr::SUBJECT_IS_NULL );
@@ -1847,7 +1847,7 @@ SassSubject::queryLength( void ) const throw( Error )
 
 
 unsigned int
-MsaSubject::copyTo( byte *toBuf,  unsigned int toBufLen ) const throw( Error )
+MsaSubject::copyTo( byte *toBuf,  unsigned int toBufLen ) const
 {
   unsigned int len;
 
@@ -1861,7 +1861,7 @@ MsaSubject::copyTo( byte *toBuf,  unsigned int toBufLen ) const throw( Error )
 
 
 unsigned int
-SassSubject::copyTo( byte *toBuf,  unsigned int toBufLen ) const throw( Error )
+SassSubject::copyTo( byte *toBuf,  unsigned int toBufLen ) const
 {
   unsigned int len;
 
@@ -1875,7 +1875,7 @@ SassSubject::copyTo( byte *toBuf,  unsigned int toBufLen ) const throw( Error )
 
 
 unsigned int
-RaiSubject::copyTo( byte *toBuf,  unsigned int toBufLen ) const throw( Error )
+RaiSubject::copyTo( byte *toBuf,  unsigned int toBufLen ) const
 {
   unsigned int len;
 
@@ -1890,7 +1890,7 @@ RaiSubject::copyTo( byte *toBuf,  unsigned int toBufLen ) const throw( Error )
 
 unsigned int
 MsaSubject::copyQueryTo( byte *toBuf,  unsigned int toBufLen ) const
-            throw( Error )
+
 {
   unsigned int len;
 
@@ -1908,7 +1908,7 @@ MsaSubject::copyQueryTo( byte *toBuf,  unsigned int toBufLen ) const
 
 unsigned int
 SassSubject::copyQueryTo( byte *toBuf,  unsigned int toBufLen ) const
-             throw( Error )
+
 {
   unsigned int len;
 
@@ -1934,7 +1934,7 @@ SassSubject::copyQueryTo( byte *toBuf,  unsigned int toBufLen ) const
 
 unsigned int
 SassSubject::decodeQuery( char *subject,  unsigned int maxSubjLen ) const
-             throw( Error )
+
 {
   unsigned int len;
   const byte * codedName;
@@ -2117,7 +2117,7 @@ RaiSubject::matches( const RaiSubject &subj ) const
 
 
 const char *
-MsaSubject::segment( unsigned int segNum ) const throw( Error )
+MsaSubject::segment( unsigned int segNum ) const
 {
   unsigned int i,
                off,
@@ -2143,7 +2143,7 @@ MsaSubject::segment( unsigned int segNum ) const throw( Error )
 }
 
 const char *
-SassSubject::segment( unsigned int segNum ) const throw( Error )
+SassSubject::segment( unsigned int segNum ) const
 {
   unsigned int i,
                off,
@@ -2164,7 +2164,7 @@ SassSubject::segment( unsigned int segNum ) const throw( Error )
 
 
 const char *
-RaiSubject::segment( unsigned int segNum ) const throw( Error )
+RaiSubject::segment( unsigned int segNum ) const
 {
   unsigned int len;
   byte         n;
@@ -2203,7 +2203,7 @@ RaiSubject::segmentCount( void ) const
 
 unsigned int
 SassSubject::getSegments( const char **segs,  unsigned int maxSegs ) const
-             throw( Error )
+
 {
   unsigned int off;
   byte         n;
@@ -2227,7 +2227,7 @@ SassSubject::getSegments( const char **segs,  unsigned int maxSegs ) const
 
 unsigned int
 SassSubject::getSegments( const char **segs,  unsigned int *lens,
-                          unsigned int maxSegs ) const throw( Error )
+                          unsigned int maxSegs ) const
 {
   unsigned int off,
                len;
@@ -2254,7 +2254,7 @@ SassSubject::getSegments( const char **segs,  unsigned int *lens,
 
 unsigned int
 RaiSubject::getSegments( const char **segs,  unsigned int maxSegs ) const
-           throw( Error )
+
 {
   unsigned int len,
                n;
@@ -2279,7 +2279,7 @@ RaiSubject::getSegments( const char **segs,  unsigned int maxSegs ) const
 
 unsigned int
 RaiSubject::getSegments( const char **segs,  unsigned int *lens,
-                        unsigned int maxSegs ) const throw( Error )
+                        unsigned int maxSegs ) const
 {
   unsigned int len,
                n;
@@ -2332,7 +2332,7 @@ Subject::hashSegment( unsigned int mask,  unsigned int numHashBits,
 
 
 unsigned int
-MsaSubject::hash( void ) const throw( Error )
+MsaSubject::hash( void ) const
 {
   unsigned int seg,
                hash,
@@ -2357,7 +2357,7 @@ MsaSubject::hash( void ) const throw( Error )
 
 
 unsigned int
-SassSubject::hash( void ) const throw( Error )
+SassSubject::hash( void ) const
 {
   unsigned int seg,
                hash,
@@ -2382,7 +2382,7 @@ SassSubject::hash( void ) const throw( Error )
 
 
 unsigned int
-MsaSubject::hashQuery( unsigned int hash ) throw( Error )
+MsaSubject::hashQuery( unsigned int hash )
 {
   static unsigned int msaQuerySeg;
   unsigned int        seg;
@@ -2401,7 +2401,7 @@ MsaSubject::hashQuery( unsigned int hash ) throw( Error )
 
 
 unsigned int
-SassSubject::hashQuery( unsigned int hash ) throw( Error )
+SassSubject::hashQuery( unsigned int hash )
 {
   static unsigned int sassQuerySeg;
   unsigned int        seg;

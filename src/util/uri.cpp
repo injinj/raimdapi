@@ -186,7 +186,7 @@ class UriPartArray {
     UriPart      buf[ 64 ];
     unsigned int bufOff;
 
-    UriPart *newPart( unsigned int size ) throw( Error ) {
+    UriPart *newPart( unsigned int size ) {
       unsigned int n = ( size + sizeof( UriPart ) - 1 ) / sizeof( UriPart );
       UriPart    * p;
       if ( this->bufOff + n <=
@@ -260,7 +260,7 @@ class URIParser : public URI {
 
     void decodeAll( void );
     void clear( void );
-    char * makeUri( bool encoded,  bool baseonly )             throw( Error );
+    char * makeUri( bool encoded,  bool baseonly );
 
     bool scanAbsoluteUri( const char **ptr );
     bool scanScheme( const char **ptr );
@@ -294,25 +294,25 @@ class URIParser : public URI {
                const char **ptr );
     char * getPart( UriPartName name );
     char * getEncodedPart( UriPartName name,  UriPartName encodedName )
-                                                               throw( Error );
-    char * addRelated( UriPartName name,  char *part )         throw( Error );
-    void constructPath( const char *abs,  const char *rel )    throw( Error );
+;
+    char * addRelated( UriPartName name,  char *part );
+    void constructPath( const char *abs,  const char *rel );
 
-    void parse( const char *uri,  URI *related )               throw( Error );
-    virtual char * getUri( bool encoded )                      throw( Error );
-    virtual char * getOpaque( bool encoded )                   throw( Error );
+    void parse( const char *uri,  URI *related );
+    virtual char * getUri( bool encoded );
+    virtual char * getOpaque( bool encoded );
     virtual char * getScheme( void );
     virtual char * getUserinfo( void );
     virtual char * getHost( void );
     virtual char * getPort( void );
-    virtual char * getHostPort( unsigned int defaultPort )     throw( Error );
-    virtual char * getPath( bool encoded )                     throw( Error );
-    virtual char * getQuery( bool encoded )                    throw( Error );
-    virtual char * getPathQuery( bool encoded )                throw( Error );
-    virtual char * getReference( bool encoded )                throw( Error );
-    virtual void   stripReference( void )                      throw( Error );
-    virtual URI  * copy( void )                                throw( Error );
-    virtual char * getBase( void )                             throw( Error );
+    virtual char * getHostPort( unsigned int defaultPort );
+    virtual char * getPath( bool encoded );
+    virtual char * getQuery( bool encoded );
+    virtual char * getPathQuery( bool encoded );
+    virtual char * getReference( bool encoded );
+    virtual void   stripReference( void );
+    virtual URI  * copy( void );
+    virtual char * getBase( void );
 };
 } // namespace rai
 
@@ -333,7 +333,7 @@ URIErr::getErr( unsigned int status )
 
 
 URI *
-URI::create( const char *uri,  URI *related ) throw( Error )
+URI::create( const char *uri,  URI *related )
 {
   URIParser * u;
 
@@ -355,7 +355,7 @@ URI::create( const char *uri,  URI *related ) throw( Error )
 
 
 URI *
-URI::createWorkingDir( const char *uri ) throw( Error )
+URI::createWorkingDir( const char *uri )
 {
   char currentDir[ 1024 ];
   URI * tmp,
@@ -384,7 +384,7 @@ URI::createWorkingDir( const char *uri ) throw( Error )
 
 
 URI *
-URI::createWild( const char *uri ) throw( Error )
+URI::createWild( const char *uri )
 {
   URIParser * u;
 
@@ -407,7 +407,7 @@ URI::createWild( const char *uri ) throw( Error )
 
 URI *
 URI::fixupHttp( const char *host,  const char *uri )
-     throw( Error )
+
 {
   URIParser * u,
             * hs;
@@ -475,7 +475,7 @@ URIParser::clear( void )
 
 
 URI *
-URIParser::copy( void ) throw( Error )
+URIParser::copy( void )
 {
   URIParser  * uri;
   UriPart    * p,
@@ -513,7 +513,7 @@ URIParser::copy( void ) throw( Error )
 
 
 void
-URIParser::parse( const char *uri,  URI *related ) throw( Error )
+URIParser::parse( const char *uri,  URI *related )
 {
   unsigned int pos;
   char       * s,
@@ -714,7 +714,7 @@ URIParser::decodeAll( void )
 
 
 char *
-URIParser::addRelated( UriPartName name,  char *part ) throw( Error )
+URIParser::addRelated( UriPartName name,  char *part )
 {
   UriPart    * p;
   unsigned int len;
@@ -734,7 +734,7 @@ URIParser::addRelated( UriPartName name,  char *part ) throw( Error )
 
 
 void
-URIParser::constructPath( const char *abs,  const char *rel ) throw( Error )
+URIParser::constructPath( const char *abs,  const char *rel )
 {
   UriPart    * p,
                q,
@@ -804,7 +804,7 @@ URIParser::constructPath( const char *abs,  const char *rel ) throw( Error )
 
 
 char *
-URIParser::getUri( bool encoded ) throw( Error )
+URIParser::getUri( bool encoded )
 {
   char * uri;
 
@@ -822,7 +822,7 @@ URIParser::getUri( bool encoded ) throw( Error )
 
 
 char *
-URIParser::getBase( void ) throw( Error )
+URIParser::getBase( void )
 {
   char * base;
 
@@ -834,7 +834,7 @@ URIParser::getBase( void ) throw( Error )
 
 
 char *
-URIParser::makeUri( bool encoded,  bool baseonly ) throw( Error )
+URIParser::makeUri( bool encoded,  bool baseonly )
 {
   const char * sch = NULL,
              * opa = NULL,
@@ -954,7 +954,7 @@ URIParser::makeUri( bool encoded,  bool baseonly ) throw( Error )
 
 
 char *
-URIParser::getOpaque( bool encoded ) throw( Error )
+URIParser::getOpaque( bool encoded )
 {
   if ( encoded )
     return this->getEncodedPart( OPAQUE, OPAQUE_ENCODED );
@@ -1000,7 +1000,7 @@ URIParser::getPort( void )
 
 
 char *
-URIParser::getHostPort( unsigned int defaultPort ) throw( Error )
+URIParser::getHostPort( unsigned int defaultPort )
 {
   unsigned int i,
                len;
@@ -1074,7 +1074,7 @@ URIParser::getHostPort( unsigned int defaultPort ) throw( Error )
 
 
 char *
-URIParser::getPath( bool encoded ) throw( Error )
+URIParser::getPath( bool encoded )
 {
   char * path,
        * opaque;
@@ -1106,7 +1106,7 @@ URIParser::getPath( bool encoded ) throw( Error )
 
 
 char *
-URIParser::getQuery( bool encoded ) throw( Error )
+URIParser::getQuery( bool encoded )
 {
   if ( encoded )
     return this->getEncodedPart( QUERY, QUERY_ENCODED );
@@ -1115,7 +1115,7 @@ URIParser::getQuery( bool encoded ) throw( Error )
 
 
 char *
-URIParser::getPathQuery( bool encoded ) throw( Error )
+URIParser::getPathQuery( bool encoded )
 {
   unsigned int len;
   char       * path,
@@ -1159,7 +1159,7 @@ URIParser::getPathQuery( bool encoded ) throw( Error )
 
 
 void
-URIParser::stripReference( void ) throw( Error )
+URIParser::stripReference( void )
 {
   UriPart      p,
              * old;
@@ -1187,7 +1187,7 @@ URIParser::stripReference( void ) throw( Error )
 
 
 char *
-URIParser::getReference( bool encoded ) throw( Error )
+URIParser::getReference( bool encoded )
 {
   if ( ! encoded )
     return this->getPart( REFERENCE );
@@ -1211,7 +1211,7 @@ URIParser::getPart( UriPartName name )
 
 char *
 URIParser::getEncodedPart( UriPartName name,  UriPartName encodedName )
-           throw( Error )
+
 {
   UriPart      p,
              * q;

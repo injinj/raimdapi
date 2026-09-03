@@ -44,7 +44,7 @@ class SubTest {
   
   bool init( const char *svcname, const char *netname,
 	     const char *dmnname, unsigned int logLevel, 
-             const char *username ) throw( RaiException ){
+             const char *username ){
     char dictSubject[80];
 
     try {
@@ -79,11 +79,11 @@ class SubTest {
     return false;
   };
   
-  void close( void ) throw( RaiException ) {
+  void close( void ) {
     RaiApi::RaiClose();
   };
   
-  void mainloop( void ) throw( RaiException ) {
+  void mainloop( void ) {
     while ( ! this->quit ) {
       try {
         RaiApi::RaiTimedDispatch( this->session, 1 );

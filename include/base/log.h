@@ -79,10 +79,10 @@ namespace Log {
   const char *levelToString( LogLevel level );
 
   RAIBASE_DLL_EXP
-  LogRolloverType parseLogRolloverType( const char *rolloverType ) throw( Error );
+  LogRolloverType parseLogRolloverType( const char *rolloverType );
 
   RAIBASE_DLL_EXP
-  const char *logRolloverTypeToString( LogRolloverType logRolloverType ) throw( Error );
+  const char *logRolloverTypeToString( LogRolloverType logRolloverType );
 
   // Enable crash logging, by default disabled
   RAIBASE_DLL_EXP
@@ -91,10 +91,10 @@ namespace Log {
   // Open log to output stream - turns off auto rotate
   RAIBASE_DLL_EXP
   void openLog( OutputStream *os,  LogLevel level,  unsigned int verbosity,
-                bool useXml = false )                  throw( Error );
+                bool useXml = false );
   RAIBASE_DLL_EXP
   void openLog( const char *path,  LogLevel level,  unsigned int verbosity,
-                bool useXml = false )                  throw( Error );
+                bool useXml = false );
   /* call with facility == NULL, closes all syslogs */
   RAIBASE_DLL_EXP
   void *openSyslog( const char *facility,  LogLevel syslogLevel = LVL_ERROR,
@@ -161,13 +161,13 @@ namespace Log {
   TimeMSecs nextLogRotate( TimeMSecs *diffTime = NULL );
 
   RAIBASE_DLL_EXP
-  void updateLogModifiedTime( TimeMSecs mtime = 0 )    throw( Error );
+  void updateLogModifiedTime( TimeMSecs mtime = 0 );
 
   RAIBASE_DLL_EXP
   void setAutoRotate( bool turnOn ); /* auto-rotate is default */
 
   RAIBASE_DLL_EXP
-  void closeLog( void )                                throw( Error );
+  void closeLog( void );
 
   // Lock log and return log OutputStream
   RAIBASE_DLL_EXP
@@ -179,7 +179,7 @@ namespace Log {
 
   // Flush log
   RAIBASE_DLL_EXP
-  void flush( void )                                   throw( Error );
+  void flush( void );
 
   // Copy Input stream to log verbatum
   RAIBASE_DLL_EXP
@@ -211,12 +211,12 @@ namespace Log {
   void vprintLogOut( OutputStream *log,  unsigned int verb,  TimeMSecs stamp,
                      LogLevel level,  const char *file,  int lineno,  Error e,
                      const char *inst,  const char *fmt,  va_list ap )
-                                                                throw( Error );
+;
   RAIBASE_DLL_EXP
   void vprintLogXml( OutputStream *log,  unsigned int verb,  TimeMSecs stamp,
                      LogLevel level,  const char *file,  int lineno,  Error e,
                      const char *inst,  const char *fmt,  va_list ap )
-                                                                throw( Error );
+;
   RAIBASE_DLL_EXP
   void printLogHex( LogLevel level,  const char *where,  int lineno,
                     Error err,  const char *what, const byte *msg,

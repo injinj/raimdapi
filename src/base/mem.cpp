@@ -208,14 +208,14 @@ class AllocSumTable : public LinearHashTable<AllocSumEntry *, AllocSumHash & >
 #if defined( MEM_SUMMARY )
 static AllocSumTable *asum = NULL;
 void
-Mem::initAllocSummary( void ) throw( Error )
+Mem::initAllocSummary( void )
 {
   asum = new AllocSumTable( 4096 );
   asum->init();
 }
 
 void
-Mem::dumpAllocSummary( OutputStream *out ) throw( Error )
+Mem::dumpAllocSummary( OutputStream *out )
 {
   if ( asum != NULL )
     asum->dump( out );
@@ -241,7 +241,7 @@ size_t Mem::memAlloced;
 size_t Mem::blocksAlloced;
 
 void
-Mem::initialize( void ) throw( Error )
+Mem::initialize( void )
 {
   memLock = Mutex::create( Mutex::RECURSIVE_LOCK );
 #if defined( MEM_SUMMARY )
@@ -431,7 +431,7 @@ removePtr( void *ptr,  size_t *nBytes,  const char *filename,
 
 
 void
-Mem::printAlloced( OutputStream *out ) throw( Error )
+Mem::printAlloced( OutputStream *out )
 {
   unsigned int i,
                j,
@@ -497,7 +497,7 @@ break_loop:;
 }
 
 void
-Mem::printAllocedSummary( OutputStream *out ) throw( Error )
+Mem::printAllocedSummary( OutputStream *out )
 {
   unsigned int i,
                j;
@@ -561,7 +561,7 @@ dbgPrintAllocedSummary( OutputStream *out )
 }
 
 void
-Mem::findMem( void *ptr,  OutputStream *out ) throw( Error )
+Mem::findMem( void *ptr,  OutputStream *out )
 {
   unsigned int i,
                j,
@@ -616,7 +616,7 @@ dbgFindMem( void *ptr,  OutputStream *out )
 
 
 void
-Mem::checkMem( void *ptr,  OutputStream *out ) throw( Error )
+Mem::checkMem( void *ptr,  OutputStream *out )
 {
   unsigned int i,
                j,
@@ -702,7 +702,7 @@ Mem::checkMem( void *ptr,  OutputStream *out ) throw( Error )
 
 
 void
-dbgCheckMem( void *ptr,  OutputStream *out ) throw( Error )
+dbgCheckMem( void *ptr,  OutputStream *out )
 {
   Mem::checkMem( ptr, out );
 }
@@ -714,7 +714,7 @@ dbgCheckMem( void *ptr,  OutputStream *out ) throw( Error )
 void
 Mem::mallocFLC( size_t nBytes,  void *ptr,  const char *fileName,
                 unsigned int lineNum,  const char *className )
-     throw( Error )
+
 {
   if ( Mem::traceMemory ) {
     *(void **)ptr = ::malloc( nBytes + MARK_SZ );
@@ -738,7 +738,7 @@ Mem::mallocFLC( size_t nBytes,  void *ptr,  const char *fileName,
 void
 Mem::reallocFL( size_t nBytes,  void *ptr,  const char *fileName,
                 unsigned int lineNum )
-     throw( Error )
+
 {
   void       * newPtr,
              * oldPtr;
@@ -830,7 +830,7 @@ Mem::freeFLC( void *ptr,  const char *fileName,  unsigned int lineNum,
 
 void
 Mem::copyStringFLC( char *&out,  const char *in,  const char *fileName,
-                    unsigned int lineNum ) throw( Error )
+                    unsigned int lineNum )
 {
   size_t len;
 
@@ -858,7 +858,7 @@ Mem::copyStringFLC( char *&out,  const char *in,  const char *fileName,
 void
 Mem::mallocFLC( size_t nBytes,  void *ptr,  const char *fileName,
                 unsigned int lineNum,  const char *className )
-     throw( Error )
+
 {
   *(void **)ptr = ::malloc( nBytes );
   if ( asum != NULL && *(void **) ptr != NULL )
@@ -871,7 +871,7 @@ Mem::mallocFLC( size_t nBytes,  void *ptr,  const char *fileName,
 void
 Mem::reallocFL( size_t nBytes,  void *ptr,  const char *fileName,
                 unsigned int lineNum )
-     throw( Error )
+
 {
   void * newPtr;
 
@@ -905,7 +905,7 @@ Mem::freeFLC( void *ptr,  const char *fileName,  unsigned int lineNum,
 
 void
 Mem::copyStringFLC( char *&out,  const char *in,  const char *fileName,
-                    unsigned int lineNum ) throw( Error )
+                    unsigned int lineNum )
 {
   size_t len;
 
@@ -928,7 +928,7 @@ extern "C" {
 }
 
 void
-Mem::doMalloc( size_t n,  void *p ) throw( Error )
+Mem::doMalloc( size_t n,  void *p )
 {
   if ( ( *(void **) p = malloc( n ) ) == NULL )
     throw MemErr::getErr( MemErr::MEM_ALLOC_FAILED );
@@ -941,7 +941,7 @@ Mem::doFree( void *p )
 }
 
 void
-Mem::doRealloc( size_t n,  void *p ) throw( Error )
+Mem::doRealloc( size_t n,  void *p )
 {
   void * p2;
   p2 = realloc( *(void **) p, n );
@@ -951,7 +951,7 @@ Mem::doRealloc( size_t n,  void *p ) throw( Error )
 }
 
 void
-Mem::doCopyString( char *&out,  const char *in ) throw( Error )
+Mem::doCopyString( char *&out,  const char *in )
 {
   size_t len;
 

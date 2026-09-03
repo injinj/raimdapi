@@ -345,7 +345,7 @@ StrUtil::trimWhitespace( char *line,  unsigned int *lineLen )
 template<class ITYPE>
 static void
 parse_ITYPE( const char *inString,  ITYPE *iVal,  const char **end,
-             unsigned int base ) throw( Error )
+             unsigned int base )
 {
   const char * start,
              * units;
@@ -600,7 +600,7 @@ StrUtil::isValidInt( const char *inString )
 
 void
 StrUtil::parseInt( const char *inString,  short *iVal,
-                   const char **end,  unsigned int base ) throw( Error )
+                   const char **end,  unsigned int base )
 {
   bool           isNegative;
   unsigned short uVal;
@@ -632,7 +632,7 @@ StrUtil::parseInt( const char *inString,  short *iVal,
 
 void
 StrUtil::parseInt( const char *inString,  int *iVal,
-                   const char **end,  unsigned int base ) throw( Error )
+                   const char **end,  unsigned int base )
 {
   bool         isNegative;
   unsigned int uVal;
@@ -664,7 +664,7 @@ StrUtil::parseInt( const char *inString,  int *iVal,
 
 void
 StrUtil::parseInt( const char *inString,  long *iVal,
-                   const char **end,  unsigned int base ) throw( Error )
+                   const char **end,  unsigned int base )
 {
   bool          isNegative;
   unsigned long uVal;
@@ -696,7 +696,7 @@ StrUtil::parseInt( const char *inString,  long *iVal,
 
 void
 StrUtil::parseInt( const char *inString,  llong *iVal,
-                   const char **end,  unsigned int base ) throw( Error )
+                   const char **end,  unsigned int base )
 {
   bool   isNegative;
   ullong uVal;
@@ -728,7 +728,7 @@ StrUtil::parseInt( const char *inString,  llong *iVal,
 
 void
 StrUtil::parseInt( const char *inString,  unsigned int *iVal,
-                   const char **end,  unsigned int base ) throw( Error )
+                   const char **end,  unsigned int base )
 {
   parse_ITYPE( inString, iVal, end, base );
 }
@@ -736,7 +736,7 @@ StrUtil::parseInt( const char *inString,  unsigned int *iVal,
 
 void
 StrUtil::parseInt( const char *inString,  unsigned long *iVal,
-                   const char **end,  unsigned int base ) throw( Error )
+                   const char **end,  unsigned int base )
 {
   parse_ITYPE( inString, iVal, end, base );
 }
@@ -744,7 +744,7 @@ StrUtil::parseInt( const char *inString,  unsigned long *iVal,
 
 void
 StrUtil::parseInt( const char *inString,  ullong *iVal,
-                   const char **end,  unsigned int base ) throw( Error )
+                   const char **end,  unsigned int base )
 {
   parse_ITYPE( inString, iVal, end, base );
 }
@@ -752,7 +752,7 @@ StrUtil::parseInt( const char *inString,  ullong *iVal,
 
 void
 StrUtil::parseInt( const char *inString,  unsigned short *iVal,
-                   const char **end,  unsigned int base ) throw( Error )
+                   const char **end,  unsigned int base )
 {
   parse_ITYPE( inString, iVal, end, base );
 }
@@ -760,14 +760,14 @@ StrUtil::parseInt( const char *inString,  unsigned short *iVal,
 
 void
 StrUtil::parseInt( const char *inString,  byte *iVal,
-                   const char **end,  unsigned int base ) throw( Error )
+                   const char **end,  unsigned int base )
 {
   parse_ITYPE( inString, iVal, end, base );
 }
 
 
 bool
-StrUtil::parseBoolean( const char *inString ) throw( Error )
+StrUtil::parseBoolean( const char *inString )
 {
   static const char *true_vals[]  = { "true",  "t", "yes", "1", "on", "+" };
   static const char *false_vals[] = { "false", "f", "no",  "0", "off", "-" };
@@ -973,7 +973,7 @@ ITYPE_toString( ITYPE i,  char *outBuf,  unsigned int bufLen,
 char *
 StrUtil::intToString( byte i,  char *buf,  unsigned int bufLen,
                       unsigned int base,  bool abrev,
-                      char **end ) throw( Error )
+                      char **end )
 {
   return StrUtil::intToString( (unsigned int) i, buf, bufLen, base, abrev,
                                end );
@@ -983,7 +983,7 @@ StrUtil::intToString( byte i,  char *buf,  unsigned int bufLen,
 char *
 StrUtil::intToString( char i,  char *buf,  unsigned int bufLen,
                       unsigned int base,  bool abrev,
-                      char **end ) throw( Error )
+                      char **end )
 {
   char *p = buf;
   if ( i < 0 && bufLen > 0 ) {
@@ -997,7 +997,7 @@ StrUtil::intToString( char i,  char *buf,  unsigned int bufLen,
 char *
 StrUtil::intToString( unsigned short i,  char *buf,  unsigned int bufLen,
                       unsigned int base,  bool abrev,
-                      char **end ) throw( Error )
+                      char **end )
 {
   return StrUtil::intToString( (unsigned int) i, buf, bufLen, base, abrev,
                                end );
@@ -1007,7 +1007,7 @@ StrUtil::intToString( unsigned short i,  char *buf,  unsigned int bufLen,
 char *
 StrUtil::intToString( short i,  char *buf,  unsigned int bufLen,
                       unsigned int base,  bool abrev,
-                      char **end ) throw( Error )
+                      char **end )
 {
   char *p = buf;
   if ( i < 0 && bufLen > 0 ) {
@@ -1021,7 +1021,7 @@ StrUtil::intToString( short i,  char *buf,  unsigned int bufLen,
 char *
 StrUtil::intToString( unsigned int i,  char *buf,  unsigned int bufLen,
                       unsigned int base,  bool abrev,
-                      char **end ) throw( Error )
+                      char **end )
 {
   return ITYPE_toString( i, buf, bufLen, base, abrev, end );
 }
@@ -1030,7 +1030,7 @@ StrUtil::intToString( unsigned int i,  char *buf,  unsigned int bufLen,
 char *
 StrUtil::intToString( int i,  char *buf,  unsigned int bufLen,
                       unsigned int base,  bool abrev,
-                      char **end ) throw( Error )
+                      char **end )
 {
   char *p = buf;
   if ( i < 0 && bufLen > 0 ) {
@@ -1044,7 +1044,7 @@ StrUtil::intToString( int i,  char *buf,  unsigned int bufLen,
 char *
 StrUtil::intToString( ullong i,  char *buf,  unsigned int bufLen,
                       unsigned int base,  bool abrev,
-                      char **end ) throw( Error )
+                      char **end )
 {
   return ITYPE_toString( i, buf, bufLen, base, abrev, end );
 }
@@ -1053,7 +1053,7 @@ StrUtil::intToString( ullong i,  char *buf,  unsigned int bufLen,
 char *
 StrUtil::intToString( llong i,  char *buf,  unsigned int bufLen,
                       unsigned int base,  bool abrev,
-                      char **end ) throw( Error )
+                      char **end )
 {
   char *p = buf;
   if ( i < 0 && bufLen > 0 ) {
@@ -1067,7 +1067,7 @@ StrUtil::intToString( llong i,  char *buf,  unsigned int bufLen,
 #if 0
 char *
 StrUtil::floatToString( double f,  char *buf,  unsigned int bufLen,
-                        unsigned int decimalPlaces,  char **end ) throw( Error )
+                        unsigned int decimalPlaces,  char **end )
 {
   char * p,
        * p2;
@@ -1384,7 +1384,7 @@ FTYPE_toString( FTYPE f,  char *buf,  unsigned int bufLen,
 char *
 StrUtil::floatToString( double f,  char *buf,  unsigned int bufLen,
                         unsigned int decimalPlaces,  unsigned int base,
-                        bool abrev, char **end ) throw( Error )
+                        bool abrev, char **end )
 {
   return FTYPE_toString( f,  buf,  bufLen, decimalPlaces,  base,
                          abrev,  end );
@@ -1394,7 +1394,7 @@ StrUtil::floatToString( double f,  char *buf,  unsigned int bufLen,
 char *
 StrUtil::floatToString( float f,  char *buf,  unsigned int bufLen,
                         unsigned int decimalPlaces,  unsigned int base,
-                        bool abrev, char **end ) throw( Error )
+                        bool abrev, char **end )
 {
   return FTYPE_toString( f,  buf,  bufLen, decimalPlaces,  base,
                          abrev,  end );
@@ -1455,7 +1455,7 @@ parse_float_precision( const char *inString,  const char *s,  FTypeExtra &ex )
 template<class FTYPE>
 static void
 parse_FTYPE( const char *inString,  FTYPE &fVal,  const char **end,
-             unsigned int base,  FTypeExtra *ex ) throw( Error )
+             unsigned int base,  FTypeExtra *ex )
 {
   const char * s,
              * units;
@@ -1745,7 +1745,7 @@ StrUtil::isValidFloat( const char *inString )
 
 void
 StrUtil::parseFloat( const char *inString,  float *fVal,
-                     const char **end,  unsigned int base ) throw( Error )
+                     const char **end,  unsigned int base )
 {
   parse_FTYPE( inString, *fVal, end, base, NULL );
 }
@@ -1753,7 +1753,7 @@ StrUtil::parseFloat( const char *inString,  float *fVal,
 
 void
 StrUtil::parseFloat( const char *inString,  double *fVal,
-                     const char **end,  unsigned int base ) throw( Error )
+                     const char **end,  unsigned int base )
 {
   parse_FTYPE( inString, *fVal, end, base, NULL );
 }
@@ -1763,7 +1763,7 @@ void
 StrUtil::parseFloat2( const char *inString,  double *fVal,
                       const char **end,  unsigned int base,
                       unsigned int &precision,  unsigned int &denom,
-                      bool &novalue ) throw( Error )
+                      bool &novalue )
 {
   FTypeExtra ex;
   ::memset( &ex, 0, sizeof( ex ) );
@@ -1778,7 +1778,7 @@ void
 StrUtil::parseFloat2( const char *inString,  float *fVal,
                       const char **end,  unsigned int base,
                       unsigned int &precision,  unsigned int &denom,
-                      bool &novalue ) throw( Error )
+                      bool &novalue )
 {
   FTypeExtra ex;
   ::memset( &ex, 0, sizeof( ex ) );
