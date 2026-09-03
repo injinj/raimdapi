@@ -1,5 +1,6 @@
 # build output (per-platform dirs like FC43_x86_64, EL9_x86_64 ...)
 /*_x86_64
+/*_x86_64-*
 /*_aarch64
 # dist
 /dist
@@ -9,3 +10,6 @@
 # editor
 *.swp
 *~
+# dotnet build products when built without RaiBuildDir
+src/raiapi/dotnet/*/bin/
+src/raiapi/dotnet/*/obj/

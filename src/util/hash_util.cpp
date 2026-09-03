@@ -388,7 +388,7 @@ Hash64::newhashs( const char *buf,  bool noCase,  ullong keyInit )
     return newhash_nocase( (const byte *) buf, ::strlen( buf ), keyInit );
   return Hash64::newhash( (const byte *) buf, ::strlen( buf ), keyInit );
 }
-
+#if 0
 
 /* Originally:
  *
@@ -3068,7 +3068,7 @@ Random::Isaac::nextBytes( byte *buf,  unsigned int bufLen )
     } while ( --n != 0 );
   }
 }
-
+#endif
 /*
  * Copyright (c) 2004-2006 Intel Corporation - All Rights Reserved
  *
@@ -3798,6 +3798,7 @@ crc_c_sse4( const byte *buf,  unsigned int bufLen,  unsigned int key )
 }
 #endif
 
+#if 0
 #if defined( __linux ) && defined( __amd64__ )
 /* as fast as crc_c_sse4, not quite as good with collisions */
 unsigned int
@@ -4342,7 +4343,7 @@ AES::decrypt( const byte *ct,  byte *pt )
   Unaligned::endianPutInt( s2, &pt[ 8 ] );
   Unaligned::endianPutInt( s3, &pt[ 12 ] );
 }
-
+#endif
 #if defined( TEST_AES )
 static char
 tohex( byte x )
@@ -4372,6 +4373,7 @@ vcopy( byte *o, const byte *i, size_t z )
   } while ( --z != 0 );
 }
 #endif
+#if 0
 void
 AES::encryptCTR( const byte *in,  byte *out,  const ullong ctr,
                  const ullong nonce )
@@ -4626,7 +4628,7 @@ main( int argc, char *argv[] )
   return 0;
 }
 #endif
-
+#endif
 
 int
 Hash32::selftest( void )
@@ -4641,6 +4643,7 @@ Hash32::selftest( void )
     0x8cb84c7e, 0x6b6e9074, 0xf200ed93, 0xd633bceb, 0xdf3d007b, 0x138fcef4,
     0x3dcdf865, 0x4e7036b3
   };
+#if 0
   static unsigned int crc_hash[] = {
     0x0, 0xe8b7be43, 0x9e83486d, 0x352441c2, 0xed82cd11, 0x8587d865, 0x4b8e39ef,
     0x312a6aa6, 0xaeef2a50, 0x8da988af, 0x3981703a, 0xce570f9f, 0xf6781b24,
@@ -4648,6 +4651,7 @@ Hash32::selftest( void )
     0x8cd4e846, 0x1a596ae5, 0x221725a3, 0x2499def3, 0x38f3316a, 0x21836df4,
     0x412a937d, 0x4c2750bd
   };
+#endif
   static unsigned int crc_hashint[] = {
     0x0, 0x14e8b055, 0x381b26de, 0x1b592aa7, 0xba26e92e, 0x78d219f5, 0x7a791761,
     0x1758b8cb, 0xb38d012f, 0xaf92843f, 0xf7e3ec21, 0x738c8aad, 0x14cb1f27,
@@ -4710,11 +4714,13 @@ Hash32::selftest( void )
     return -19;
   if ( Hash32::fnv( (const byte *) t, sizeof( t ) - 1 ) != 0xb4873c1aU )
     return -20;
+#if 0
   if ( Hash32::crc( (const byte *) t, sizeof( t ) - 1 ) != 0xb18ffa46U )
     return -21;
   for ( i = 0; i < sizeof( c ); i++ )
     if ( Hash32::crc( (const byte *) c, i ) != crc_hash[ i ] )
       return -22;
+#endif
   if ( Hash32::hashInt( 750 ) != 0x534da1caU )
     return -23;
   if ( Hash32::crc_c_tbl_hashInt( 750 ) != 0x534da1caU )
@@ -4727,6 +4733,7 @@ Hash32::selftest( void )
   for ( i = 0; i < sizeof( crc_chash ) / sizeof( crc_chash[ 0 ] ); i++ )
     if ( Hash32::crc_c_tbl_hashInt( crc_chash[ i ] ) != crc_hashint[ i ] )
       return -27;
+#if 0
   MD4Ctx md4;
   if ( ! md4.selftest() )
     return -28;
@@ -4752,6 +4759,6 @@ Hash32::selftest( void )
   SHA512Ctx sha2_512;
   if ( ! sha2_512.selftest() )
     return -37;
+#endif
   return 0;
 }
-

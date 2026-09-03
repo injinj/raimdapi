@@ -7,31 +7,6 @@ import com.rai.raimsg.*;
 import com.rai.raiapi2.*;
 import com.rai.raiexception.RaiException;
 
-/* raicache will look for rai_service_* classes in the CLASSPATH
- * and run them when they are configured in cache.xml, for example:
- *
- * <service-jraireplay2 subject="PING.TEST" perSec="1000" />
- *
- * This would cause and instance of class raireplay2 to be run with arguments
- * configured in the service-jraireplay2 XML tag.
- */
-class rai_service_jraireplay2 extends RaiServiceFactory {
-  final static String svcname = "jraireplay2";
-
-  public String getName() throws RaiException {
-    return this.svcname;
-  }
-
-  public void getArgs( Args args ) throws RaiException {
-    raireplay2Args pingargs = new raireplay2Args();
-    pingargs.getArgs( args );
-  }
-
-  public RaiService newService() throws RaiException {
-    return new raireplay2();
-  }
-}
-
 class raireplay2Args {
   StringArg fileName_arg;
   IntArg    perSec_arg,
@@ -73,7 +48,7 @@ class raireplay2Args {
   }
 }
 
-public class raireplay2 implements RaiTimerCallback, RaiService {
+public class raireplay2 implements RaiTimerCallback {
   RaiApi        api;
   RaiSession    session;
   RaiQueue      pubQueue;

@@ -23,7 +23,7 @@ inline static int closeSocket( socket_t s ) { return ::close( s ); }
 #include <time.h>
 #include <io.h>
 #undef byte
-#define FD_SETSIZE MAX_DESCRIPTORS
+#define FD_SETSIZE 1024
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #include <windows.h>
@@ -86,7 +86,9 @@ static const struct Facility {
 
 using namespace rai;
 
-static const socket_t INVALID_SOCKET = -1;
+#if ! defined( _WIN32 ) && ! defined( _WIN64 )
+static const socket_t INVALID_SOCKET = -1; /* winsock2.h defines it */
+#endif
 static const unsigned int defaultVerb = ( Log::VERB_SEVERITY |
                                           Log::VERB_NUMBER |
                                           Log::VERB_REASON |

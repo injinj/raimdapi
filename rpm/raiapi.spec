@@ -24,10 +24,11 @@ Prefix:	        /usr
 %global jdk_ver 21
 %endif
 
-# --- .NET bindings: not yet implemented -------------------------------------
-# When they land, flip to %%bcond_without dotnet; BuildRequires below then
-# activates (dotnet-sdk-8.0 exists on EL8/9/10 + Fedora; no EL7) and make
-# receives dotnet=1.  Kept as a disabled bcond so the wiring is visible.
+# --- .NET bindings ----------------------------------------------------------
+# RaiApi2.dll (netstandard2.0, P/Invoke over libraiapi2c.so) plus the
+# d{raisub2,raipub2,raiping2,raireplay2} programs.  Needs a dotnet SDK in the
+# chroot (dotnet-sdk-9.0 on EL8/9/10 + Fedora; nothing on EL7), so it is off by
+# default; build --with dotnet to enable.
 %bcond_with dotnet
 
 BuildRequires:  gcc-c++
@@ -37,7 +38,7 @@ BuildRequires:  git-core
 BuildRequires:  java-%{jdk_ver}-openjdk-devel
 %endif
 %if %{with dotnet}
-BuildRequires:  dotnet-sdk-8.0
+BuildRequires:  dotnet-sdk-9.0
 %endif
 Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig

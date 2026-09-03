@@ -201,8 +201,9 @@ inline unsigned int hashPtr( const void *a ) {
   return Hash32::hashLong( (ulongptr) a );
 }
 
-/* Mark Adler's crc32 & adler32 http://www.gzip.org/zlib */
 const unsigned int crcKeyInit = 0;
+#if 0
+/* Mark Adler's crc32 & adler32 http://www.gzip.org/zlib */
 RAIBASE_DLL_EXP
 unsigned int crc( const byte *ptr,  unsigned int size,
                   unsigned int keyInit = crcKeyInit );
@@ -211,7 +212,7 @@ const unsigned int adlerKeyInit = 0;
 RAIBASE_DLL_EXP
 unsigned int adler( const byte *buf,  unsigned int len,
                     unsigned int keyInit = adlerKeyInit );
-
+#endif
 /* SSE4.2 crc_c_tbl() version does not use crc instruction.
  * Use Hash32::crc_c() instead, since it determines if the CPU supports SSE4.2
  * then either uses the instruction or uses crc_c_tbl() as a fallback */
@@ -296,7 +297,7 @@ inline ullong mixInt( ullong a,  ullong b = newhashMagic,
 
 }
 
-
+#if 0
 namespace Hash128 {
 
 /* RSA hashes */
@@ -473,6 +474,7 @@ struct AES {
 
   static bool selftestCTR( void );
 };
+#endif
 
 } // namespace rai
 

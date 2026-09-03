@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- .NET binding of the Rai API: netstandard2.0 so it loads in .NET
+       Framework 4.7.2+/4.8 as well as .NET 6/8/9.  Native side is
+       libraiapi2c (include/raiapi2_c.h). -->
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>RaiApi2</AssemblyName>
+    <RootNamespace>Com.Rai</RootNamespace>
+    <LangVersion>7.3</LangVersion>
+    <Nullable>disable</Nullable>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <NoWarn>CS1591</NoWarn>
+    <Version>1.0.0</Version>
+    <Company>Rai Technology</Company>
+    <Product>Rai API</Product>
+  </PropertyGroup>
+</Project>

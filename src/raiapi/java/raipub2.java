@@ -5,31 +5,6 @@ import com.rai.raimsg.*;
 import com.rai.raiapi2.*;
 import com.rai.raiexception.RaiException;
 
-/* raicache will look for rai_service_* classes in the CLASSPATH
- * and run them when they are configured in cache.xml, for example:
- *
- * <service-jraipub2 subject="PING.TEST" perSec="1000" />
- *
- * This would cause and instance of class raipub2 to be run with arguments
- * configured in the service-jraipub2 XML tag.
- */
-class rai_service_jraipub2 extends RaiServiceFactory {
-  final static String svcname = "jraipub2";
-
-  public String getName() throws RaiException {
-    return this.svcname;
-  }
-
-  public void getArgs( Args args ) throws RaiException {
-    raipub2Args pingargs = new raipub2Args();
-    pingargs.getArgs( args );
-  }
-
-  public RaiService newService() throws RaiException {
-    return new raipub2();
-  }
-}
-
 /* 
  * This example Publisher creates a Publishing class. The class uses a 
  * main loop to Publish a message up to count times. 
@@ -75,7 +50,7 @@ class raipub2Args {
 }
 
   
-public class raipub2 implements RaiService {
+public class raipub2 {
   RaiApi       api;
   RaiSession   session;
   RaiPublish   pub;

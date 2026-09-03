@@ -20,7 +20,11 @@
   __extension__ typedef long long          llong;
   __extension__ typedef unsigned long long ullong;
   typedef unsigned char byte;
+  #if defined( _WIN64 ) /* LLP64: long is 32 bits */
+  typedef unsigned long long ulongptr;
+  #else
   typedef unsigned long ulongptr;
+  #endif
   #define RAI_DLL_EXPORT
 #elif defined( __ICL )
   typedef __int64            llong;

@@ -50,7 +50,7 @@ class raiping2Args {
 
 
 public class raiping2
-  implements RaiTimerCallback, RaiMsgCallback, RaiDataLossCallback, RaiService {
+  implements RaiTimerCallback, RaiMsgCallback, RaiDataLossCallback {
   RaiApi       api;
   RaiSession   session;
   RaiQueue     subQueue,

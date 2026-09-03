@@ -1,0 +1,8 @@
+<Project>
+  <!-- keep obj/bin out of the source tree; the GNUmakefile passes
+       RaiBuildDir=<FCxx_x86_64>/dotnet -->
+  <PropertyGroup Condition="'$(RaiBuildDir)' != ''">
+    <BaseOutputPath>$(RaiBuildDir)/bin/$(MSBuildProjectName)/</BaseOutputPath>
+    <BaseIntermediateOutputPath>$(RaiBuildDir)/obj/$(MSBuildProjectName)/</BaseIntermediateOutputPath>
+  </PropertyGroup>
+</Project>
