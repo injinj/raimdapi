@@ -1277,12 +1277,15 @@ setVerb( unsigned int verbosity,  unsigned int &verb )
     switch ( verbosity ) {
       case Log::VERB_4:
         verb |= (unsigned int) ( Log::VERB_TRACE );
+      /* FALLTHRU */
       case Log::VERB_3:
         verb |= (unsigned int) ( Log::VERB_SEVERITY );
+      /* FALLTHRU */
       case Log::VERB_2:
         verb |= (unsigned int) ( Log::VERB_TIMESTAMP |
                                  Log::VERB_MILLISECS |
                                  Log::VERB_REASON );
+      /* FALLTHRU */
       case Log::VERB_1:
         verb |= (unsigned int) ( Log::VERB_NUMBER | Log::VERB_DESCR );
       case Log::VERB_0:

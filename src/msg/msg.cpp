@@ -918,6 +918,7 @@ SassHdrParse::getRaiMsgHdr( void )
         if ( ( typeKey & 0x40 ) == 0 )
           break;
 
+      /* FALLTHRU */
       case RAIMSG_PARTIAL:
       case RAIMSG_ARRAY:
         if ( i + 2 > this->fieldEnd )

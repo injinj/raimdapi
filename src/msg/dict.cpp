@@ -1408,6 +1408,7 @@ RaiMsg_dict::convert( RaiField &field ) const
         else
           field.hintData = stimeHint;
       }
+    /* FALLTHRU */
     case RAI_TSS_STRING:
     case RAI_TSS_OPAQUE:
       switch ( field.type ) {

@@ -211,6 +211,7 @@ StrUtil::stripXmlEntities( char *buf,  unsigned int len,  bool plusIsSpace,
                 break;
               }
             }
+          /* FALLTHRU */
           case 5: /* &amp; */
             if ( s[ 4 ] == ';' &&
                  tolower( s[ 1 ] ) == 'a' && tolower( s[ 2 ] ) == 'm' &&
@@ -218,6 +219,7 @@ StrUtil::stripXmlEntities( char *buf,  unsigned int len,  bool plusIsSpace,
               c = '&'; s = &s[ 5 ];
               break;
             }
+          /* FALLTHRU */
           case 4: /* &lt; &gt; */
             if ( s[ 3 ] == ';' ) {
               if ( tolower( s[ 1 ] ) == 'l' && tolower( s[ 2 ] ) == 't' ) {
@@ -229,6 +231,7 @@ StrUtil::stripXmlEntities( char *buf,  unsigned int len,  bool plusIsSpace,
                 break;
               }
             }
+          /* FALLTHRU */
           case 3: case 2: case 1:
             c = '&'; s++;
             break;

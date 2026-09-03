@@ -323,27 +323,53 @@ RaiMfeed_dict::printEnumtype( OutputStream *enumtypeOut ) const
 }
 
 
+/* name -> type tables; the old switch( p[ 0 ] ) cascades fell through
+ * every following case on a miss, which was correct only because each
+ * strcmp() then failed too */
+namespace {
+struct MfeedTypeName {
+  const char  * name;
+  RaiMfeed_type type;
+};
+const MfeedTypeName mfeed_type_names[] = {
+  { "PRICE",        MFT_PRICE        },
+  { "INTEGER",      MFT_INTEGER      },
+  { "ENUMERATED",   MFT_ENUMERATED   },
+  { "TIME",         MFT_TIME         },
+  { "TIME_SECONDS", MFT_TIME_SECONDS },
+  { "DATE",         MFT_DATE         },
+  { "ALPHANUMERIC", MFT_ALPHANUMERIC },
+  { "BINARY",       MFT_BINARY       }
+};
+struct RwfTypeName {
+  const char * name;
+  RaiRWF_type  type;
+  Rai_u8       bits;
+};
+const RwfTypeName rwf_type_names[] = {
+  { "RMTES_STRING", RWF_RMTES_STRING, 0  },
+  { "REAL32",       RWF_REAL,         32 },
+  { "REAL64",       RWF_REAL,         64 },
+  { "ASCII_STRING", RWF_ASCII_STRING, 0  },
+  { "BUFFER",       RWF_BUFFER,       0  },
+  { "DATE",         RWF_DATE,         0  },
+  { "TIME",         RWF_TIME,         0  },
+  { "ENUM",         RWF_ENUM,         0  },
+  { "UINT32",       RWF_UINT,         32 },
+  { "UINT64",       RWF_UINT,         64 },
+  { "INT32",        RWF_INT,          32 },
+  { "INT64",        RWF_INT,          64 },
+  { "MAP",          RWF_MAP,          0  }
+};
+}
+
 RaiMfeed_type
 RaiMfeed_dict::getType( const char *p ) {
-  switch ( p[ 0 ] ) {
-    case 'P': if ( ::strcmp( p, "PRICE" ) == 0 )
-                return MFT_PRICE;
-    case 'I': if ( ::strcmp( p, "INTEGER" ) == 0 )
-                return MFT_INTEGER;
-    case 'E': if ( ::strcmp( p, "ENUMERATED" ) == 0 )
-                return MFT_ENUMERATED;
-    case 'T': if ( ::strcmp( p, "TIME" ) == 0 )
-                return MFT_TIME;
-              if ( ::strcmp( p, "TIME_SECONDS" ) == 0 )
-                return MFT_TIME_SECONDS;
-    case 'D': if ( ::strcmp( p, "DATE" ) == 0 )
-                return MFT_DATE;
-    case 'A': if ( ::strcmp( p, "ALPHANUMERIC" ) == 0 )
-                return MFT_ALPHANUMERIC;
-    case 'B': if ( ::strcmp( p, "BINARY" ) == 0 )
-                return MFT_BINARY;
-    default:  return MFT_NONE;
+  for ( const MfeedTypeName &t : mfeed_type_names ) {
+    if ( ::strcmp( p, t.name ) == 0 )
+      return t.type;
   }
+  return MFT_NONE;
 }
 
 
@@ -352,47 +378,13 @@ RaiMfeed_dict::getRWFType( const char *p,  Rai_u8 &bits ) {
   bits = 0;
   if ( p == NULL )
     return RWF_NONE;
-  switch ( p[ 0 ] ) {
-    case 'R': if ( ::strcmp( p, "RMTES_STRING" ) == 0 )
-                return RWF_RMTES_STRING;
-              if ( ::strcmp( p, "REAL32" ) == 0 ) {
-                bits = 32;
-                return RWF_REAL;
-              }
-              if ( ::strcmp( p, "REAL64" ) == 0 ) {
-                bits = 64;
-                return RWF_REAL;
-              }
-    case 'A': if ( ::strcmp( p, "ASCII_STRING" ) == 0 )
-                return RWF_ASCII_STRING;
-    case 'B': if ( ::strcmp( p, "BUFFER" ) == 0 )
-                return RWF_BUFFER;
-    case 'D': if ( ::strcmp( p, "DATE" ) == 0 )
-                return RWF_DATE;
-    case 'T': if ( ::strcmp( p, "TIME" ) == 0 )
-                return RWF_TIME;
-    case 'E': if ( ::strcmp( p, "ENUM" ) == 0 )
-                return RWF_ENUM;
-    case 'U': if ( ::strcmp( p, "UINT32" ) == 0 ) {
-                bits = 32;
-                return RWF_UINT;
-              }
-              if ( ::strcmp( p, "UINT64" ) == 0 ) {
-                bits = 64;
-                return RWF_UINT;
-              }
-    case 'I': if ( ::strcmp( p, "INT32" ) == 0 ) {
-                bits = 32;
-                return RWF_INT;
-              }
-              if ( ::strcmp( p, "INT64" ) == 0 ) {
-                bits = 64;
-                return RWF_INT;
-              }
-    case 'M': if ( ::strcmp( p, "MAP" ) == 0 )
-                return RWF_MAP;
-    default:  return RWF_NONE;
+  for ( const RwfTypeName &t : rwf_type_names ) {
+    if ( ::strcmp( p, t.name ) == 0 ) {
+      bits = t.bits;
+      return t.type;
+    }
   }
+  return RWF_NONE;
 }
 
 
@@ -1999,6 +1991,7 @@ RaiMfeed_dict::packDataDictionary( RaiMsg &msg,  bool full ) const
           ar[ 5 ] = RAIMSG_INT;
           break;
         }
+        /* FALLTHRU - integers wider than 9 digits are carried as reals */
       case MFT_PRICE:
         ar[ 3 ] = 8;
         ar[ 4 ] = 0;

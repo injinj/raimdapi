@@ -177,12 +177,16 @@ Time::strptime_clr( int tz,  const char *fmt,  const char *buf,  int clr )
   switch ( clr ) {
     case CLR_MONTH:
       tmbuf.tm_mon = 0;
+    /* FALLTHRU */
     case CLR_DAY:
       tmbuf.tm_mday = 1;
+    /* FALLTHRU */
     case CLR_HOUR:
       tmbuf.tm_hour = 0;
+    /* FALLTHRU */
     case CLR_MIN:
       tmbuf.tm_min = 0;
+    /* FALLTHRU */
     case CLR_SEC:
       tmbuf.tm_sec = 0;
     case CLR_NONE:
@@ -371,6 +375,7 @@ num3( const unsigned int *n,  const byte *f,  char *buf,  unsigned int bufLen,
       case 4:
         buf[ off++ ] = '0' + (byte) ( ( *n / 1000 ) % 10 );
         buf[ off++ ] = '0' + (byte) ( ( *n / 100 ) % 10 );
+      /* FALLTHRU */
       case 2:
         buf[ off++ ] = '0' + (byte) ( ( *n / 10 ) % 10 );
         buf[ off++ ] = '0' + (byte) ( *n % 10 );

@@ -675,6 +675,7 @@ URIParser::decodeAll( void )
                     break;
                   }
                 }
+              /* FALLTHRU */
               case 5: /* &amp; */
                 if ( s[ 4 ] == ';' &&
                      isLowerChar( s[ 1 ], 'a' ) &&
@@ -683,6 +684,7 @@ URIParser::decodeAll( void )
                   c = '&'; s = &s[ 5 ];
                   break;
                 }
+              /* FALLTHRU */
               case 4: /* &lt; &gt; */
                 if ( s[ 3 ] == ';' ) {
                   if ( isLowerChar( s[ 1 ], 'l' ) &&
@@ -696,6 +698,7 @@ URIParser::decodeAll( void )
                     break;
                   }
                 }
+              /* FALLTHRU */
               case 3: case 2: case 1:
                 c = '&'; s++;
                 break;

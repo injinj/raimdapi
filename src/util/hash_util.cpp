@@ -3770,18 +3770,22 @@ crc_c_sse4( const byte *buf,  unsigned int bufLen,  unsigned int key )
   switch ( endBuf - buf ) {
     case 7:
       crc32b( key, buf[ 0 ] ); buf++;
+    /* FALLTHRU */
     case 6:
       crc32w( key, ((const unsigned short *) buf)[ 0 ] ); buf = &buf[ 2 ];
+    /* FALLTHRU */
     case 4:
       crc32l( key, ((const unsigned int *) buf)[ 0 ] );
       break;
     case 3:
       crc32b( key, buf[ 0 ] ); buf++;
+    /* FALLTHRU */
     case 2:
       crc32w( key, ((const unsigned short *) buf)[ 0 ] );
       break;
     case 5:
       crc32l( key, ((const unsigned int *) buf)[ 0 ] ); buf = &buf[ 4 ];
+    /* FALLTHRU */
     case 1:
       crc32b( key, buf[ 0 ] );
       break;

@@ -1088,6 +1088,7 @@ int rai_vformatter(int (*flush_func)(rai_vformatter_buff *),
 		    s_len = 8;
 		    prefix_char = NUL;
 		    break;*/
+		/* FALLTHRU */
 		case 'p':
 #ifdef FN_VOID_P_IS_QUAD
 		    if (sizeof(void *) <= sizeof(u_widest_int)) {

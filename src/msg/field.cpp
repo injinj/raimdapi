@@ -209,6 +209,7 @@ RaiField::PackSize( RaiMsg_protocol proto )
             }
           }
 
+        /* FALLTHRU */
         case RAIMSG_PARTIAL:
         case RAIMSG_ARRAY:
           packSize += ( this->size < RAI_RV_TINY_SIZE ) ? 1 :
@@ -326,6 +327,7 @@ RaiField::Pack( RaiMsg_protocol proto,  Rai_u8 *to_ptr )
           if ( this->size == 0 )
             break;
 
+        /* FALLTHRU */
         default:
           throw RaiMsgErr::getErr( RaiMsgErr::BAD_RAIMSG_TYPE );
 
@@ -470,6 +472,7 @@ RaiField::Pack( RaiMsg_protocol proto,  Rai_u8 *to_ptr )
             }
             if ( this->hintSize == 0 )
               break;
+          /* FALLTHRU */
           default:
             throw RaiMsgErr::getErr( RaiMsgErr::BAD_RAIMSG_HINT );
         }
@@ -799,6 +802,7 @@ RaiField::UnPack( RaiMsg_protocol proto,  Rai_u8 *from_ptr,
           else if ( this->size != 2 && this->size != 4 )
             throw RaiMsgErr::getErr( RaiMsgErr::BAD_RAIMSG_MTYPE );
 
+        /* FALLTHRU */
         case RAIMSG_INT:
         case RAIMSG_UINT:
           if ( this->size == 2 ) {
@@ -806,6 +810,7 @@ RaiField::UnPack( RaiMsg_protocol proto,  Rai_u8 *from_ptr,
             from_ptr = &from_ptr[ 2 ];
             break;
           }
+        /* FALLTHRU */
         case RAIMSG_REAL:
           if ( this->size == 4 ) {
             this->data = from_ptr;
@@ -2201,6 +2206,7 @@ RaiField::Print( OutputStream *output_file,  Rai_u32 field_newlines,
             }
           }
         }
+      /* FALLTHRU */
       case RAIMSG_PARTIAL:
         if ( print_opaques ) {
       case RAIMSG_STRING:
@@ -2941,6 +2947,7 @@ RaiField::Convert( ConvertCtx &ctx )
               break;
             }
           }
+        /* FALLTHRU */
         default:
           throw RaiMsgErr::getErr( RaiMsgErr::BAD_CVT_IPDATA );
       }
