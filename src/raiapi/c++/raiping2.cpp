@@ -292,10 +292,10 @@ class RaiPing2 : public RaiTimerCallback, public RaiMsgCallback,
   }
 
   /* RaiDataLossCallback */
-  virtual void onConnection( RaiConnectionEvent &event,  void *cl ) {
+  virtual void onConnection( RaiConnectionEvent &event,  void */* cl */ ) {
     this->api->PrintLog( LMINOR, "%s", event.description );
   }
-  virtual void onDataLoss( RaiDataLossEvent &event,  void *cl ) {
+  virtual void onDataLoss( RaiDataLossEvent &event,  void */* cl */ ) {
     RaiException e = RaiApiErr::getErr( RaiApiErr::TSPT_DATALOSS );
     this->api->PrintLog( LERROR, e, "%s", event.description );
   }
@@ -318,7 +318,7 @@ class RaiPing2 : public RaiTimerCallback, public RaiMsgCallback,
   }
 
   /* RaiMsgCallback */
-  virtual void onMsg( RaiMsgEvent &event,  RaiMsg &raiMsg,  void *closure ) {
+  virtual void onMsg( RaiMsgEvent &event,  RaiMsg &raiMsg,  void */* closure */ ) {
     double         latencyMS,
                    cpms;
     rai::TimeHires sendTime,
@@ -372,7 +372,7 @@ class RaiPing2 : public RaiTimerCallback, public RaiMsgCallback,
   }
 
   /* RaiTimerCallback */
-  virtual void onTimer( RaiTimer &timer, void *closure ) {
+  virtual void onTimer( RaiTimer &timer, void */* closure */ ) {
     if ( &timer == this->publishTimer )
       this->publish();
     else if ( &timer == this->printTimer )

@@ -388,7 +388,7 @@ struct RaiReplay2 : public RaiTimerCallback {
     return true;
   }
 
-  virtual void onTimer( RaiTimer &timer,  void *cl ) {
+  virtual void onTimer( RaiTimer &timer,  void */* cl */ ) {
     if ( &timer == this->pubTimer )
       this->doPub();
     else if ( &timer == this->printTimer )

@@ -91,7 +91,7 @@ javaException( JNIEnv *env,  const char *msg )
 
 
 JNIEXPORT void JNICALL
-JaRaiMsg( initClasses )( JNIEnv *env,  jclass me,
+JaRaiMsg( initClasses )( JNIEnv *env,  jclass /* me */,
                          jclass Z, jclass B, jclass S, jclass I, jclass J,
                          jclass F, jclass D )
 {
@@ -1157,7 +1157,7 @@ updateOrAppendField( JNIEnv *env,  RaiMsg &msg,  jobject obj,  bool isAppend )
  * Signature: ()J
  */
 JNIEXPORT jlong JNICALL
-JaRaiMsg( Create )( JNIEnv *env, jclass cls,  jint proto )
+JaRaiMsg( Create )( JNIEnv *env, jclass /* cls */,  jint proto )
 {
   RaiMsg * msg = NULL;
   try {
@@ -1176,7 +1176,7 @@ JaRaiMsg( Create )( JNIEnv *env, jclass cls,  jint proto )
  * Signature: (J)V
  */
 JNIEXPORT void JNICALL
-JaRaiMsg( Delete )( JNIEnv *env, jclass cls, jlong me )
+JaRaiMsg( Delete )( JNIEnv */* env */, jclass /* cls */, jlong me )
 {
   if ( me != 0 )
     delete toRaiMsg( me );
@@ -1189,7 +1189,7 @@ JaRaiMsg( Delete )( JNIEnv *env, jclass cls, jlong me )
  * Signature: (JI)V
  */
 JNIEXPORT void JNICALL
-JaRaiMsg( ReUse__JI )( JNIEnv *env, jclass cls, jlong me, jint proto )
+JaRaiMsg( ReUse__JI )( JNIEnv *env, jclass /* cls */, jlong me, jint proto )
 {
   try {
     toRaiMsg( me )->ReUse( (RaiMsg_protocol) proto );
@@ -1204,7 +1204,7 @@ JaRaiMsg( ReUse__JI )( JNIEnv *env, jclass cls, jlong me, jint proto )
  * Signature: (J)V
  */
 JNIEXPORT void JNICALL
-JaRaiMsg( ReUse__J )( JNIEnv *env, jclass cls, jlong me )
+JaRaiMsg( ReUse__J )( JNIEnv *env, jclass /* cls */, jlong me )
 {
   try {
     toRaiMsg( me )->ReUse();
@@ -1219,7 +1219,7 @@ JaRaiMsg( ReUse__J )( JNIEnv *env, jclass cls, jlong me )
  * Signature: (J)I
  */
 JNIEXPORT jint JNICALL
-JaRaiMsg( GetProtocol )( JNIEnv *env, jclass cls, jlong me )
+JaRaiMsg( GetProtocol )( JNIEnv */* env */, jclass /* cls */, jlong me )
 {
   return (jint) toRaiMsg( me )->GetProtocol();
 }
@@ -1230,7 +1230,7 @@ JaRaiMsg( GetProtocol )( JNIEnv *env, jclass cls, jlong me )
  * Signature: (J)Ljava/lang/String;
  */
 JNIEXPORT jstring JNICALL
-JaRaiMsg( GetProtocolString )( JNIEnv *env, jclass cls, jlong me )
+JaRaiMsg( GetProtocolString )( JNIEnv *env, jclass /* cls */, jlong me )
 {
   const char *s = toRaiMsg( me )->GetProtocolString();
   return env->NewStringUTF( s );
@@ -1242,7 +1242,7 @@ JaRaiMsg( GetProtocolString )( JNIEnv *env, jclass cls, jlong me )
  * Signature: (S)Ljava/lang/String;
  */
 JNIEXPORT jstring JNICALL
-JaRaiMsg( MsgTypeToString )( JNIEnv *env, jclass cls, jshort msgType )
+JaRaiMsg( MsgTypeToString )( JNIEnv *env, jclass /* cls */, jshort msgType )
 {
   char buf[ 16 ];
   return env->NewStringUTF( rai::SassConst::msgTypeToString(
@@ -1255,7 +1255,7 @@ JaRaiMsg( MsgTypeToString )( JNIEnv *env, jclass cls, jshort msgType )
  * Signature: (Ljava/lang/String;)S
  */
 JNIEXPORT jshort JNICALL
-JaRaiMsg( StringToMsgType )( JNIEnv *env, jclass cls, jstring s )
+JaRaiMsg( StringToMsgType )( JNIEnv *env, jclass /* cls */, jstring s )
 {
   const char   * s2      = ( s == NULL ? NULL :
                            env->GetStringUTFChars( s, NULL ) );
@@ -1271,7 +1271,7 @@ JaRaiMsg( StringToMsgType )( JNIEnv *env, jclass cls, jstring s )
  * Signature: (J)Ljava/lang/String;
  */
 JNIEXPORT jstring JNICALL
-JaRaiMsg( GetMsgTypeString )( JNIEnv *env, jclass cls, jlong me )
+JaRaiMsg( GetMsgTypeString )( JNIEnv *env, jclass /* cls */, jlong me )
 {
   jstring      val = NULL;
   RaiException e2  = NULL;
@@ -1308,7 +1308,7 @@ JaRaiMsg( GetMsgTypeString )( JNIEnv *env, jclass cls, jlong me )
  * Signature: (JLjava/lang/String;)V
  */
 JNIEXPORT void JNICALL
-JaRaiMsg( SetMsgTypeString )( JNIEnv *env, jclass cls, jlong me, jstring s )
+JaRaiMsg( SetMsgTypeString )( JNIEnv *env, jclass /* cls */, jlong me, jstring s )
 {
   const char   * s2      = ( s == NULL ? NULL :
                            env->GetStringUTFChars( s, NULL ) );
@@ -1328,7 +1328,7 @@ JaRaiMsg( SetMsgTypeString )( JNIEnv *env, jclass cls, jlong me, jstring s )
  * Signature: (S)Ljava/lang/String;
  */
 JNIEXPORT jstring JNICALL
-JaRaiMsg( RecStatusToString )( JNIEnv *env, jclass cls, jshort recStatus )
+JaRaiMsg( RecStatusToString )( JNIEnv *env, jclass /* cls */, jshort recStatus )
 {
   char buf[ 16 ];
   return env->NewStringUTF( rai::SassConst::recStatusToString(
@@ -1341,7 +1341,7 @@ JaRaiMsg( RecStatusToString )( JNIEnv *env, jclass cls, jshort recStatus )
  * Signature: (Ljava/lang/String;)S
  */
 JNIEXPORT jshort JNICALL
-JaRaiMsg( StringToRecStatus )( JNIEnv *env, jclass cls, jstring s )
+JaRaiMsg( StringToRecStatus )( JNIEnv *env, jclass /* cls */, jstring s )
 {
   const char   * s2        = ( s == NULL ? NULL :
                              env->GetStringUTFChars( s, NULL ) );
@@ -1357,7 +1357,7 @@ JaRaiMsg( StringToRecStatus )( JNIEnv *env, jclass cls, jstring s )
  * Signature: (J)Ljava/lang/String;
  */
 JNIEXPORT jstring JNICALL
-JaRaiMsg( GetRecStatusString )( JNIEnv *env, jclass cls, jlong me )
+JaRaiMsg( GetRecStatusString )( JNIEnv *env, jclass /* cls */, jlong me )
 {
   jstring      val = NULL;
   RaiException e2  = NULL;
@@ -1394,7 +1394,7 @@ JaRaiMsg( GetRecStatusString )( JNIEnv *env, jclass cls, jlong me )
  * Signature: (JLjava/lang/String;)V
  */
 JNIEXPORT void JNICALL
-JaRaiMsg( SetRecStatusString )( JNIEnv *env, jclass cls, jlong me, jstring s )
+JaRaiMsg( SetRecStatusString )( JNIEnv *env, jclass /* cls */, jlong me, jstring s )
 {
   const char   * s2        = ( s == NULL ? NULL :
                              env->GetStringUTFChars( s, NULL ) );
@@ -1415,7 +1415,7 @@ JaRaiMsg( SetRecStatusString )( JNIEnv *env, jclass cls, jlong me, jstring s )
  * Signature: (S)Ljava/lang/String;
  */
 JNIEXPORT jstring JNICALL
-JaRaiMsg( RecTypeToString )( JNIEnv *env, jclass cls, jshort recType )
+JaRaiMsg( RecTypeToString )( JNIEnv *env, jclass /* cls */, jshort recType )
 {
   const RaiMsg_form * form;
   RaiException e2;
@@ -1437,7 +1437,7 @@ JaRaiMsg( RecTypeToString )( JNIEnv *env, jclass cls, jshort recType )
  * Signature: (Ljava/lang/String;)S
  */
 JNIEXPORT jshort JNICALL
-JaRaiMsg( StringToRecType )( JNIEnv *env, jclass cls, jstring s )
+JaRaiMsg( StringToRecType )( JNIEnv *env, jclass /* cls */, jstring s )
 {
   const char        * s2 = ( s == NULL ? NULL :
                       env->GetStringUTFChars( s, NULL ) );
@@ -1473,7 +1473,7 @@ JaRaiMsg( StringToRecType )( JNIEnv *env, jclass cls, jstring s )
  * Signature: (J)Ljava/lang/String;
  */
 JNIEXPORT jstring JNICALL
-JaRaiMsg( GetRecTypeString )( JNIEnv *env, jclass cls, jlong me )
+JaRaiMsg( GetRecTypeString )( JNIEnv *env, jclass /* cls */, jlong me )
 {
   jstring      val = NULL;
   RaiException e2  = NULL;
@@ -1517,7 +1517,7 @@ JaRaiMsg( GetRecTypeString )( JNIEnv *env, jclass cls, jlong me )
  * Signature: (JLjava/lang/String;)V
  */
 JNIEXPORT void JNICALL
-JaRaiMsg( SetRecTypeString )( JNIEnv *env, jclass cls, jlong me, jstring s )
+JaRaiMsg( SetRecTypeString )( JNIEnv *env, jclass /* cls */, jlong me, jstring s )
 {
   const char        * s2 = ( s == NULL ? NULL :
                            env->GetStringUTFChars( s, NULL ) );
@@ -1549,7 +1549,7 @@ JaRaiMsg( SetRecTypeString )( JNIEnv *env, jclass cls, jlong me, jstring s )
  * Signature: (J)V
  */
 JNIEXPORT void JNICALL
-JaRaiMsg( ClearForm )( JNIEnv *env, jclass cls, jlong me )
+JaRaiMsg( ClearForm )( JNIEnv *env, jclass /* cls */, jlong me )
 {
   RaiMsg            * _this = toRaiMsg( me );
   const RaiMsg_form * form      = NULL;
@@ -1602,7 +1602,7 @@ JaRaiMsg( ClearForm )( JNIEnv *env, jclass cls, jlong me )
  * Signature: (J)V
  */
 JNIEXPORT void JNICALL
-JaRaiMsg( Release )( JNIEnv *env, jclass cls, jlong me )
+JaRaiMsg( Release )( JNIEnv */* env */, jclass /* cls */, jlong me )
 {
   toRaiMsg( me )->Release();
 }
@@ -1613,7 +1613,7 @@ JaRaiMsg( Release )( JNIEnv *env, jclass cls, jlong me )
  * Signature: (JLjava/lang/String;)Ljava/lang/Object;
  */
 JNIEXPORT jobject JNICALL
-JaRaiMsg( Get )( JNIEnv *env, jclass cls, jlong me, jstring name )
+JaRaiMsg( Get )( JNIEnv *env, jclass /* cls */, jlong me, jstring name )
 {
   RaiMsg     * _this = toRaiMsg( me );
   RaiField     field;
@@ -1696,7 +1696,7 @@ GetVal( JNIEnv *env, jlong me, jstring name )
  * Signature: (JLjava/lang/String;)Z
  */
 JNIEXPORT jboolean JNICALL
-JaRaiMsg( GetBoolean )( JNIEnv *env, jclass cls, jlong me, jstring name )
+JaRaiMsg( GetBoolean )( JNIEnv *env, jclass /* cls */, jlong me, jstring name )
 {
   BADGCC_GET_VAL2( jboolean, bool, env, me, name )
   /*return GetVal<jboolean, bool>( env, me, name );*/
@@ -1708,7 +1708,7 @@ JaRaiMsg( GetBoolean )( JNIEnv *env, jclass cls, jlong me, jstring name )
  * Signature: (JLjava/lang/String;)B
  */
 JNIEXPORT jbyte JNICALL
-JaRaiMsg( GetByte )( JNIEnv *env, jclass cls, jlong me, jstring name )
+JaRaiMsg( GetByte )( JNIEnv *env, jclass /* cls */, jlong me, jstring name )
 {
   BADGCC_GET_VAL2( jbyte, Rai_i8, env, me, name )
   /*return GetVal<jbyte, Rai_i8>( env, me, name );*/
@@ -1720,7 +1720,7 @@ JaRaiMsg( GetByte )( JNIEnv *env, jclass cls, jlong me, jstring name )
  * Signature: (JLjava/lang/String;)S
  */
 JNIEXPORT jshort JNICALL
-JaRaiMsg( GetShort )( JNIEnv *env, jclass cls, jlong me, jstring name )
+JaRaiMsg( GetShort )( JNIEnv *env, jclass /* cls */, jlong me, jstring name )
 {
   BADGCC_GET_VAL2( jshort, Rai_i16, env, me, name )
   /*return GetVal<jshort, Rai_i16>( env, me, name );*/
@@ -1732,7 +1732,7 @@ JaRaiMsg( GetShort )( JNIEnv *env, jclass cls, jlong me, jstring name )
  * Signature: (JLjava/lang/String;)I
  */
 JNIEXPORT jint JNICALL
-JaRaiMsg( GetInt )( JNIEnv *env, jclass cls, jlong me, jstring name )
+JaRaiMsg( GetInt )( JNIEnv *env, jclass /* cls */, jlong me, jstring name )
 {
   BADGCC_GET_VAL2( jint, Rai_i32, env, me, name )
   /*return GetVal<jint, Rai_i32>( env, me, name );*/
@@ -1744,7 +1744,7 @@ JaRaiMsg( GetInt )( JNIEnv *env, jclass cls, jlong me, jstring name )
  * Signature: (JLjava/lang/String;)J
  */
 JNIEXPORT jlong JNICALL
-JaRaiMsg( GetLong )( JNIEnv *env, jclass cls, jlong me, jstring name )
+JaRaiMsg( GetLong )( JNIEnv *env, jclass /* cls */, jlong me, jstring name )
 {
   BADGCC_GET_VAL2( jlong, Rai_i64, env, me, name )
   /*return GetVal<jlong, Rai_i64>( env, me, name );*/
@@ -1756,7 +1756,7 @@ JaRaiMsg( GetLong )( JNIEnv *env, jclass cls, jlong me, jstring name )
  * Signature: (JLjava/lang/String;)F
  */
 JNIEXPORT jfloat JNICALL
-JaRaiMsg( GetFloat )( JNIEnv *env, jclass cls, jlong me, jstring name )
+JaRaiMsg( GetFloat )( JNIEnv *env, jclass /* cls */, jlong me, jstring name )
 {
   BADGCC_GET_VAL2( jfloat, Rai_f32, env, me, name )
   /*return GetVal<jfloat, Rai_f32>( env, me, name );*/
@@ -1768,7 +1768,7 @@ JaRaiMsg( GetFloat )( JNIEnv *env, jclass cls, jlong me, jstring name )
  * Signature: (JLjava/lang/String;)D
  */
 JNIEXPORT jdouble JNICALL
-JaRaiMsg( GetDouble )( JNIEnv *env, jclass cls, jlong me, jstring name )
+JaRaiMsg( GetDouble )( JNIEnv *env, jclass /* cls */, jlong me, jstring name )
 {
   BADGCC_GET_VAL2( jdouble, Rai_f64, env, me, name )
   /*return GetVal<jdouble, Rai_f64>( env, me, name );*/
@@ -1820,7 +1820,7 @@ GetString( JNIEnv *env,  RaiField &field )
  * Signature: (JLjava/lang/String;)Ljava/lang/String;
  */
 JNIEXPORT jstring JNICALL
-JaRaiMsg( GetString )( JNIEnv *env, jclass cls, jlong me, jstring name )
+JaRaiMsg( GetString )( JNIEnv *env, jclass /* cls */, jlong me, jstring name )
 {
   RaiMsg     * _this = toRaiMsg( me );
   jstring      val   = NULL;
@@ -1891,7 +1891,7 @@ GetOpaque( JNIEnv *env,  RaiField &field )
  * Signature: (JLjava/lang/String;)[B
  */
 JNIEXPORT jbyteArray JNICALL
-JaRaiMsg( GetOpaque )( JNIEnv *env, jclass cls, jlong me, jstring name )
+JaRaiMsg( GetOpaque )( JNIEnv *env, jclass /* cls */, jlong me, jstring name )
 {
   RaiMsg     * _this = toRaiMsg( me );
   jbyteArray   val   = NULL;
@@ -1950,7 +1950,7 @@ GetPartial( JNIEnv *env,  RaiField &field )
  * Signature: (JLjava/lang/String;)LPartial;
  */
 JNIEXPORT jobject JNICALL
-JaRaiMsg( GetPartial )( JNIEnv *env, jclass cls, jlong me, jstring name )
+JaRaiMsg( GetPartial )( JNIEnv *env, jclass /* cls */, jlong me, jstring name )
 {
   RaiMsg     * _this = toRaiMsg( me );
   jobject      val   = NULL;
@@ -2066,7 +2066,7 @@ JaRaiMsg( GetPartial )( JNIEnv *env, jclass cls, jlong me, jstring name )
  * Signature: (JLjava/lang/String;)[Z
  */
 JNIEXPORT jbooleanArray JNICALL
-JaRaiMsg( GetBooleanArray )( JNIEnv *env, jclass cls, jlong me, jstring name )
+JaRaiMsg( GetBooleanArray )( JNIEnv *env, jclass /* cls */, jlong me, jstring name )
 {
   /*return GetArrayVal<jbooleanArray, jboolean, RAIMSG_BOOLEAN, RAIMSG_BOOLEAN,
                      RaiMsgErr::BAD_CVT_BOOL>
@@ -2085,7 +2085,7 @@ JaRaiMsg( GetBooleanArray )( JNIEnv *env, jclass cls, jlong me, jstring name )
  * Signature: (JLjava/lang/String;)[B
  */
 JNIEXPORT jbyteArray JNICALL
-JaRaiMsg( GetByteArray )( JNIEnv *env, jclass cls, jlong me, jstring name )
+JaRaiMsg( GetByteArray )( JNIEnv *env, jclass /* cls */, jlong me, jstring name )
 {
   jbyteArray val = NULL;
   GET_ARRAY_VAL_DEF1( val, jbyteArray, jbyte, RAIMSG_UINT, RAIMSG_INT,
@@ -2100,7 +2100,7 @@ JaRaiMsg( GetByteArray )( JNIEnv *env, jclass cls, jlong me, jstring name )
  * Signature: (JLjava/lang/String;)[S
  */
 JNIEXPORT jshortArray JNICALL
-JaRaiMsg( GetShortArray )( JNIEnv *env, jclass cls, jlong me, jstring name )
+JaRaiMsg( GetShortArray )( JNIEnv *env, jclass /* cls */, jlong me, jstring name )
 {
   jshortArray val = NULL;
   GET_ARRAY_VAL_DEF1( val, jshortArray, jshort, RAIMSG_UINT, RAIMSG_INT,
@@ -2115,7 +2115,7 @@ JaRaiMsg( GetShortArray )( JNIEnv *env, jclass cls, jlong me, jstring name )
  * Signature: (JLjava/lang/String;)[I
  */
 JNIEXPORT jintArray JNICALL
-JaRaiMsg( GetIntArray )( JNIEnv *env, jclass cls, jlong me, jstring name )
+JaRaiMsg( GetIntArray )( JNIEnv *env, jclass /* cls */, jlong me, jstring name )
 {
   jintArray val = NULL;
   GET_ARRAY_VAL_DEF1( val, jintArray, jint, RAIMSG_UINT, RAIMSG_INT,
@@ -2130,7 +2130,7 @@ JaRaiMsg( GetIntArray )( JNIEnv *env, jclass cls, jlong me, jstring name )
  * Signature: (JLjava/lang/String;)[J
  */
 JNIEXPORT jlongArray JNICALL
-JaRaiMsg( GetLongArray )( JNIEnv *env, jclass cls, jlong me, jstring name )
+JaRaiMsg( GetLongArray )( JNIEnv *env, jclass /* cls */, jlong me, jstring name )
 {
   jlongArray val = NULL;
   GET_ARRAY_VAL_DEF1( val, jlongArray, jlong, RAIMSG_UINT, RAIMSG_INT,
@@ -2145,7 +2145,7 @@ JaRaiMsg( GetLongArray )( JNIEnv *env, jclass cls, jlong me, jstring name )
  * Signature: (JLjava/lang/String;)[F
  */
 JNIEXPORT jfloatArray JNICALL
-JaRaiMsg( GetFloatArray )( JNIEnv *env, jclass cls, jlong me, jstring name )
+JaRaiMsg( GetFloatArray )( JNIEnv *env, jclass /* cls */, jlong me, jstring name )
 {
   jfloatArray val = NULL;
   GET_ARRAY_VAL_DEF1( val, jfloatArray, jfloat, RAIMSG_REAL, RAIMSG_REAL,
@@ -2160,7 +2160,7 @@ JaRaiMsg( GetFloatArray )( JNIEnv *env, jclass cls, jlong me, jstring name )
  * Signature: (JLjava/lang/String;)[D
  */
 JNIEXPORT jdoubleArray JNICALL
-JaRaiMsg( GetDoubleArray )( JNIEnv *env, jclass cls, jlong me, jstring name )
+JaRaiMsg( GetDoubleArray )( JNIEnv *env, jclass /* cls */, jlong me, jstring name )
 {
   jdoubleArray val = NULL;
   GET_ARRAY_VAL_DEF1( val, jdoubleArray, jdouble, RAIMSG_REAL, RAIMSG_REAL,
@@ -2233,7 +2233,7 @@ GetStringArray( JNIEnv *env,  RaiField &field )
  * Signature: (JLjava/lang/String;)[Ljava/lang/String;
  */
 JNIEXPORT jobjectArray JNICALL
-JaRaiMsg( GetStringArray )( JNIEnv *env, jclass cls, jlong me, jstring name )
+JaRaiMsg( GetStringArray )( JNIEnv *env, jclass /* cls */, jlong me, jstring name )
 {
   RaiMsg     * _this = toRaiMsg( me );
   jobjectArray val   = NULL;
@@ -2263,7 +2263,7 @@ JaRaiMsg( GetStringArray )( JNIEnv *env, jclass cls, jlong me, jstring name )
  */
 JNIEXPORT void JNICALL
 JaRaiMsg( Append__JLjava_lang_String_2Ljava_lang_Object_2 )( JNIEnv *env,
-                               jclass cls, jlong me, jstring name, jobject val )
+                               jclass /* cls */, jlong me, jstring name, jobject val )
 {
   RaiMsg * _this = toRaiMsg( me );
   updateOrAppend( env, *_this, name, val, NULL, true, false );
@@ -2275,7 +2275,7 @@ JaRaiMsg( Append__JLjava_lang_String_2Ljava_lang_Object_2 )( JNIEnv *env,
  * Signature: (JLjava/lang/String;Ljava/lang/Object;Ljava/lang/Object;)V
  */
 JNIEXPORT void JNICALL
-JaRaiMsg( AppendWithHint )(JNIEnv *env, jclass cls, jlong me, jstring name,
+JaRaiMsg( AppendWithHint )(JNIEnv *env, jclass /* cls */, jlong me, jstring name,
                            jobject val, jobject hintVal )
 {
   RaiMsg * _this = toRaiMsg( me );
@@ -2315,7 +2315,7 @@ updateOrAppendOpaque( JNIEnv *env,  RaiMsg &msg,  jstring name,
  * Signature: (JLjava/lang/String;[BII)V
  */
 JNIEXPORT void JNICALL
-JaRaiMsg( AppendOpaque )( JNIEnv *env, jclass cls, jlong me, jstring name,
+JaRaiMsg( AppendOpaque )( JNIEnv *env, jclass /* cls */, jlong me, jstring name,
                           jbyteArray buf, jint off, jint len )
 {
   RaiMsg * _this = toRaiMsg( me );
@@ -2328,7 +2328,7 @@ JaRaiMsg( AppendOpaque )( JNIEnv *env, jclass cls, jlong me, jstring name,
  * Signature: (JLjava/lang/String;Ljava/lang/Object;)V
  */
 JNIEXPORT void JNICALL
-JaRaiMsg( AppendUnsigned )( JNIEnv *env, jclass cls, jlong me, jstring name,
+JaRaiMsg( AppendUnsigned )( JNIEnv *env, jclass /* cls */, jlong me, jstring name,
                             jobject val )
 {
   RaiMsg * _this = toRaiMsg( me );
@@ -2341,7 +2341,7 @@ JaRaiMsg( AppendUnsigned )( JNIEnv *env, jclass cls, jlong me, jstring name,
  * Signature: (JLcom_rai_raimsg_RaiField;)V
  */
 JNIEXPORT void JNICALL
-JaRaiMsg( Append__JLcom_rai_raimsg_RaiField_2 )( JNIEnv *env, jclass cls,
+JaRaiMsg( Append__JLcom_rai_raimsg_RaiField_2 )( JNIEnv *env, jclass /* cls */,
                                                  jlong me, jobject val )
 {
   RaiMsg * _this = toRaiMsg( me );
@@ -2375,7 +2375,7 @@ append( JNIEnv *env,  RaiMsg &msg,  jstring name,  JType val )
  * Signature: (JLjava/lang/String;Z)V
  */
 JNIEXPORT void JNICALL
-JaRaiMsg( AppendBoolean )( JNIEnv *env, jclass cls, jlong me, jstring name,
+JaRaiMsg( AppendBoolean )( JNIEnv *env, jclass /* cls */, jlong me, jstring name,
                            jboolean val )
 {
   RaiMsg * _this = toRaiMsg( me );
@@ -2388,7 +2388,7 @@ JaRaiMsg( AppendBoolean )( JNIEnv *env, jclass cls, jlong me, jstring name,
  * Signature: (JLjava/lang/String;BZ)V
  */
 JNIEXPORT void JNICALL
-JaRaiMsg( AppendByte )( JNIEnv *env, jclass cls, jlong me, jstring name,
+JaRaiMsg( AppendByte )( JNIEnv *env, jclass /* cls */, jlong me, jstring name,
                         jbyte val, jboolean isUnsigned )
 {
   RaiMsg * _this = toRaiMsg( me );
@@ -2404,7 +2404,7 @@ JaRaiMsg( AppendByte )( JNIEnv *env, jclass cls, jlong me, jstring name,
  * Signature: (JLjava/lang/String;SZ)V
  */
 JNIEXPORT void JNICALL
-JaRaiMsg( AppendShort )( JNIEnv *env, jclass cls, jlong me, jstring name,
+JaRaiMsg( AppendShort )( JNIEnv *env, jclass /* cls */, jlong me, jstring name,
                          jshort val, jboolean isUnsigned )
 {
   RaiMsg * _this = toRaiMsg( me );
@@ -2420,7 +2420,7 @@ JaRaiMsg( AppendShort )( JNIEnv *env, jclass cls, jlong me, jstring name,
  * Signature: (JLjava/lang/String;IZ)V
  */
 JNIEXPORT void JNICALL
-JaRaiMsg( AppendInt )( JNIEnv *env, jclass cls, jlong me, jstring name,
+JaRaiMsg( AppendInt )( JNIEnv *env, jclass /* cls */, jlong me, jstring name,
                        jint val, jboolean isUnsigned )
 {
   RaiMsg * _this = toRaiMsg( me );
@@ -2436,7 +2436,7 @@ JaRaiMsg( AppendInt )( JNIEnv *env, jclass cls, jlong me, jstring name,
  * Signature: (JLjava/lang/String;JZ)V
  */
 JNIEXPORT void JNICALL
-JaRaiMsg( AppendLong )( JNIEnv *env, jclass cls, jlong me, jstring name,
+JaRaiMsg( AppendLong )( JNIEnv *env, jclass /* cls */, jlong me, jstring name,
                         jlong val, jboolean isUnsigned )
 {
   RaiMsg * _this = toRaiMsg( me );
@@ -2452,7 +2452,7 @@ JaRaiMsg( AppendLong )( JNIEnv *env, jclass cls, jlong me, jstring name,
  * Signature: (JLjava/lang/String;F)V
  */
 JNIEXPORT void JNICALL
-JaRaiMsg( AppendFloat )( JNIEnv *env, jclass cls, jlong me, jstring name,
+JaRaiMsg( AppendFloat )( JNIEnv *env, jclass /* cls */, jlong me, jstring name,
                          jfloat val )
 {
   RaiMsg * _this = toRaiMsg( me );
@@ -2465,7 +2465,7 @@ JaRaiMsg( AppendFloat )( JNIEnv *env, jclass cls, jlong me, jstring name,
  * Signature: (JLjava/lang/String;D)V
  */
 JNIEXPORT void JNICALL
-JaRaiMsg( AppendDouble )( JNIEnv *env, jclass cls, jlong me, jstring name,
+JaRaiMsg( AppendDouble )( JNIEnv *env, jclass /* cls */, jlong me, jstring name,
                           jdouble val )
 {
   RaiMsg * _this = toRaiMsg( me );
@@ -2479,7 +2479,7 @@ JaRaiMsg( AppendDouble )( JNIEnv *env, jclass cls, jlong me, jstring name,
  */
 JNIEXPORT void JNICALL
 JaRaiMsg( Update__JLjava_lang_String_2Ljava_lang_Object_2 )( JNIEnv *env,
-                               jclass cls, jlong me, jstring name, jobject val )
+                               jclass /* cls */, jlong me, jstring name, jobject val )
 {
   RaiMsg * _this = toRaiMsg( me );
   updateOrAppend( env, *_this, name, val, NULL, false, false );
@@ -2491,7 +2491,7 @@ JaRaiMsg( Update__JLjava_lang_String_2Ljava_lang_Object_2 )( JNIEnv *env,
  * Signature: (JLjava/lang/String;Ljava/lang/Object;Ljava/lang/Object;)V
  */
 JNIEXPORT void JNICALL
-JaRaiMsg( UpdateWithHint )(JNIEnv *env, jclass cls, jlong me, jstring name,
+JaRaiMsg( UpdateWithHint )(JNIEnv *env, jclass /* cls */, jlong me, jstring name,
           jobject val, jobject hintVal )
 {
   RaiMsg * _this = toRaiMsg( me );
@@ -2504,7 +2504,7 @@ JaRaiMsg( UpdateWithHint )(JNIEnv *env, jclass cls, jlong me, jstring name,
  * Signature: (JLjava/lang/String;[BII)V
  */
 JNIEXPORT void JNICALL
-JaRaiMsg( UpdateOpaque )( JNIEnv *env, jclass cls, jlong me, jstring name,
+JaRaiMsg( UpdateOpaque )( JNIEnv *env, jclass /* cls */, jlong me, jstring name,
                           jbyteArray buf, jint off, jint len )
 {
   RaiMsg * _this = toRaiMsg( me );
@@ -2517,7 +2517,7 @@ JaRaiMsg( UpdateOpaque )( JNIEnv *env, jclass cls, jlong me, jstring name,
  * Signature: (JLjava/lang/String;Ljava/lang/Object;)V
  */
 JNIEXPORT void JNICALL
-JaRaiMsg( UpdateUnsigned )( JNIEnv *env, jclass cls, jlong me, jstring name,
+JaRaiMsg( UpdateUnsigned )( JNIEnv *env, jclass /* cls */, jlong me, jstring name,
                             jobject val )
 {
   RaiMsg * _this = toRaiMsg( me );
@@ -2530,7 +2530,7 @@ JaRaiMsg( UpdateUnsigned )( JNIEnv *env, jclass cls, jlong me, jstring name,
  * Signature: (JLcom_rai_raimsg_RaiField;)V
  */
 JNIEXPORT void JNICALL
-JaRaiMsg( Update__JLcom_rai_raimsg_RaiField_2 )( JNIEnv *env, jclass cls,
+JaRaiMsg( Update__JLcom_rai_raimsg_RaiField_2 )( JNIEnv *env, jclass /* cls */,
                                                  jlong me, jobject val )
 {
   RaiMsg * _this = toRaiMsg( me );
@@ -2564,7 +2564,7 @@ update( JNIEnv *env,  RaiMsg &msg,  jstring name,  JType val )
  * Signature: (JLjava/lang/String;Z)V
  */
 JNIEXPORT void JNICALL
-JaRaiMsg( UpdateBoolean )( JNIEnv *env, jclass cls, jlong me, jstring name,
+JaRaiMsg( UpdateBoolean )( JNIEnv *env, jclass /* cls */, jlong me, jstring name,
                            jboolean val )
 {
   RaiMsg * _this = toRaiMsg( me );
@@ -2577,7 +2577,7 @@ JaRaiMsg( UpdateBoolean )( JNIEnv *env, jclass cls, jlong me, jstring name,
  * Signature: (JLjava/lang/String;BZ)V
  */
 JNIEXPORT void JNICALL
-JaRaiMsg( UpdateByte )( JNIEnv *env, jclass cls, jlong me, jstring name,
+JaRaiMsg( UpdateByte )( JNIEnv *env, jclass /* cls */, jlong me, jstring name,
                         jbyte val, jboolean isUnsigned )
 {
   RaiMsg * _this = toRaiMsg( me );
@@ -2593,7 +2593,7 @@ JaRaiMsg( UpdateByte )( JNIEnv *env, jclass cls, jlong me, jstring name,
  * Signature: (JLjava/lang/String;SZ)V
  */
 JNIEXPORT void JNICALL
-JaRaiMsg( UpdateShort )( JNIEnv *env, jclass cls, jlong me, jstring name,
+JaRaiMsg( UpdateShort )( JNIEnv *env, jclass /* cls */, jlong me, jstring name,
                          jshort val, jboolean isUnsigned )
 {
   RaiMsg * _this = toRaiMsg( me );
@@ -2609,7 +2609,7 @@ JaRaiMsg( UpdateShort )( JNIEnv *env, jclass cls, jlong me, jstring name,
  * Signature: (JLjava/lang/String;IZ)V
  */
 JNIEXPORT void JNICALL
-JaRaiMsg( UpdateInt )( JNIEnv *env, jclass cls, jlong me, jstring name,
+JaRaiMsg( UpdateInt )( JNIEnv *env, jclass /* cls */, jlong me, jstring name,
                        jint val, jboolean isUnsigned )
 {
   RaiMsg * _this = toRaiMsg( me );
@@ -2625,7 +2625,7 @@ JaRaiMsg( UpdateInt )( JNIEnv *env, jclass cls, jlong me, jstring name,
  * Signature: (JLjava/lang/String;JZ)V
  */
 JNIEXPORT void JNICALL
-JaRaiMsg( UpdateLong )( JNIEnv *env, jclass cls, jlong me, jstring name,
+JaRaiMsg( UpdateLong )( JNIEnv *env, jclass /* cls */, jlong me, jstring name,
                         jlong val, jboolean isUnsigned )
 {
   RaiMsg * _this = toRaiMsg( me );
@@ -2641,7 +2641,7 @@ JaRaiMsg( UpdateLong )( JNIEnv *env, jclass cls, jlong me, jstring name,
  * Signature: (JLjava/lang/String;F)V
  */
 JNIEXPORT void JNICALL
-JaRaiMsg( UpdateFloat )( JNIEnv *env, jclass cls, jlong me, jstring name,
+JaRaiMsg( UpdateFloat )( JNIEnv *env, jclass /* cls */, jlong me, jstring name,
                          jfloat val )
 {
   RaiMsg * _this = toRaiMsg( me );
@@ -2654,7 +2654,7 @@ JaRaiMsg( UpdateFloat )( JNIEnv *env, jclass cls, jlong me, jstring name,
  * Signature: (JLjava/lang/String;D)V
  */
 JNIEXPORT void JNICALL
-JaRaiMsg( UpdateDouble )( JNIEnv *env, jclass cls, jlong me, jstring name,
+JaRaiMsg( UpdateDouble )( JNIEnv *env, jclass /* cls */, jlong me, jstring name,
                           jdouble val )
 {
   RaiMsg * _this = toRaiMsg( me );
@@ -2667,7 +2667,7 @@ JaRaiMsg( UpdateDouble )( JNIEnv *env, jclass cls, jlong me, jstring name,
  * Signature: (J[BII)V
  */
 JNIEXPORT void JNICALL
-JaRaiMsg( UnPack )( JNIEnv *env, jclass cls, jlong me, jbyteArray msgBuf,
+JaRaiMsg( UnPack )( JNIEnv *env, jclass /* cls */, jlong me, jbyteArray msgBuf,
                     jint off, jint len )
 {
   RaiMsg        * _this = toRaiMsg( me );
@@ -2705,7 +2705,7 @@ JaRaiMsg( UnPack )( JNIEnv *env, jclass cls, jlong me, jbyteArray msgBuf,
  * Signature: (J[BII)I
  */
 JNIEXPORT jint JNICALL
-JaRaiMsg( Pack__J_3BII )( JNIEnv *env, jclass cls, jlong me, jbyteArray msgBuf,
+JaRaiMsg( Pack__J_3BII )( JNIEnv *env, jclass /* cls */, jlong me, jbyteArray msgBuf,
                           jint off, jint len )
 {
   RaiMsg    * _this = toRaiMsg( me );
@@ -2729,7 +2729,7 @@ JaRaiMsg( Pack__J_3BII )( JNIEnv *env, jclass cls, jlong me, jbyteArray msgBuf,
  * Signature: (J)[B
  */
 JNIEXPORT jbyteArray JNICALL
-JaRaiMsg( Pack__J )( JNIEnv *env, jclass cls, jlong me )
+JaRaiMsg( Pack__J )( JNIEnv *env, jclass /* cls */, jlong me )
 {
   RaiMsg    * _this  = toRaiMsg( me );
   jbyteArray  msgBuf = NULL;
@@ -2752,7 +2752,7 @@ JaRaiMsg( Pack__J )( JNIEnv *env, jclass cls, jlong me )
  * Signature: (J)I
  */
 JNIEXPORT jint JNICALL
-JaRaiMsg( PackSize )( JNIEnv *env, jclass cls, jlong me )
+JaRaiMsg( PackSize )( JNIEnv *env, jclass /* cls */, jlong me )
 {
   RaiMsg    * _this = toRaiMsg( me );
   RaiMsg_size size  = 0;
@@ -2772,7 +2772,7 @@ JaRaiMsg( PackSize )( JNIEnv *env, jclass cls, jlong me )
  * Signature: (JLjava/lang/String;)V
  */
 JNIEXPORT jboolean JNICALL
-JaRaiMsg( Activate )( JNIEnv *env, jclass cls, jlong me, jstring name )
+JaRaiMsg( Activate )( JNIEnv *env, jclass /* cls */, jlong me, jstring name )
 {
   RaiMsg     * _this = toRaiMsg( me );
   RaiException e2;
@@ -2800,7 +2800,7 @@ JaRaiMsg( Activate )( JNIEnv *env, jclass cls, jlong me, jstring name )
  * Signature: (JLjava/lang/String;Ljava/lang/String;)V
  */
 JNIEXPORT jboolean JNICALL
-JaRaiMsg( Rename )( JNIEnv *env, jclass cls, jlong me, jstring oldName,
+JaRaiMsg( Rename )( JNIEnv *env, jclass /* cls */, jlong me, jstring oldName,
                     jstring newName )
 {
   RaiMsg     * _this = toRaiMsg( me );
@@ -2832,7 +2832,7 @@ JaRaiMsg( Rename )( JNIEnv *env, jclass cls, jlong me, jstring oldName,
  * Signature: (JLjava/lang/String;)V
  */
 JNIEXPORT jboolean JNICALL
-JaRaiMsg( Remove )( JNIEnv *env, jclass cls, jlong me, jstring name )
+JaRaiMsg( Remove )( JNIEnv *env, jclass /* cls */, jlong me, jstring name )
 {
   RaiMsg     * _this = toRaiMsg( me );
   const char * fname;
@@ -2892,7 +2892,7 @@ struct RaiMsgJOutputStream : public rai::OutputStream {
  * Signature: (JLjava/io/OutputStream;)V
  */
 JNIEXPORT void JNICALL
-JaRaiMsg( Print )( JNIEnv *env, jclass cls, jlong me, jobject out,
+JaRaiMsg( Print )( JNIEnv *env, jclass /* cls */, jlong me, jobject out,
                    jboolean field_nl,  jstring fname_fmt,  jboolean print_op,
                    jstring dbg_format,  jstring dbg_hformat )
 {
@@ -2933,7 +2933,7 @@ JaRaiMsg( Print )( JNIEnv *env, jclass cls, jlong me, jobject out,
  * Signature: (JLjava/io/OutputStream;)V
  */
 JNIEXPORT void JNICALL
-JaRaiMsg( PrintHex__JLjava_io_OutputStream_2 )( JNIEnv *env, jclass cls,
+JaRaiMsg( PrintHex__JLjava_io_OutputStream_2 )( JNIEnv *env, jclass /* cls */,
                                                 jlong me, jobject out )
 {
   RaiMsg * _this = toRaiMsg( me );
@@ -2953,7 +2953,7 @@ JaRaiMsg( PrintHex__JLjava_io_OutputStream_2 )( JNIEnv *env, jclass cls,
  * Signature: (Ljava/io/OutputStream;[BII)V
  */
 JNIEXPORT void JNICALL
-JaRaiMsg( PrintHex__Ljava_io_OutputStream_2_3BII )( JNIEnv *env, jclass cls,
+JaRaiMsg( PrintHex__Ljava_io_OutputStream_2_3BII )( JNIEnv *env, jclass /* cls */,
                           jobject out, jbyteArray msgBuf, jint off, jint len )
 {
   jbyte * buf;
@@ -2976,7 +2976,7 @@ JaRaiMsg( PrintHex__Ljava_io_OutputStream_2_3BII )( JNIEnv *env, jclass cls,
  * Signature: (JLjava/io/OutputStream;IZLjava/lang/String;[Ljava/lang/String;)V
  */
 JNIEXPORT void JNICALL
-JaRaiMsg( PrintXML )( JNIEnv *env, jclass cls, jlong me, jobject out,
+JaRaiMsg( PrintXML )( JNIEnv *env, jclass /* cls */, jlong me, jobject out,
                       jint attr_flags, jboolean field_nl, jstring msg_name,
                       jobjectArray msg_atts )
 {
@@ -3032,7 +3032,7 @@ JaRaiMsg( PrintXML )( JNIEnv *env, jclass cls, jlong me, jobject out,
  * Signature: (Ljava/lang/String;)I
  */
 JNIEXPORT jint JNICALL
-JaRaiMsg( StrType )( JNIEnv *env, jclass cls, jstring name )
+JaRaiMsg( StrType )( JNIEnv *env, jclass /* cls */, jstring name )
 {
   const char * tname;
   RaiMsg_type  type;
@@ -3051,7 +3051,7 @@ JaRaiMsg( StrType )( JNIEnv *env, jclass cls, jstring name )
  * Signature: (I)Ljava/lang/String;
  */
 JNIEXPORT jstring JNICALL
-JaRaiMsg( TypeStr )( JNIEnv *env, jclass cls, jint typ )
+JaRaiMsg( TypeStr )( JNIEnv *env, jclass /* cls */, jint typ )
 {
   return env->NewStringUTF( RaiMsg::TypeStr( (RaiMsg_type) typ ) );
 }
@@ -3062,7 +3062,7 @@ JaRaiMsg( TypeStr )( JNIEnv *env, jclass cls, jint typ )
  * Signature: (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;C)V
  */
 JNIEXPORT void JNICALL
-JaRaiMsg( ReadDataDictionary )( JNIEnv *env, jclass cls, jstring fields_cf,
+JaRaiMsg( ReadDataDictionary )( JNIEnv *env, jclass /* cls */, jstring fields_cf,
                                 jstring records_cf, jstring cfile_path,
                                 jchar path_sep )
 {
@@ -3142,7 +3142,7 @@ JaRaiMsg( SetDataDictionary )( JNIEnv *env, jclass cls, jobject msg )
  * Signature: ()LRaiMsg;
  */
 JNIEXPORT jobject JNICALL
-JaRaiMsg( GetDataDictionary )( JNIEnv *env, jclass cls )
+JaRaiMsg( GetDataDictionary )( JNIEnv *env, jclass /* cls */ )
 {
   jobject         obj;
   RaiMsg_config * curDict;
@@ -3171,7 +3171,7 @@ JaRaiMsg( GetDataDictionary )( JNIEnv *env, jclass cls )
  * Signature: ()J
  */
 JNIEXPORT jlong JNICALL
-JaRaiField( Create )( JNIEnv *env, jclass cls )
+JaRaiField( Create )( JNIEnv *env, jclass /* cls */ )
 {
   RaiField * field = NULL;
   try {
@@ -3188,7 +3188,7 @@ JaRaiField( Create )( JNIEnv *env, jclass cls )
  * Signature: (J)V
  */
 JNIEXPORT void JNICALL
-JaRaiField( Delete )( JNIEnv *env, jclass cls, jlong fld )
+JaRaiField( Delete )( JNIEnv */* env */, jclass /* cls */, jlong fld )
 {
   if ( fld != 0 )
     delete toRaiField( fld );
@@ -3200,7 +3200,7 @@ JaRaiField( Delete )( JNIEnv *env, jclass cls, jlong fld )
  * Signature: (J)Ljava/lang/String;
  */
 JNIEXPORT jstring JNICALL
-JaRaiField( Name )( JNIEnv *env, jclass cls, jlong fld )
+JaRaiField( Name )( JNIEnv *env, jclass /* cls */, jlong fld )
 {
   RaiField * _this = toRaiField( fld );
   jstring    s     = NULL;
@@ -3217,7 +3217,7 @@ JaRaiField( Name )( JNIEnv *env, jclass cls, jlong fld )
  * Signature: (J)I
  */
 JNIEXPORT jint JNICALL
-JaRaiField( Type )( JNIEnv *env, jclass cls, jlong fld )
+JaRaiField( Type )( JNIEnv */* env */, jclass /* cls */, jlong fld )
 {
   return (jint) toRaiField( fld )->Type();
 }
@@ -3228,7 +3228,7 @@ JaRaiField( Type )( JNIEnv *env, jclass cls, jlong fld )
  * Signature: (J)I
  */
 JNIEXPORT jint JNICALL
-JaRaiField( Size )( JNIEnv *env, jclass cls, jlong fld )
+JaRaiField( Size )( JNIEnv */* env */, jclass /* cls */, jlong fld )
 {
   return (jint) toRaiField( fld )->Size();
 }
@@ -3239,7 +3239,7 @@ JaRaiField( Size )( JNIEnv *env, jclass cls, jlong fld )
  * Signature: (J)I
  */
 JNIEXPORT jint JNICALL
-JaRaiField( HintType )( JNIEnv *env, jclass cls, jlong fld )
+JaRaiField( HintType )( JNIEnv */* env */, jclass /* cls */, jlong fld )
 {
   return (jint) toRaiField( fld )->HintType();
 }
@@ -3250,7 +3250,7 @@ JaRaiField( HintType )( JNIEnv *env, jclass cls, jlong fld )
  * Signature: (J)I
  */
 JNIEXPORT jint JNICALL
-JaRaiField( HintSize )( JNIEnv *env, jclass cls, jlong fld )
+JaRaiField( HintSize )( JNIEnv */* env */, jclass /* cls */, jlong fld )
 {
   return (jint) toRaiField( fld )->HintSize();
 }
@@ -3261,7 +3261,7 @@ JaRaiField( HintSize )( JNIEnv *env, jclass cls, jlong fld )
  * Signature: (J)I
  */
 JNIEXPORT jint JNICALL
-JaRaiField( EntryType )( JNIEnv *env, jclass cls, jlong fld )
+JaRaiField( EntryType )( JNIEnv */* env */, jclass /* cls */, jlong fld )
 {
   return (jint) toRaiField( fld )->EntryType();
 }
@@ -3272,7 +3272,7 @@ JaRaiField( EntryType )( JNIEnv *env, jclass cls, jlong fld )
  * Signature: (J)I
  */
 JNIEXPORT jint JNICALL
-JaRaiField( EntrySize )( JNIEnv *env, jclass cls, jlong fld )
+JaRaiField( EntrySize )( JNIEnv */* env */, jclass /* cls */, jlong fld )
 {
   return (jint) toRaiField( fld )->EntrySize();
 }
@@ -3283,7 +3283,7 @@ JaRaiField( EntrySize )( JNIEnv *env, jclass cls, jlong fld )
  * Signature: (J)I
  */
 JNIEXPORT jint JNICALL
-JaRaiField( NumEntries )( JNIEnv *env, jclass cls, jlong fld )
+JaRaiField( NumEntries )( JNIEnv */* env */, jclass /* cls */, jlong fld )
 {
   return (jint) toRaiField( fld )->NumEntries();
 }
@@ -3294,7 +3294,7 @@ JaRaiField( NumEntries )( JNIEnv *env, jclass cls, jlong fld )
  * Signature: (J)Ljava/lang/Object;
  */
 JNIEXPORT jobject JNICALL
-JaRaiField( Get )( JNIEnv *env, jclass cls, jlong fld )
+JaRaiField( Get )( JNIEnv *env, jclass /* cls */, jlong fld )
 {
   RaiField * _this = toRaiField( fld );
   jobject    obj   = NULL;
@@ -3338,7 +3338,7 @@ GetVal( JNIEnv *env, RaiField &field )
  * Signature: (J)Z
  */
 JNIEXPORT jboolean JNICALL
-JaRaiField( GetBoolean )( JNIEnv *env, jclass cls, jlong fld )
+JaRaiField( GetBoolean )( JNIEnv *env, jclass /* cls */, jlong fld )
 {
   BADGCC_GET_VAL( jboolean, bool, env, *(toRaiField( fld )) )
   /*return GetVal<jboolean, bool>( env, *(toRaiField( fld )) );*/
@@ -3350,7 +3350,7 @@ JaRaiField( GetBoolean )( JNIEnv *env, jclass cls, jlong fld )
  * Signature: (J)B
  */
 JNIEXPORT jbyte JNICALL
-JaRaiField( GetByte )( JNIEnv *env, jclass cls, jlong fld )
+JaRaiField( GetByte )( JNIEnv *env, jclass /* cls */, jlong fld )
 {
   BADGCC_GET_VAL( jbyte, Rai_i8, env, *(toRaiField( fld )) )
   /*return GetVal<jbyte, Rai_i8>( env, *(toRaiField( fld )) );*/
@@ -3362,7 +3362,7 @@ JaRaiField( GetByte )( JNIEnv *env, jclass cls, jlong fld )
  * Signature: (J)S
  */
 JNIEXPORT jshort JNICALL
-JaRaiField( GetShort )( JNIEnv *env, jclass cls, jlong fld )
+JaRaiField( GetShort )( JNIEnv *env, jclass /* cls */, jlong fld )
 {
   BADGCC_GET_VAL( jshort, Rai_i16, env, *(toRaiField( fld )) )
   /*return GetVal<jshort, Rai_i16>( env, *(toRaiField( fld )) );*/
@@ -3374,7 +3374,7 @@ JaRaiField( GetShort )( JNIEnv *env, jclass cls, jlong fld )
  * Signature: (J)I
  */
 JNIEXPORT jint JNICALL
-JaRaiField( GetInt )( JNIEnv *env, jclass cls, jlong fld )
+JaRaiField( GetInt )( JNIEnv *env, jclass /* cls */, jlong fld )
 {
   BADGCC_GET_VAL( jint, Rai_i32, env, *(toRaiField( fld )) )
   /*return GetVal<jint, Rai_i32>( env, *(toRaiField( fld )) );*/
@@ -3386,7 +3386,7 @@ JaRaiField( GetInt )( JNIEnv *env, jclass cls, jlong fld )
  * Signature: (J)J
  */
 JNIEXPORT jlong JNICALL
-JaRaiField( GetLong )( JNIEnv *env, jclass cls, jlong fld )
+JaRaiField( GetLong )( JNIEnv *env, jclass /* cls */, jlong fld )
 {
   BADGCC_GET_VAL( jlong, Rai_i64, env, *(toRaiField( fld )) )
   /*return GetVal<jlong, Rai_i64>( env, *(toRaiField( fld )) );*/
@@ -3404,7 +3404,7 @@ bad_gcc_my_getf32( RaiField &field, Rai_f32 &val )
  * Signature: (J)F
  */
 JNIEXPORT jfloat JNICALL
-JaRaiField( GetFloat )( JNIEnv *env, jclass cls, jlong fld )
+JaRaiField( GetFloat )( JNIEnv *env, jclass /* cls */, jlong fld )
 {
   RaiField &field = *(toRaiField( fld ));
   Rai_f32 val;
@@ -3429,7 +3429,7 @@ bad_gcc_my_getf64( RaiField &field, Rai_f64 &val )
  * Signature: (J)D
  */
 JNIEXPORT jdouble JNICALL
-JaRaiField( GetDouble )( JNIEnv *env, jclass cls, jlong fld )
+JaRaiField( GetDouble )( JNIEnv *env, jclass /* cls */, jlong fld )
 {
   RaiField &field = *(toRaiField( fld ));
   Rai_f64 val;
@@ -3448,7 +3448,7 @@ JaRaiField( GetDouble )( JNIEnv *env, jclass cls, jlong fld )
  * Signature: (J)Ljava/lang/String;
  */
 JNIEXPORT jstring JNICALL
-JaRaiField( GetString )( JNIEnv *env, jclass cls, jlong fld )
+JaRaiField( GetString )( JNIEnv *env, jclass /* cls */, jlong fld )
 {
   return GetString( env, *(toRaiField( fld )) );
 }
@@ -3459,7 +3459,7 @@ JaRaiField( GetString )( JNIEnv *env, jclass cls, jlong fld )
  * Signature: (J)[B
  */
 JNIEXPORT jbyteArray JNICALL
-JaRaiField( GetOpaque )( JNIEnv *env, jclass cls, jlong fld )
+JaRaiField( GetOpaque )( JNIEnv *env, jclass /* cls */, jlong fld )
 {
   return GetOpaque( env,  *(toRaiField( fld )) );
 }
@@ -3470,7 +3470,7 @@ JaRaiField( GetOpaque )( JNIEnv *env, jclass cls, jlong fld )
  * Signature: (J)LPartial;
  */
 JNIEXPORT jobject JNICALL
-JaRaiField( GetPartial )( JNIEnv *env, jclass cls, jlong fld )
+JaRaiField( GetPartial )( JNIEnv *env, jclass /* cls */, jlong fld )
 {
   return GetPartial( env,  *(toRaiField( fld )) );
 }
@@ -3481,7 +3481,7 @@ JaRaiField( GetPartial )( JNIEnv *env, jclass cls, jlong fld )
  * Signature: (J)[Z
  */
 JNIEXPORT jbooleanArray JNICALL
-JaRaiField( GetBooleanArray )( JNIEnv *env, jclass cls, jlong fld )
+JaRaiField( GetBooleanArray )( JNIEnv *env, jclass /* cls */, jlong fld )
 {
   jbooleanArray val = NULL;
   RaiField &field = *(toRaiField( fld ));
@@ -3497,7 +3497,7 @@ JaRaiField( GetBooleanArray )( JNIEnv *env, jclass cls, jlong fld )
  * Signature: (J)[B
  */
 JNIEXPORT jbyteArray JNICALL
-JaRaiField( GetByteArray )( JNIEnv *env, jclass cls, jlong fld )
+JaRaiField( GetByteArray )( JNIEnv *env, jclass /* cls */, jlong fld )
 {
   jbyteArray val = NULL;
   RaiField &field = *(toRaiField( fld ));
@@ -3513,7 +3513,7 @@ JaRaiField( GetByteArray )( JNIEnv *env, jclass cls, jlong fld )
  * Signature: (J)[S
  */
 JNIEXPORT jshortArray JNICALL
-JaRaiField( GetShortArray )( JNIEnv *env, jclass cls, jlong fld )
+JaRaiField( GetShortArray )( JNIEnv *env, jclass /* cls */, jlong fld )
 {
   jshortArray val = NULL;
   RaiField &field = *(toRaiField( fld ));
@@ -3529,7 +3529,7 @@ JaRaiField( GetShortArray )( JNIEnv *env, jclass cls, jlong fld )
  * Signature: (J)[I
  */
 JNIEXPORT jintArray JNICALL
-JaRaiField( GetIntArray )( JNIEnv *env, jclass cls, jlong fld )
+JaRaiField( GetIntArray )( JNIEnv *env, jclass /* cls */, jlong fld )
 {
   jintArray val = NULL;
   RaiField &field = *(toRaiField( fld ));
@@ -3545,7 +3545,7 @@ JaRaiField( GetIntArray )( JNIEnv *env, jclass cls, jlong fld )
  * Signature: (J)[J
  */
 JNIEXPORT jlongArray JNICALL
-JaRaiField( GetLongArray )( JNIEnv *env, jclass cls, jlong fld )
+JaRaiField( GetLongArray )( JNIEnv *env, jclass /* cls */, jlong fld )
 {
   jlongArray val = NULL;
   RaiField &field = *(toRaiField( fld ));
@@ -3561,7 +3561,7 @@ JaRaiField( GetLongArray )( JNIEnv *env, jclass cls, jlong fld )
  * Signature: (J)[F
  */
 JNIEXPORT jfloatArray JNICALL
-JaRaiField( GetFloatArray )( JNIEnv *env, jclass cls, jlong fld )
+JaRaiField( GetFloatArray )( JNIEnv *env, jclass /* cls */, jlong fld )
 {
   jfloatArray val = NULL;
   RaiField &field = *(toRaiField( fld ));
@@ -3577,7 +3577,7 @@ JaRaiField( GetFloatArray )( JNIEnv *env, jclass cls, jlong fld )
  * Signature: (J)[D
  */
 JNIEXPORT jdoubleArray JNICALL
-JaRaiField( GetDoubleArray )( JNIEnv *env, jclass cls, jlong fld )
+JaRaiField( GetDoubleArray )( JNIEnv *env, jclass /* cls */, jlong fld )
 {
   jdoubleArray val = NULL;
   RaiField &field = *(toRaiField( fld ));
@@ -3593,7 +3593,7 @@ JaRaiField( GetDoubleArray )( JNIEnv *env, jclass cls, jlong fld )
  * Signature: (J)[Ljava/lang/String;
  */
 JNIEXPORT jobjectArray JNICALL
-JaRaiField( GetStringArray )( JNIEnv *env, jclass cls, jlong fld )
+JaRaiField( GetStringArray )( JNIEnv *env, jclass /* cls */, jlong fld )
 {
   return GetStringArray( env, *(toRaiField( fld )) );
 }
@@ -3604,7 +3604,7 @@ JaRaiField( GetStringArray )( JNIEnv *env, jclass cls, jlong fld )
  * Signature: (J)Ljava/lang/Object;
  */
 JNIEXPORT jobject JNICALL
-JaRaiField( GetHint )( JNIEnv *env, jclass cls, jlong fld )
+JaRaiField( GetHint )( JNIEnv *env, jclass /* cls */, jlong fld )
 {
   RaiField * _this = toRaiField( fld );
   jobject    obj   = NULL;
@@ -3622,7 +3622,7 @@ JaRaiField( GetHint )( JNIEnv *env, jclass cls, jlong fld )
  * Signature: (JJLjava/lang/String;)Z
  */
 JNIEXPORT jboolean JNICALL
-JaRaiField( Find )( JNIEnv *env, jclass cls, jlong fld, jlong msg,
+JaRaiField( Find )( JNIEnv *env, jclass /* cls */, jlong fld, jlong msg,
                     jstring name )
 {
   RaiField   * _this  = toRaiField( fld );
@@ -3650,7 +3650,7 @@ JaRaiField( Find )( JNIEnv *env, jclass cls, jlong fld, jlong msg,
  * Signature: (JJ)Z
  */
 JNIEXPORT jboolean JNICALL
-JaRaiField( First )( JNIEnv *env, jclass cls, jlong fld, jlong msg )
+JaRaiField( First )( JNIEnv *env, jclass /* cls */, jlong fld, jlong msg )
 {
   RaiField * _this  = toRaiField( fld );
   RaiMsg   * m      = toRaiMsg( msg );
@@ -3670,7 +3670,7 @@ JaRaiField( First )( JNIEnv *env, jclass cls, jlong fld, jlong msg )
  * Signature: (J)Z
  */
 JNIEXPORT jboolean JNICALL
-JaRaiField( Next )( JNIEnv *env, jclass cls, jlong fld )
+JaRaiField( Next )( JNIEnv *env, jclass /* cls */, jlong fld )
 {
   RaiField * _this  = toRaiField( fld );
   bool       result = false;
@@ -3689,7 +3689,7 @@ JaRaiField( Next )( JNIEnv *env, jclass cls, jlong fld )
  * Signature: (J)Ljava/lang/String;
  */
 JNIEXPORT jstring JNICALL
-JaRaiMsgException( getModule )( JNIEnv *env, jclass cls, jlong err )
+JaRaiMsgException( getModule )( JNIEnv *env, jclass /* cls */, jlong err )
 {
   if ( err == 0 )
     return NULL;
@@ -3702,7 +3702,7 @@ JaRaiMsgException( getModule )( JNIEnv *env, jclass cls, jlong err )
  * Signature: (J)I
  */
 JNIEXPORT jint JNICALL
-JaRaiMsgException( getErrno )( JNIEnv *env, jclass cls, jlong err )
+JaRaiMsgException( getErrno )( JNIEnv */* env */, jclass /* cls */, jlong err )
 {
   if ( err == 0 )
     return 0;
@@ -3715,7 +3715,7 @@ JaRaiMsgException( getErrno )( JNIEnv *env, jclass cls, jlong err )
  * Signature: (J)Ljava/lang/String;
  */
 JNIEXPORT jstring JNICALL
-JaRaiMsgException( getReason )( JNIEnv *env, jclass cls, jlong err )
+JaRaiMsgException( getReason )( JNIEnv *env, jclass /* cls */, jlong err )
 {
   if ( err == 0 )
     return NULL;

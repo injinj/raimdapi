@@ -311,12 +311,12 @@ struct RaiSub2 : public RaiMsgCallback, public RaiDataLossCallback,
   }
 
   /* RaiDataLossCallback, connection success event, log it */
-  virtual void onConnection( RaiConnectionEvent &event,  void *cl ) {
+  virtual void onConnection( RaiConnectionEvent &event,  void */* cl */ ) {
     this->api->PrintLog( LMINOR, "%s", event.description );
   }
 
   /* RaiDataLossCallback, log it then notify subscriptions */
-  virtual void onDataLoss( RaiDataLossEvent &event,  void *cl ) {
+  virtual void onDataLoss( RaiDataLossEvent &event,  void */* cl */ ) {
     RaiException e = RaiApiErr::getErr( RaiApiErr::TSPT_DATALOSS );
     this->api->PrintLog( LERROR, e, "%s", event.description );
     /* notify subscriptions if connection oriented and no secondary exists */
@@ -330,7 +330,7 @@ struct RaiSub2 : public RaiMsgCallback, public RaiDataLossCallback,
     }
   }
   /* RaiMsgCallback, print the message */
-  virtual void onMsg( RaiMsgEvent &event,  RaiMsg &raiMsg,  void *closure ) {
+  virtual void onMsg( RaiMsgEvent &event,  RaiMsg &raiMsg,  void */* closure */ ) {
     rai::TimeNSecs ns = ( event.pubTime != 0 || event.routeTime != 0 ) ?
                         rai::Time::currentTimeNanosecs() : 0;
     unsigned int nBytes = 0;
@@ -460,7 +460,7 @@ struct RaiSub2 : public RaiMsgCallback, public RaiDataLossCallback,
   } 
   
   /* RaiTimerCallback, print the message rate (if -rate) */
-  virtual void onTimer( RaiTimer &timer,  void *closure ) {
+  virtual void onTimer( RaiTimer &timer,  void */* closure */ ) {
     if ( &timer == this->rateTimer ) {
       double       interval;
       Rai_u64      msgs,

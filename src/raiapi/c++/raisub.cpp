@@ -23,7 +23,7 @@ class SubTest {
   bool           quit;
   
   static void
-  subject_onMsg( RaiEvent * event,  RaiMsg * raiMsg,  void * closure ) {
+  subject_onMsg( RaiEvent * event,  RaiMsg * raiMsg,  void * /* closure */ ) {
     
     try {
       Sys::out->printf( "subscribed subject %s\n", event->subscribedSubject );

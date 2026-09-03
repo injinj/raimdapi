@@ -62,7 +62,7 @@ class Ping {
     }
   };
 
-  static void ping_onMsg( RaiEvent * event,  RaiMsg * raiMsg,  void * closure ) {
+  static void ping_onMsg( RaiEvent * /* event */,  RaiMsg * raiMsg,  void * closure ) {
     Ping * me = (Ping *) closure;
     double cpms;
     ullong sendTime,
@@ -95,7 +95,7 @@ class Ping {
     }
   };
 
-  static void  onTimer( RaiSession * session, void * closure ) {
+  static void  onTimer( RaiSession * /* session */, void * closure ) {
     Ping       * me = (Ping *) closure;
     ullong       time;
     byte         msgBuf[ 1024 ];

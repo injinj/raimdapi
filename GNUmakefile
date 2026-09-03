@@ -446,8 +446,8 @@ libjraimsg_ver   := $(major_num).$(minor_num)
 $(libd)/libjraimsg.$(dll): $(libjraimsg_dbjs) $(libd)/libraimsg.$(dll) $(lnk_dep) $(dlnk_dep)
 
 ifeq ($(java),1)
-all_dlls    += $(libd)/libjraimsg.$(dll)
-all_depends += $(libjraimsg_deps)
+all_dlls    += $(libd)/libjraiapi2.$(dll) $(libd)/libjraimsg.$(dll)
+all_depends += $(libjraiapi2_deps) $(libjraimsg_deps)
 endif
 
 raiexception_root     = com/rai/raiexception
