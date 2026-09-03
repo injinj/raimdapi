@@ -536,7 +536,7 @@ struct RaiSub2 : public RaiMsgCallback, public RaiDataLossCallback,
   void renameSaveFile( void ) {
     char saveName2[ 1024 ];
 
-    ::strncpy( saveName2, this->saveName, sizeof( saveName2 ) );
+    rai::str_copy( saveName2, this->saveName, sizeof( saveName2 ) );
 
     unsigned int olen = ::strlen( saveName2 );
     rai::TimeMSecs curTime = rai::Time::currentTimeMillisecs();

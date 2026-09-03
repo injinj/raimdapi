@@ -930,7 +930,7 @@ ITYPE_toString( ITYPE i,  char *outBuf,  unsigned int bufLen,
     len = ::strlen( units );
     if ( ! abrev && i == (ITYPE) 1 )
       len -= 1;
-    ::strncpy( &buf[ off -= len ], units, len );
+    ::memcpy( &buf[ off -= len ], units, len );
     if ( ! abrev ) {
       buf[ --off ] = ' ';
     }
@@ -1273,7 +1273,7 @@ FTYPE_toString( FTYPE f,  char *buf,  unsigned int bufLen,
       len -= 1;
     if ( off < len )
       throw StrUtilErr::getErr( StrUtilErr::BUF_OVERFLOW );
-    ::strncpy( &p[ off -= len ], units, len );
+    ::memcpy( &p[ off -= len ], units, len );
     if ( ! abrev ) {
       if ( off == 0 )
         throw StrUtilErr::getErr( StrUtilErr::BUF_OVERFLOW );

@@ -58,7 +58,7 @@ class PubTest {
     this->logLevel  = logLevel;
     this->msgType   = Sass::INITIAL;
     this->formId    = 0;
-    this->isComplex = isComplex;
+    this->isComplex = 0;         /* set by init() */
     this->seqNo     = 1;         /* start from 1 for complex publisher */
                                  /* simple publisher start from 0. */
   };

@@ -243,8 +243,8 @@ class LogRenamer {
       if ( rolloverCnt ) {
         while ( files.length() > rolloverCnt ) {
           FileTime * fileTime = files.pop();
-          strncpy( logFileName2, logFileDir, sizeof(logFileName2) );
-          strncat( logFileName2, fileTime->fileName, sizeof(logFileName2) );
+          str_copy( logFileName2, logFileDir, sizeof( logFileName2 ) );
+          str_cat( logFileName2, fileTime->fileName, sizeof( logFileName2 ) );
           // printf("Date Remove file %s\n", logFileName2 );
           File::removeFile( logFileName2 );
           delete fileTime;
@@ -1160,7 +1160,7 @@ Log::openLog( const char *path,  LogLevel level,  unsigned int verbosity,
         logRotate.setLastTime( t );
         out = rai_open_log_file( path );
         log = out;
-        ::strncpy( logFileName, path, sizeof( logFileName ) );
+        str_copy( logFileName, path, sizeof( logFileName ) );
         suppressTimestamp    = false;
         needStartupTimestamp = true;
       } catch ( Error e ) {

@@ -10,6 +10,7 @@
 #include "base/dir.h"
 #include "util/uri.h"
 #include "util/array.h"
+#include "util/str_util.h"
 
 using namespace rai;
 
@@ -1022,7 +1023,7 @@ URIParser::getHostPort( unsigned int defaultPort )
   if ( port == NULL ) {
     if ( defaultPort == 0 ) {
       if ( (scheme = this->getScheme()) != NULL ) {
-        ::strncpy( buf, scheme, sizeof( buf ) );
+        str_copy( buf, scheme, sizeof( buf ) );
         for ( len = 0; len < sizeof( buf ) && buf[ len ] != '\0'; len++ ) {
           if ( buf[ len ] >= 'A' && buf[ len ] <= 'Z' )
             buf[ len ] += 'a' - 'A';

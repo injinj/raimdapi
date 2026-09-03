@@ -1134,10 +1134,13 @@ unsigned __stdcall
 StartThread::startRoutine( void *thread )
 {
   Thread * thr = (Thread *) thread;
-  char     thr_name[ sizeof( thr->name ) + 8 ];
+  /* name copy followed by a "THRBASE" marker, both live on this stack
+   * frame so the thread base can be located by scanning for the marker */
+  static const size_t marker_len = sizeof( "THRBASE" );  /* 8 incl NUL */
+  char thr_name[ sizeof( thr->name ) + marker_len ];
 
-  ::strcpy( &thr_name[ sizeof( thr->name ) ], "THRBASE" );
-  ::strncpy( thr_name, thr->name, sizeof( thr->name ) );
+  ::memcpy( &thr_name[ sizeof( thr->name ) ], "THRBASE", marker_len );
+  ::memcpy( thr_name, thr->name, sizeof( thr->name ) );
   thr->threadPtr->stk_thr_name = thr_name;
   logDebug( LDEBUG, "Thread %s 0x%lx this 0x%lx", thr->name,
             (unsigned long) (ulongptr) (void *) thr_name,
@@ -1926,10 +1929,13 @@ void *
 StartThread::startRoutine( void *thread )
 {
   Thread * thr = (Thread *) thread;
-  char     thr_name[ sizeof( thr->name ) + 8 ];
+  /* name copy followed by a "THRBASE" marker, both live on this stack
+   * frame so the thread base can be located by scanning for the marker */
+  static const size_t marker_len = sizeof( "THRBASE" );  /* 8 incl NUL */
+  char thr_name[ sizeof( thr->name ) + marker_len ];
 
-  ::strcpy( &thr_name[ sizeof( thr->name ) ], "THRBASE" );
-  ::strncpy( thr_name, thr->name, sizeof( thr->name ) );
+  ::memcpy( &thr_name[ sizeof( thr->name ) ], "THRBASE", marker_len );
+  ::memcpy( thr_name, thr->name, sizeof( thr->name ) );
   thr->threadPtr->stk_thr_name = thr_name;
   logDebug( LDEBUG, "Thread %s 0x%lx this 0x%lx", thr->name,
             (unsigned long) (ulongptr) (void *) thr_name,

@@ -14,6 +14,7 @@ static char CVS_ID_api__raiping2_cpp[] __attribute__ ((__unused__)) = "$Header$"
 #include "raiapi2.h"
 #include "base/thread.h"
 #include "stream/io_stream.h"
+#include "util/str_util.h"
 
 namespace {
 
@@ -220,9 +221,8 @@ class RaiPing2 : public RaiTimerCallback, public RaiMsgCallback,
         STRDUP( this->publishSubject, this->subject );
       else {
         char buf[ rai::SassConst::MAX_SUBJECT_LEN ];
-        ::strncpy( buf, this->prefix, sizeof( buf ) );
-        ::strncat( buf, this->subject, sizeof( buf ) - 1 - ::strlen( buf ) );
-        buf[ sizeof( buf ) - 1 ] = '\0';
+        rai::str_copy( buf, this->prefix, sizeof( buf ) );
+        rai::str_cat( buf, this->subject, sizeof( buf ) );
         STRDUP( this->publishSubject, buf );
       }
       if ( ! this->noPub && ! this->noSub )

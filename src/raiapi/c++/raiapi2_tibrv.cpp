@@ -15,6 +15,7 @@ static char CVS_ID_api__raiapi2_tibrv_cpp[] __attribute__ ((__unused__)) = "$Hea
 #include "msg/mfeed_dict.h"
 #include "msg/subject.h"
 #include "stream/byte_array_stream.h"
+#include "util/str_util.h"
 
 using namespace rai;
 
@@ -1454,11 +1455,11 @@ RaiSubscribe_tibrv::sendSubRequest( void )
       if ( len >= sizeof( snapSubjectName ) )
         len = sizeof( snapSubjectName ) - 1;
       ::memcpy( snapSubjectName, this->q.session.api.snapPrefix, len );
-      ::strncpy( &snapSubjectName[ len ], subject,
+      str_copy( &snapSubjectName[ len ], subject,
                 sizeof( snapSubjectName ) - len );
     }
     else {
-      ::strncpy( snapSubjectName, subject, sizeof( snapSubjectName ) );
+      str_copy( snapSubjectName, subject, sizeof( snapSubjectName ) );
     }
     try {
       status = tibrvMsg_SetSendSubject( m, snapSubjectName );

@@ -809,7 +809,7 @@ RaiPublish::Publish(const char * subject, RaiMsg * raiMsg )
 
 
   ::strcpy( ticName, "_TIC." );
-  ::strncpy( &ticName[ 5 ], subject, sizeof( ticName ) - 5 );
+  str_copy( &ticName[ 5 ], subject, sizeof( ticName ) - 5 );
 
   logDebug( LDEBUG, "Publishing to %s, msgSize %u", ticName,
             raiMsg->PackSize() );
@@ -1260,8 +1260,8 @@ RaiSubscribe::RaiSubscribe( RaiSession * session, const char * subject,
       if ( status != TIBRV_OK )
         throw badRvStatus( status );
       ::strcpy( initialSubjectName, "_SNAP." );
-      ::strncpy( &initialSubjectName[ 6 ], subject,
-                 sizeof( initialSubjectName ) - 6 );
+      str_copy( &initialSubjectName[ 6 ], subject,
+                sizeof( initialSubjectName ) - 6 );
       status = tibrvMsg_SetSendSubject( m, initialSubjectName );
       if ( status != TIBRV_OK )
         throw badRvStatus( status );

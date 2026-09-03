@@ -607,7 +607,7 @@ CFileParser::isInt( int &intVal )
 {
   const char * ptr,
              * endPtr;
-  unsigned int uintVal;
+  unsigned int uintVal = 0;
  
   ptr    = &this->buf[ this->lookahead.off ];
   endPtr = &ptr[ this->lookahead.len ];

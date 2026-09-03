@@ -19,6 +19,33 @@
 
 namespace rai {
 
+/* Bounded string copy that always NUL terminates the destination
+ * (strlcpy semantics).  strncpy() does not terminate when the source is
+ * longer than the bound, which was a latent overflow at several call
+ * sites.  Returns strlen( src ), so ( ret >= dst_size ) means truncated. */
+static inline size_t
+str_copy( char *dst,  const char *src,  size_t dst_size )
+{
+  size_t len = ::strlen( src );
+  if ( dst_size != 0 ) {
+    size_t n = ( len < dst_size ) ? len : dst_size - 1;
+    ::memcpy( dst, src, n );
+    dst[ n ] = '\0';
+  }
+  return len;
+}
+
+/* Bounded append, dst_size is the total size of dst (strlcat semantics).
+ * Returns the length the string would have had, truncated if >= dst_size. */
+static inline size_t
+str_cat( char *dst,  const char *src,  size_t dst_size )
+{
+  size_t off = ::strnlen( dst, dst_size );
+  if ( off == dst_size )
+    return off + ::strlen( src );
+  return off + str_copy( &dst[ off ], src, dst_size - off );
+}
+
 enum Units {
   U_NUMBER    = 0,
   U_FRACTION  = 1,
