@@ -3,6 +3,9 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net9.0</TargetFramework>
     <AssemblyName>raipub2</AssemblyName>
+    <!-- on windows the C++ raipub2.exe exists too, so the apphost is draipub2.exe
+         (the linux launchers are draipub2 as well) -->
+    <AssemblyName Condition="'$(RuntimeIdentifier)' == 'win-x64'">draipub2</AssemblyName>
     <RootNamespace>Com.Rai</RootNamespace>
     <Nullable>disable</Nullable>
     <ImplicitUsings>disable</ImplicitUsings>
