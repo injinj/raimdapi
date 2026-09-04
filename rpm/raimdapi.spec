@@ -19,12 +19,12 @@ Prefix:	        /usr
 # Build with --without java to skip the bindings entirely (C++ libs only).
 # (NB: rpm expands macros inside comments -- write %%macro in comments.)
 %bcond_without java
+%global jdk_ver 21
 %if 0%{?rhel} == 7
 %global jdk_ver 11
-%elif 0%{?fedora} >= 44
+%endif
+%if 0%{?fedora} >= 44
 %global jdk_ver 25
-%else
-%global jdk_ver 21
 %endif
 
 # --- .NET bindings ----------------------------------------------------------
