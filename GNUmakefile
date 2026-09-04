@@ -91,7 +91,7 @@ implib    := -Wl,--out-implib,
 # raiapi is exception based, so unlike the lower layers it needs the C++
 # runtime; link it statically so the dlls do not depend on libstdc++-6.dll
 thread_lib  := -lwinpthread
-sock_lib    := -lcares -lws2_32 -lwinmm
+sock_lib    := -lcares -lws2_32 -lpsapi -lwinmm
 dynlink_lib := -lpcre2-8 -lz
 cxxrt_lflags := -static-libstdc++ -static-libgcc
 else
@@ -667,14 +667,9 @@ endif
 # target used by rpmbuild, dpkgbuild
 .PHONY: dist_bins
 dist_bins: $(all_libs) $(all_dlls) $(all_exes) $(if $(filter 1,$(java)),$(java_progs)) $(if $(filter 1,$(dotnet)),$(dotnet_progs))
-	$(remove_rpath) $(bind)/raisub$(exe)
-	$(remove_rpath) $(bind)/raipub$(exe)
-	$(remove_rpath) $(bind)/raiping$(exe)
-	$(remove_rpath) $(bind)/raisub2$(exe)
-	$(remove_rpath) $(bind)/raipub2$(exe)
-	$(remove_rpath) $(bind)/raiping2$(exe)
-	$(remove_rpath) $(bind)/raireplay2$(exe)
-	$(remove_rpath) $(libd)/libraimdapi.$(dll)
+	for p in $(all_dlls) $(all_exes) ; do
+	  $(remove_rpath) $$p
+	done
 
 # --- windows distribution (make port_extra=-mingw [dotnet=1] dist_win) ------
 # Everything a Windows box needs, in one directory: the exes and dlls are
