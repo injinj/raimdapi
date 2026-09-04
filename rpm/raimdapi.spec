@@ -64,7 +64,6 @@ Market data api
 
 
 %define _unpackaged_files_terminate_build 0
-%define _missing_doc_files_terminate_build 0
 %define _missing_build_ids_terminate_build 0
 %define _include_gdb_index 1
 
@@ -89,7 +88,6 @@ rm -rf %{buildroot}
 /usr/bin/*
 /usr/lib64/*
 /usr/include/*
-/usr/share/doc/*
 
 %post
 echo "${RPM_INSTALL_PREFIX}/lib64" > /etc/ld.so.conf.d/%{name}.conf
