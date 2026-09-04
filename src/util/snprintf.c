@@ -1218,11 +1218,12 @@ int rai_vformatter(int (*flush_func)(rai_vformatter_buff *),
 }
 
 
-static int snprintf_flush(rai_vformatter_buff */* vbuff */)
+static int snprintf_flush(rai_vformatter_buff *vbuff)
 {
     /* if the buffer fills we have to abort immediately, there is no way
      * to "flush" an rai_snprintf... there's nowhere to flush it to.
      */
+    (void) vbuff; /* C before C23 requires the parameter name */
     return -1;
 }
 
