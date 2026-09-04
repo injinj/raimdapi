@@ -660,14 +660,6 @@ else
 remove_rpath = chrpath -d
 endif
 
-raisub
-raipub
-raiping
-raisub2
-raipub2
-raiping2
-raireplay2
-
 # target used by rpmbuild, dpkgbuild
 .PHONY: dist_bins
 dist_bins: $(all_libs) $(all_dlls) $(all_exes) $(if $(filter 1,$(java)),$(java_progs)) $(if $(filter 1,$(dotnet)),$(dotnet_progs))
