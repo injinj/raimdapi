@@ -666,8 +666,11 @@ endif
 
 # target used by rpmbuild, dpkgbuild
 .PHONY: dist_bins
+# the j<prog> / d<prog> launchers are shell scripts, only the ELF files have
+# an rpath to remove
+rpath_bins := $(all_dlls) $(filter-out $(java_progs) $(dotnet_progs), $(all_exes))
 dist_bins: $(all_libs) $(all_dlls) $(all_exes) $(if $(filter 1,$(java)),$(java_progs)) $(if $(filter 1,$(dotnet)),$(dotnet_progs))
-	for p in $(all_dlls) $(all_exes) ; do $(remove_rpath) $$p ; done
+	for p in $(rpath_bins) ; do $(remove_rpath) $$p ; done
 
 # --- windows distribution (make port_extra=-mingw [dotnet=1] dist_win) ------
 # Everything a Windows box needs, in one directory: the exes and dlls are
