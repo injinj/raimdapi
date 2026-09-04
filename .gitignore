@@ -13,3 +13,4 @@
 # dotnet build products when built without RaiBuildDir
 src/raiapi/dotnet/*/bin/
 src/raiapi/dotnet/*/obj/
+!/deps.sh

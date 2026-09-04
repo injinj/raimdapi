@@ -18,6 +18,7 @@ static char CVS_ID_api__raiapi2_cpp[] __attribute__ ((__unused__)) = "$Header$";
 #include "util/atomic.h"
 #include "base/thread.h"
 #include "base/sys.h"
+#include "raimdapi_version.h"
 
 using namespace rai;
 
@@ -132,7 +133,8 @@ RaiApi::GetIoctl( const char *parameter,  void *value )
 const char *
 RaiApi::RaiVersion( void )
 {
-  return "1.0";
+  /* "1.0.0-1 (f06c315a)", from the generated raimdapi_version.h */
+  return RAIMDAPI_VER_STR;
 }
 
 

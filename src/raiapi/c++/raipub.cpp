@@ -13,6 +13,7 @@ static char CVS_ID_api__raipub_cpp[] __attribute__ ((__unused__)) = "$Header$";
 #include "raisampleutil.h"
 
 using namespace rai;
+using namespace rai_old; /* v1 api */
 
 /* 
  * This example Publisher creates a Publishing class. The class uses a 

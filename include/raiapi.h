@@ -28,6 +28,12 @@ static char CVS_ID_raiapi__raiapi_h[] __attribute__ ((__unused__)) = "$Header$";
 /* Windows has a function SetForm defined */
 #undef SetForm
 #endif
+
+/* The v1 api lives in rai_old so that it can share one library with the v2
+ * api (raiapi2.h), which reuses the class names RaiApi, RaiSession, ...
+ * Existing v1 code compiles unchanged with a "using namespace rai_old;" */
+namespace rai_old {
+
 enum IoctlParameter {
   SetPubType = 1,
   SetForm    = 2,
@@ -291,5 +297,7 @@ namespace RaiApiErr {
   };
   RaiException getErr( unsigned int status );
 };
+
+} /* namespace rai_old */
 
 #endif

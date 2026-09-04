@@ -12,6 +12,7 @@ static char CVS_ID_raiutil__raisampleutil_cpp[] __attribute__ ((__unused__)) = "
 #include "raisampleutil.h"
 
 using namespace rai;
+using namespace rai_old; /* v1 api */
 
 Argument::Argument( const char * name, const char * defVal, const char * example, const char * description ) {
   this->name		= name;

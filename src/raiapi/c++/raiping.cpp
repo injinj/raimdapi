@@ -12,6 +12,7 @@ static char CVS_ID_test__pingrv_cpp[] __attribute__ ((__unused__)) = "$Header$";
 #include "raisampleutil.h"
 
 using namespace rai;
+using namespace rai_old; /* v1 api */
 
 static const char WARN_FASTPRODUCER[] = "_RV.WARN.SYSTEM.CLIENT.FASTPRODUCER";
 

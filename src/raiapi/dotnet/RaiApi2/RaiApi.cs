@@ -140,7 +140,16 @@ public class RaiApi : IDisposable {
   }
 
   public string GetApiName() { return Native.Str( Native.rai_api_name( this.api ) ); }
+  /** Version of the native api, e.g. "1.0.0-1 (f06c315a)" */
   public static string RaiVersion() { return Native.Str( Native.rai_api_version() ); }
+  /** Version stamped into RaiApi2.dll at build time (same source of truth
+   * as RaiVersion(): the makefile passes it to msbuild) */
+  public static string BindingVersion() {
+    System.Reflection.Assembly a = typeof( RaiApi ).Assembly;
+    object[] at = a.GetCustomAttributes( typeof( System.Reflection.AssemblyInformationalVersionAttribute ), false );
+    if ( at.Length > 0 ) return ( (System.Reflection.AssemblyInformationalVersionAttribute) at[ 0 ] ).InformationalVersion;
+    return a.GetName().Version.ToString();
+  }
   public void GetArgs( Args args ) { RaiException.Check( Native.rai_api_get_args( this.api, args.args ) ); }
   public static void GetDictArgs( Args args ) { RaiException.Check( Native.rai_api_get_dict_args( args.args ) ); }
   public void ParseArgs( Args args ) { RaiException.Check( Native.rai_api_parse_args( this.api, args.args ) ); }

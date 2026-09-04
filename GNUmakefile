@@ -287,79 +287,45 @@ all_libs    :=
 all_dlls    :=
 all_depends :=
 
+# --- libraimdapi: one library -------------------------------------------------
+# v1 api (raiapi.h, namespace rai_old), v2 api (raiapi2.h), the C binding
+# (raiapi2_c.h), the message library (msg/*.h) and base/stream/util.  The v1
+# classes are in rai_old so that the same names (RaiApi, RaiSession, ...) can
+# coexist with v2 in one object.  Named raimdapi (not raiapi/raiapi2, which
+# are RaiCore's libraries) to keep the two code bases apart.
 raiapi_files    := raiapi
-base_files      := sys time log file thread mem dir
-stream_files    := io_stream file_stream stdio_stream byte_array_stream cycle_stream
-util_files      := snprintf strptime hash_util str_util args
-libraiapi_files := $(raiapi_files) $(base_files) $(stream_files) $(util_files)
-libraiapi_objs  := $(addprefix $(objd)/, $(addsuffix .o, $(libraiapi_files)))
-libraiapi_dbjs  := $(addprefix $(objd)/, $(addsuffix .fpic.o, $(libraiapi_files)))
-libraiapi_deps  := $(addprefix $(dependd)/, $(addsuffix .d, $(libraiapi_files))) \
-                   $(addprefix $(dependd)/, $(addsuffix .fpic.d, $(libraiapi_files)))
-libraiapi_dlnk  := $(dlnk_lib)
-libraiapi_spec  := $(ver_build)_$(git_hash)
-libraiapi_ver   := $(major_num).$(minor_num)
-
-$(libd)/libraiapi.a: $(libraiapi_objs)
-$(libd)/libraiapi.$(dll): $(libraiapi_dbjs) $(lnk_dep) $(dlnk_dep)
-
-all_libs    += $(libd)/libraiapi.a
-all_dlls    += $(libd)/libraiapi.$(dll)
-all_depends += $(libraiapi_deps)
-
 raiapi2_files   := raiapi2 raiapi2_tibrv
+raiapi2c_files  := raiapi2_c
 base_files      := sys time log file thread mem dir
 stream_files    := io_stream file_stream stdio_stream byte_array_stream cycle_stream
 util_files      := snprintf strptime hash_util str_util args
-libraiapi2_files := $(raiapi2_files) $(base_files) $(stream_files) $(util_files)
-libraiapi2_objs  := $(addprefix $(objd)/, $(addsuffix .o, $(libraiapi2_files)))
-libraiapi2_dbjs  := $(addprefix $(objd)/, $(addsuffix .fpic.o, $(libraiapi2_files)))
-libraiapi2_deps  := $(addprefix $(dependd)/, $(addsuffix .d, $(libraiapi2_files))) \
-                   $(addprefix $(dependd)/, $(addsuffix .fpic.d, $(libraiapi2_files)))
-libraiapi2_dlnk  := $(dlnk_lib)
-libraiapi2_spec  := $(ver_build)_$(git_hash)
-libraiapi2_ver   := $(major_num).$(minor_num)
+msg_files       := cfile_parser msg field dict subject sass_const wildcard mfeed_dict rai_form_msg
+libraimdapi_files := $(raiapi_files) $(raiapi2_files) $(raiapi2c_files) $(msg_files) \
+                   $(base_files) $(stream_files) $(util_files)
+libraimdapi_objs  := $(addprefix $(objd)/, $(addsuffix .o, $(libraimdapi_files)))
+libraimdapi_dbjs  := $(addprefix $(objd)/, $(addsuffix .fpic.o, $(libraimdapi_files)))
+libraimdapi_deps  := $(addprefix $(dependd)/, $(addsuffix .d, $(libraimdapi_files))) \
+                   $(addprefix $(dependd)/, $(addsuffix .fpic.d, $(libraimdapi_files)))
+libraimdapi_dlnk  := $(dlnk_lib)
+libraimdapi_spec  := $(ver_build)_$(git_hash)
+libraimdapi_ver   := $(major_num).$(minor_num)
 
-$(libd)/libraiapi2.a: $(libraiapi2_objs)
-$(libd)/libraiapi2.$(dll): $(libraiapi2_dbjs) $(lnk_dep) $(dlnk_dep)
+$(libd)/libraimdapi.a: $(libraimdapi_objs)
+$(libd)/libraimdapi.$(dll): $(libraimdapi_dbjs) $(lnk_dep) $(dlnk_dep)
 
-all_libs    += $(libd)/libraiapi2.a
-all_dlls    += $(libd)/libraiapi2.$(dll)
-all_depends += $(libraiapi2_deps)
+all_libs    += $(libd)/libraimdapi.a
+all_dlls    += $(libd)/libraimdapi.$(dll)
+all_depends += $(libraimdapi_deps)
 
-libraimsg_files := cfile_parser msg field dict subject sass_const wildcard mfeed_dict rai_form_msg
-libraimsg_objs  := $(addprefix $(objd)/, $(addsuffix .o, $(libraimsg_files)))
-libraimsg_dbjs  := $(addprefix $(objd)/, $(addsuffix .fpic.o, $(libraimsg_files)))
-# a windows dll must resolve every symbol when linked, and raimsg <-> raiapi
-# reference each other (msg uses base/util/stream, api uses msg); so on mingw
-# each dll carries the objects it needs.  static libs and linux are unchanged.
+raiapi_lib  := $(libd)/libraimdapi.a
+raiapi_lnk  := $(libd)/libraimdapi.a $(lnk_lib)
+raiapi_dlib := $(libd)/libraimdapi.$(dll)
 ifeq (true,$(mingw))
-libraimsg_dbjs  += $(addprefix $(objd)/, $(addsuffix .fpic.o, $(base_files) $(stream_files) $(util_files)))
-libraiapi_dbjs  += $(addprefix $(objd)/, $(addsuffix .fpic.o, $(libraimsg_files)))
-libraiapi2_dbjs += $(addprefix $(objd)/, $(addsuffix .fpic.o, $(libraimsg_files)))
-endif
-libraimsg_deps  := $(addprefix $(dependd)/, $(addsuffix .d, $(libraimsg_files))) \
-                   $(addprefix $(dependd)/, $(addsuffix .fpic.d, $(libraimsg_files)))
-libraimsg_dlnk  :=
-libraimsg_spec  := $(ver_build)_$(git_hash)
-libraimsg_ver   := $(major_num).$(minor_num)
-
-$(libd)/libraimsg.a: $(libraimsg_objs)
-$(libd)/libraimsg.$(dll): $(libraimsg_dbjs)
-
-all_libs    += $(libd)/libraimsg.a
-all_dlls    += $(libd)/libraimsg.$(dll)
-all_depends += $(libraimsg_deps)
-
-raiapi_lib  := $(libd)/libraiapi.a $(libd)/libraimsg.a
-raiapi_lnk  := $(libd)/libraiapi.a $(libd)/libraimsg.a $(lnk_lib)
-raiapi_dlib := $(libd)/libraiapi.$(dll) $(libd)/libraimsg.$(dll)
-ifeq (true,$(mingw))
-# mingw ld prefers lib*.a over lib*.dll, so exes link statically; the group
-# resolves the raiapi <-> raimsg cycle, lnk_lib supplies the sibling libs
-raiapi_dlnk := -Wl,--start-group -lraiapi -lraimsg -Wl,--end-group $(lnk_lib)
+# mingw ld prefers lib*.a over lib*.dll, so exes link statically and need the
+# sibling libs from lnk_lib
+raiapi_dlnk := -lraimdapi $(lnk_lib)
 else
-raiapi_dlnk := -lraiapi -lraimsg
+raiapi_dlnk := -lraimdapi
 endif
 
 raisub_files := raisub raisampleutil
@@ -395,14 +361,10 @@ $(bind)/raiping$(exe): $(raiping_objs) $(raiping_libs)
 all_exes += $(bind)/raiping$(exe)
 all_depends +=  $(raiping_deps)
 
-raiapi2_lib  := $(libd)/libraiapi2.a $(libd)/libraimsg.a
-raiapi2_lnk  := $(libd)/libraiapi2.a $(libd)/libraimsg.a $(lnk_lib)
-raiapi2_dlib := $(libd)/libraiapi2.$(dll) $(libd)/libraimsg.$(dll)
-ifeq (true,$(mingw))
-raiapi2_dlnk := -Wl,--start-group -lraiapi2 -lraimsg -Wl,--end-group $(lnk_lib)
-else
-raiapi2_dlnk := -lraiapi2 -lraimsg
-endif
+raiapi2_lib  := $(raiapi_lib)
+raiapi2_lnk  := $(raiapi_lnk)
+raiapi2_dlib := $(raiapi_dlib)
+raiapi2_dlnk := $(raiapi_dlnk)
 
 raisub2_files := raisub2
 raisub2_cfile := $(addprefix src/raiapi/c++/, $(addsuffix .cpp, $(raisub2_files)))
@@ -464,35 +426,17 @@ libjraimsg_files := rai_msg_jni
 libjraimsg_objs  := $(addprefix src/raiapi/c++/java/com/rai/raiapi2/, $(addsuffix .cpp, $(libjraimsg_files)))
 libjraimsg_dbjs  := $(addprefix $(objd)/, $(addsuffix .fpic.o, $(libjraimsg_files)))
 libjraimsg_deps  := $(addprefix $(dependd)/, $(addsuffix .fpic.d, $(libjraimsg_files)))
-ifeq (true,$(mingw))
-libjraimsg_dlnk  := -L$(libd) -Wl,--start-group -lraimsg -lraiapi2 -Wl,--end-group $(dlnk_lib)
-else
-libjraimsg_dlnk  := -L$(libd) -lraimsg $(dlnk_lib)
-endif
+libjraimsg_dlnk  := -L$(libd) $(raiapi2_dlnk) $(dlnk_lib)
 libjraimsg_spec  := $(ver_build)_$(git_hash)
 libjraimsg_ver   := $(major_num).$(minor_num)
 
-$(libd)/libjraimsg.$(dll): $(libjraimsg_dbjs) $(libd)/libraimsg.$(dll) $(lnk_dep) $(dlnk_dep)
+$(libd)/libjraimsg.$(dll): $(libjraimsg_dbjs) $(raiapi2_dlib) $(lnk_dep) $(dlnk_dep)
 
 ifeq ($(java),1)
 all_dlls    += $(libd)/libjraiapi2.$(dll) $(libd)/libjraimsg.$(dll)
 all_depends += $(libjraiapi2_deps) $(libjraimsg_deps)
 endif
 
-# flat C binding of raiapi2 + raimsg (include/raiapi2_c.h), used by the .NET
-# binding through P/Invoke and by any other language without C++ access
-libraiapi2c_files := raiapi2_c
-libraiapi2c_cfile := $(addprefix src/raiapi/c/, $(addsuffix .cpp, $(libraiapi2c_files)))
-libraiapi2c_dbjs  := $(addprefix $(objd)/, $(addsuffix .fpic.o, $(libraiapi2c_files)))
-libraiapi2c_deps  := $(addprefix $(dependd)/, $(addsuffix .fpic.d, $(libraiapi2c_files)))
-libraiapi2c_dlnk  := -L$(libd) $(raiapi2_dlnk) $(dlnk_lib)
-libraiapi2c_spec  := $(ver_build)_$(git_hash)
-libraiapi2c_ver   := $(major_num).$(minor_num)
-
-$(libd)/libraiapi2c.$(dll): $(libraiapi2c_dbjs) $(raiapi2_dlib) $(lnk_dep) $(dlnk_dep)
-
-all_dlls    += $(libd)/libraiapi2c.$(dll)
-all_depends += $(libraiapi2c_deps)
 
 raiexception_root     = com/rai/raiexception
 raiexception_classes  = $(java_classd)/$(raiexception_root)/RaiException.class
@@ -600,7 +544,7 @@ all_exes += $(java_progs)
 endif
 
 # --- .NET binding (dotnet=1) ------------------------------------------------
-# src/raiapi/dotnet: RaiApi2 (netstandard2.0 class library over libraiapi2c)
+# src/raiapi/dotnet: RaiApi2 (netstandard2.0 class library over libraimdapi)
 # and the raisub2/raipub2/raiping2/raireplay2 programs (net9.0).  msbuild
 # writes to $(dotnet_outd), the assemblies are copied to $(libd)/dotnet and a
 # launcher script d<prog> is generated in $(bind), like the java j<prog>.
@@ -612,8 +556,9 @@ dotnet_src   := $(wildcard $(dotnet_srcd)/*/*.cs $(dotnet_srcd)/*/*.csproj $(dot
 dotnet_stamp := $(dotnet_outd)/build.stamp
 dotnet_progs := $(addprefix $(bind)/d, $(dotnet_progs_names))
 
-$(dotnet_stamp): $(dotnet_src) $(libd)/libraiapi2c.$(dll)
-	dotnet build $(dotnet_srcd)/raiapi2.sln -c Release -nologo -v q -p:RaiBuildDir=$(abspath $(dotnet_outd))
+$(dotnet_stamp): $(dotnet_src) $(libd)/libraimdapi.$(dll) $(version_h)
+	dotnet build $(dotnet_srcd)/raiapi2.sln -c Release -nologo -v q -p:RaiBuildDir=$(abspath $(dotnet_outd)) \
+	  -p:Version=$(version) -p:FileVersion=$(version).$(build_num) -p:InformationalVersion="$(version_str)"
 	mkdir -p $(dotnet_libd)
 	cp -f $(dotnet_outd)/bin/RaiApi2/Release/netstandard2.0/RaiApi2.dll $(dotnet_libd)/
 	for p in $(dotnet_progs_names) ; do \
@@ -627,7 +572,7 @@ $(bind)/d%: $(dotnet_stamp) GNUmakefile
 	   echo '# generated by GNUmakefile - do not edit'; \
 	   echo 'here=$$(cd "$$(dirname "$$0")/.." && pwd)'; \
 	   echo 'lib="$$here/lib64"'; \
-	   echo '# libraiapi2c.so (P/Invoke) and its deps live in lib64'; \
+	   echo '# libraimdapi.so (P/Invoke) and its deps live in lib64'; \
 	   echo 'LD_LIBRARY_PATH="$$lib$${LD_LIBRARY_PATH:+:$$LD_LIBRARY_PATH}"; export LD_LIBRARY_PATH'; \
 	   echo 'exec dotnet "$$lib/dotnet/$*.dll" "$$@"'; } > $@
 	chmod +x $@
@@ -639,18 +584,52 @@ endif
 
 all_dirs := $(bind) $(libd) $(objd) $(dependd) $(java_classd)
 
+# --- version -----------------------------------------------------------------
+# The package version comes from .copr/Makefile (major/minor/patch/build_num)
+# plus the git hash.  It is written to a generated header so that
+# RaiApi::RaiVersion() (C++, and through it the C api, java and .NET) reports
+# the same string as the rpm; the file is only rewritten when the content
+# changes, so nothing rebuilds needlessly.  The java manifests and the .NET
+# assembly version are stamped from the same variables (see below).
+version_h   := $(objd)/raimdapi_version.h
+version_str := $(ver_build) ($(git_hash))
+.PHONY: version_check
+version_check:
+	@mkdir -p $(objd)
+	@{ echo '/* generated by GNUmakefile - do not edit */'; \
+	   echo '#define RAIMDAPI_VERSION "$(version)"'; \
+	   echo '#define RAIMDAPI_BUILD   "$(ver_build)"'; \
+	   echo '#define RAIMDAPI_GIT     "$(git_hash)"'; \
+	   echo '#define RAIMDAPI_VER_STR "$(version_str)"'; } > $(version_h).tmp
+	@if cmp -s $(version_h).tmp $(version_h) ; then rm -f $(version_h).tmp ; \
+	 else mv -f $(version_h).tmp $(version_h) ; fi
+$(version_h): version_check
+# the objects that bake the version in
+$(objd)/raiapi.o $(objd)/raiapi.fpic.o $(objd)/raiapi2.o $(objd)/raiapi2.fpic.o: $(version_h)
+raiapi_includes  = -I$(objd)
+raiapi2_includes = -I$(objd)
+
 all: $(all_libs) $(all_dlls) $(all_exes)
 
 $(libd)/%.jar:
 	jar cvfm $@ $($(*)_manifest) $(addprefix -C $(java_classd) $($(*)_root)/, $(notdir $($(*)_classes)))
 
+# one javac per class, so with -j several run at once: -implicit:none stops
+# each from also writing the classes of the sources it pulls in, and
+# -Xprefer:source stops it from reading a sibling's half-written .class;
+# the package ordering below keeps a package's dependencies complete first.
 $(java_classd)/%.class: $(java_srcd)/%.java
-	$(JAVAC) -sourcepath $(java_srcd) -classpath $(java_classd) $< -d $(java_classd)
+	$(JAVAC) -implicit:none -Xprefer:source -sourcepath $(java_srcd) -classpath $(java_classd) $< -d $(java_classd)
 
-$(java_classd)/%_manifest.txt:
+$(raimsg_classes):  $(raiexception_classes)
+$(raiapi2_classes): $(raimsg_classes) $(raiexception_classes)
+$(raiapi_classes):  $(raiapi2_classes)
+
+$(java_classd)/%_manifest.txt: $(version_h)
 	echo "Implementation-Title:" $(notdir $*) > $@
-	echo "Implementation-Version:" 1.0 >> $@
+	echo "Implementation-Version:" $(ver_build) >> $@
 	echo "Implementation-Vendor: http://www.raitechnology.com/" >> $@
+	echo "Rai-Git-Hash:" $(git_hash) >> $@
 
 # create directories
 $(dependd):
@@ -669,6 +648,8 @@ clean_dist:
 .PHONY: clean_all
 clean_all: clean clean_dist
 
+# the version header must exist before the .d files are generated
+$(all_depends): | $(version_h)
 $(dependd)/depend.make: $(dependd) $(all_depends)
 	@echo "# depend file" > $(dependd)/depend.make
 	@cat $(all_depends) >> $(dependd)/depend.make
@@ -682,12 +663,12 @@ endif
 .PHONY: dist_bins
 dist_bins: $(all_libs) $(all_dlls) $(bind)/raisub2$(exe) $(if $(filter 1,$(java)),$(java_progs)) $(if $(filter 1,$(dotnet)),$(dotnet_progs))
 	$(remove_rpath) $(bind)/raisub$(exe)
-	$(remove_rpath) $(libd)/libraiapi.$(dll)
+	$(remove_rpath) $(libd)/libraimdapi.$(dll)
 
 # target for building installable rpm
 .PHONY: dist_rpm
 dist_rpm: srpm
-	( cd rpmbuild && rpmbuild --define "-topdir `pwd`" -ba SPECS/raimd.spec )
+	( cd rpmbuild && rpmbuild --define "-topdir `pwd`" -ba SPECS/raimdapi.spec )
 
 # force a remake of depend using 'make -B depend'
 .PHONY: depend
@@ -709,7 +690,7 @@ install_lib_suffix ?=
 install: dist_bins
 	install -d $(install_prefix)/lib$(install_lib_suffix)
 	install -d $(install_prefix)/bin $(install_prefix)/include/raiapi
-	for f in $(libd)/libraiapi.* ; do \
+	for f in $(libd)/libraimdapi.* ; do \
 	if [ -h $$f ] ; then \
 	cp -a $$f $(install_prefix)/lib$(install_lib_suffix) ; \
 	else \
@@ -719,6 +700,9 @@ install: dist_bins
 	install -m 644 include/raiapi/*.h $(install_prefix)/include/raiapi
 
 $(objd)/%.o: src/raiapi/c++/%.cpp
+	$(cpp) $(cflags) $(cppflags) $(includes) $(defines) $($(notdir $*)_includes) $($(notdir $*)_defines) -c $< -o $@
+
+$(objd)/%.o: src/raiapi/c/%.cpp
 	$(cpp) $(cflags) $(cppflags) $(includes) $(defines) $($(notdir $*)_includes) $($(notdir $*)_defines) -c $< -o $@
 
 $(objd)/%.o: src/base/%.cpp
@@ -796,6 +780,15 @@ $(dependd)/%.d: src/msg/%.cpp
 
 $(dependd)/%.d: src/util/%.c
 	$(cc) $(arch_cflags) $(defines) $(includes) $($(notdir $*)_includes) $($(notdir $*)_defines) -MM $< -MT $(objd)/$(*).o -MF $@
+
+$(dependd)/%.d: src/raiapi/c/%.cpp
+	$(cpp) $(arch_cflags) $(defines) $(includes) $($(notdir $*)_includes) $($(notdir $*)_defines) -MM $< -MT $(objd)/$(*).o -MF $@
+
+$(dependd)/%.fpic.d: src/raiapi/java/com/rai/raiapi2/%.cpp
+	$(cpp) $(arch_cflags) $(defines) $(includes) $($(notdir $*)_includes) $($(notdir $*)_defines) -MM $< -MT $(objd)/$(*).fpic.o -MF $@
+
+$(dependd)/%.fpic.d: src/raiapi/java/com/rai/raimsg/%.cpp
+	$(cpp) $(arch_cflags) $(defines) $(includes) $($(notdir $*)_includes) $($(notdir $*)_defines) -MM $< -MT $(objd)/$(*).fpic.o -MF $@
 
 $(dependd)/%.fpic.d: src/raiapi/c/%.cpp
 	$(cpp) $(arch_cflags) $(defines) $(includes) $($(notdir $*)_includes) $($(notdir $*)_defines) -MM $< -MT $(objd)/$(*).fpic.o -MF $@

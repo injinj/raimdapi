@@ -23,6 +23,8 @@ using namespace rai;
 
 #include <sassrv/rv7api.h>
 
+namespace rai_old {
+
 RaiException badRvStatus( tibrv_status status );
 
 struct RaiEntImpl {
@@ -169,5 +171,7 @@ struct RaiSessionImpl {
 
   ~RaiSessionImpl();
 };
+
+} /* namespace rai_old */
 
 #endif

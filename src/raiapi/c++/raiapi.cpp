@@ -13,8 +13,11 @@ static char CVS_ID_raiapi__raiapi_cpp[] __attribute__ ((__unused__)) = "$Header$
 #include "stream/io_stream.h"
 #include "msg/rai_msg.h"
 #include "util/str_util.h"
+#include "raimdapi_version.h"
 
 using namespace rai;
+
+namespace rai_old {
 
 /******************************************************************************
  *
@@ -996,7 +999,7 @@ RaiApi::RaiVersion( void )
 {
   const char * version;
 
-  version = "RaiApi Version 1.3 Patch 9 C++ Mar 1, 2006";
+  version = "RaiApi Version " RAIMDAPI_VER_STR " C++"; /* raimdapi_version.h */
   return( version );
 }
 
@@ -1376,3 +1379,4 @@ RaiApiErr::getErr( unsigned int status )
   return &err[ status < numErrs ? status : numErrs ];
 }
 
+} /* namespace rai_old */

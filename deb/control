@@ -1,13 +1,13 @@
-Source: raimd
+Source: raimdapi
 Section: devel
 Priority: optional
 Maintainer: Chris Anderson <chris@raitechnology.com>
 Build-Depends: debhelper (>= 9)
 Standards-Version: 3.9.5
-Homepage: https://www.github.com/raitechnology/raikv
+Homepage: https://www.github.com/raitechnology/raimdapi
 
-Package: raimd
+Package: raimdapi
 Architecture: amd64
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: Library for market data codes
- Codecs for market data messages.
+Description: Rai market data api
+ Client api (C++, C, Java, .NET) for the Rai market data services.

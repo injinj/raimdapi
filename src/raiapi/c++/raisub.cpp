@@ -14,6 +14,7 @@ static char CVS_ID_api__raisub_cpp[] __attribute__ ((__unused__)) = "$Header$";
 #include "raisampleutil.h"
 
 using namespace rai;
+using namespace rai_old; /* v1 api */
 
 class SubTest {
  public:

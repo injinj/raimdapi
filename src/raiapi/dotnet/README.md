@@ -23,15 +23,15 @@ Method names are the Java ones (`CreateSession`, `getString`, `AppendUShort`,
 ## How it works
 
 ```
- C#  RaiApi2.dll  --P/Invoke-->  libraiapi2c.so / .dll  --C++-->  libraiapi2, libraimsg, ...
+ C#  RaiApi2.dll  --P/Invoke-->  libraimdapi.so / .dll  --C++-->  libomm, libsassrv, libraimd, ...
 ```
 
-`libraiapi2c` (`include/raiapi2_c.h`, `src/raiapi/c/raiapi2_c.cpp`) is a flat
+`libraimdapi` (`include/raiapi2_c.h`, `src/raiapi/c/raiapi2_c.cpp`) is a flat
 C API over the C++ classes: opaque handles, every call returns a `rai_err_t`
 (NULL = ok), callbacks are function pointers with a closure.  It is what any
 language without C++ access should bind to.  The native library is resolved by
-the runtime's normal probing: put `libraiapi2c.so` (and the libraries it links,
-`libraiapi2`, `libraimsg`, `libomm`, `librv7lib`, `libsassrv`, `libraimd`,
+the runtime's normal probing: put `libraimdapi.so` (and the libraries it links,
+`libomm`, `librv7lib`, `libsassrv`, `libraimd`,
 `libdecnumber`, `libraikv`, plus c-ares / pcre2 / zlib) on `LD_LIBRARY_PATH`
 or next to the application, or install the rpm.  On Windows the same set as
 `.dll` files (built with `make port_extra=-mingw`) goes next to the exe.
@@ -39,7 +39,7 @@ or next to the application, or install the rpm.  On Windows the same set as
 ## Building
 
 ```
-make dotnet=1          # builds libraiapi2c, RaiApi2.dll and the 4 programs
+make dotnet=1          # builds libraimdapi, RaiApi2.dll and the 4 programs
 ```
 
 Outputs: `FC43_x86_64/lib64/dotnet/*.dll` and launchers

@@ -1,8 +1,8 @@
-Name:		raiapi
+Name:		raimdapi
 Version:	999.999
 Vendor:	        Rai Technology, Inc
 Release:	99999%{?dist}
-Summary:	Rai market data api
+Summary:	Rai market data api (libraimdapi: v1/v2 C++, Java, .NET bindings)
 
 License:	ASL 2.0
 URL:		https://github.com/raitechnology/%{name}
@@ -34,6 +34,19 @@ Prefix:	        /usr
 BuildRequires:  gcc-c++
 BuildRequires:  chrpath
 BuildRequires:  git-core
+BuildRequires:  raikv _raikv_dep
+BuildRequires:  raimd _raimd_dep
+BuildRequires:  sassrv _sassrv_dep
+BuildRequires:  libdecnumber _libdecnumber_dep
+BuildRequires:  omm _omm_dep
+BuildRequires:  pcre2-devel
+BuildRequires:  c-ares-devel
+BuildRequires:  zlib-devel
+Requires:       raikv
+Requires:       raimd
+Requires:       sassrv
+Requires:       libdecnumber
+Requires:       omm
 %if %{with java}
 BuildRequires:  java-%{jdk_ver}-openjdk-devel
 %endif

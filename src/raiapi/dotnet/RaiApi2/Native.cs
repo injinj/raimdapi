@@ -1,7 +1,7 @@
 /* Copyright (c) 2026 Rai Technology.  All rights reserved.
  *  http://www.raitechnology.com
  *
- * P/Invoke declarations for libraiapi2c (include/raiapi2_c.h).  Everything
+ * P/Invoke declarations for libraimdapi (include/raiapi2_c.h).  Everything
  * here is internal; the public surface mirrors the Java binding in
  * com.rai.raiapi2 / com.rai.raimsg and lives in the other files.
  */
@@ -13,7 +13,7 @@ namespace Com.Rai.Interop {
 
 /* a rai_err_t is a pointer to a static { status, reason, module } record */
 internal static class Native {
-  internal const string Lib = "raiapi2c";
+  internal const string Lib = "raimdapi";
   internal const CallingConvention CC = CallingConvention.Cdecl;
 
   [UnmanagedFunctionPointer( CC )]
