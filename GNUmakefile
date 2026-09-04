@@ -659,10 +659,25 @@ remove_rpath = rpath -r
 else
 remove_rpath = chrpath -d
 endif
+
+raisub
+raipub
+raiping
+raisub2
+raipub2
+raiping2
+raireplay2
+
 # target used by rpmbuild, dpkgbuild
 .PHONY: dist_bins
-dist_bins: $(all_libs) $(all_dlls) $(bind)/raisub2$(exe) $(if $(filter 1,$(java)),$(java_progs)) $(if $(filter 1,$(dotnet)),$(dotnet_progs))
+dist_bins: $(all_libs) $(all_dlls) $(all_exes) $(if $(filter 1,$(java)),$(java_progs)) $(if $(filter 1,$(dotnet)),$(dotnet_progs))
 	$(remove_rpath) $(bind)/raisub$(exe)
+	$(remove_rpath) $(bind)/raipub$(exe)
+	$(remove_rpath) $(bind)/raiping$(exe)
+	$(remove_rpath) $(bind)/raisub2$(exe)
+	$(remove_rpath) $(bind)/raipub2$(exe)
+	$(remove_rpath) $(bind)/raiping2$(exe)
+	$(remove_rpath) $(bind)/raireplay2$(exe)
 	$(remove_rpath) $(libd)/libraimdapi.$(dll)
 
 # target for building installable rpm
