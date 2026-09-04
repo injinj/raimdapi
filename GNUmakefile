@@ -667,9 +667,7 @@ endif
 # target used by rpmbuild, dpkgbuild
 .PHONY: dist_bins
 dist_bins: $(all_libs) $(all_dlls) $(all_exes) $(if $(filter 1,$(java)),$(java_progs)) $(if $(filter 1,$(dotnet)),$(dotnet_progs))
-	for p in $(all_dlls) $(all_exes) ; do
-	  $(remove_rpath) $$p
-	done
+	for p in $(all_dlls) $(all_exes) ; do $(remove_rpath) $$p ; done
 
 # --- windows distribution (make port_extra=-mingw [dotnet=1] dist_win) ------
 # Everything a Windows box needs, in one directory: the exes and dlls are
