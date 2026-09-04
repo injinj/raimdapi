@@ -72,9 +72,7 @@ Market data api
 make build_dir=./usr %{?_smp_mflags} \
      java=%{with java} jdk_release=%{jdk_ver} dotnet=%{with dotnet} \
      dist_bins
-mkdir -p ./usr/share/doc/%{name}
 cp -a ./include ./usr/include
-cp -a README.md doc/msg_format.md ./usr/share/doc/%{name}/
 
 %install
 rm -rf %{buildroot}
