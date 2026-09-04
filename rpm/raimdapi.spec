@@ -13,13 +13,16 @@ Prefix:	        /usr
 # --- Java bindings (JNI + jars) ---------------------------------------------
 # One JDK version per chroot, threaded through to javac as --release so the
 # emitted class files always load on that chroot's runtime.
-#   EL7:      only java-1.8.0 / java-11 exist
-#   EL8+/Fed: java-21 (LTS; EL10's primary JDK)
+#   EL7:        only java-1.8.0 / java-11 exist
+#   EL8/9/10, Fedora <= 43: java-21 (LTS)
+#   Fedora >= 44: java-21 was retired, java-25 (LTS) is the versioned JDK
 # Build with --without java to skip the bindings entirely (C++ libs only).
 # (NB: rpm expands macros inside comments -- write %%macro in comments.)
 %bcond_without java
 %if 0%{?rhel} == 7
 %global jdk_ver 11
+%elif 0%{?fedora} >= 44
+%global jdk_ver 25
 %else
 %global jdk_ver 21
 %endif
