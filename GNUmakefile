@@ -736,6 +736,11 @@ dist_win: all
 	for d in $(mingw_rtdll) ; do cp -f $(mingw_bin)/$$d $(distd)/bin/ ; done
 	cp -a include/*.h include/base include/msg include/stream include/util $(distd)/include/
 	cp -f win/README-windows.md $(distd)/README.md
+	# example program sources (the binaries of these are in bin/)
+	mkdir -p $(distd)/examples/c++ $(distd)/examples/java $(distd)/examples/dotnet
+	cp -f src/raiapi/c++/raisub*.cpp src/raiapi/c++/raipub*.cpp src/raiapi/c++/raiping*.cpp src/raiapi/c++/raireplay*.cpp src/raiapi/c++/raisampleutil.cpp $(distd)/examples/c++/
+	cp -f src/raiapi/java/*.java $(distd)/examples/java/
+	cp -f src/raiapi/dotnet/rai*2/*.cs $(distd)/examples/dotnet/
 ifeq ($(java),1)
 	$(dist_strip) -o $(distd)/bin/jraiapi2.dll $(libd)/libjraiapi2.$(dll)
 	$(dist_strip) -o $(distd)/bin/jraimsg.dll $(libd)/libjraimsg.$(dll)
