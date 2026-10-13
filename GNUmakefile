@@ -723,14 +723,15 @@ mingw_bin   := /usr/x86_64-w64-mingw32/sys-root/mingw/bin
 mingw_rtdll := libcares-2.dll libpcre2-8-0.dll libwinpthread-1.dll zlib1.dll
 dist_name   := $(name)-$(ver_build)-win64
 distd       := $(build_dir)/dist/$(dist_name)
-dist_strip  := x86_64-w64-mingw32-strip
+dist_strip  := win/dist-strip.sh
+dist_dbgd   := $(build_dir)/dist/$(dist_name)-debug
 dotnet_win  := $(build_dir)/dotnet-win
 
 .PHONY: dist_win
 dist_win: all
-	rm -rf $(distd) && mkdir -p $(distd)/bin $(distd)/lib $(distd)/include
-	for f in $(all_exes) ; do case $$f in *.exe) $(dist_strip) -o $(distd)/bin/$$(basename $$f) $$f ;; esac ; done
-	$(dist_strip) -o $(distd)/bin/raimdapi.dll $(libd)/libraimdapi.$(dll)
+	rm -rf $(distd) $(dist_dbgd) && mkdir -p $(distd)/bin $(distd)/lib $(distd)/include $(dist_dbgd)
+	for f in $(all_exes) ; do case $$f in *.exe) $(dist_strip) $$f $(distd)/bin/$$(basename $$f) $(dist_dbgd) ;; esac ; done
+	$(dist_strip) $(libd)/libraimdapi.$(dll) $(distd)/bin/raimdapi.dll $(dist_dbgd)
 	cp -f $(libd)/libraimdapi.$(dll).a $(distd)/lib/raimdapi.lib
 	cp -f $(libd)/libraimdapi.a $(distd)/lib/libraimdapi.a
 	for d in $(mingw_rtdll) ; do cp -f $(mingw_bin)/$$d $(distd)/bin/ ; done
@@ -742,8 +743,8 @@ dist_win: all
 	cp -f src/raiapi/java/*.java $(distd)/examples/java/
 	cp -f src/raiapi/dotnet/rai*2/*.cs $(distd)/examples/dotnet/
 ifeq ($(java),1)
-	$(dist_strip) -o $(distd)/bin/jraiapi2.dll $(libd)/libjraiapi2.$(dll)
-	$(dist_strip) -o $(distd)/bin/jraimsg.dll $(libd)/libjraimsg.$(dll)
+	$(dist_strip) $(libd)/libjraiapi2.$(dll) $(distd)/bin/jraiapi2.dll $(dist_dbgd)
+	$(dist_strip) $(libd)/libjraimsg.$(dll) $(distd)/bin/jraimsg.dll $(dist_dbgd)
 	cp -f $(libd)/*.jar $(distd)/lib/
 	for p in $(java_progs) ; do n=$$(basename $$p) ; n=$${n#j} ; \
 	  { printf '@echo off\r\n'; \
@@ -759,7 +760,12 @@ ifeq ($(dotnet),1)
 	    -p:Version=$(version) -p:FileVersion=$(version).$(build_num) -p:InformationalVersion="$(version_str)" ; done
 	rm -f $(distd)/bin/*.pdb
 endif
-	cd $(build_dir)/dist && rm -f $(dist_name).zip && zip -qr $(dist_name).zip $(dist_name)
+	# which source built this: this repo and every sibling, plus the toolchain
+	{ echo "# $(dist_name) built $$(date -u +%Y-%m-%dT%H:%MZ) on $$(hostname) with $$(x86_64-w64-mingw32-gcc --version | head -1)" ; \
+	  echo "# repo  describe  commit  origin   (debug symbols: $(dist_name)-debug.zip, unpack into bin/)" ; \
+	  ./deps.sh -s ; } > $(distd)/SOURCES.txt
+	cp -f $(distd)/SOURCES.txt $(dist_dbgd)/
+	cd $(build_dir)/dist && rm -f $(dist_name).zip $(dist_name)-debug.zip && zip -qr $(dist_name).zip $(dist_name) && zip -qr $(dist_name)-debug.zip $(dist_name)-debug
 	@if command -v makensis >/dev/null 2>&1 ; then \
 	  makensis -V2 -DNAME=$(name) -DVERSION=$(version) -DVER_BUILD=$(ver_build) -DSRC=$(abspath $(distd)) \
 	           -DOUT=$(abspath $(build_dir)/dist/$(dist_name)-setup.exe) win/raimdapi.nsi ; \
