@@ -1,0 +1,13 @@
+<Project>
+  <!-- .NET Framework does not understand runtimes/<rid>/native; copy the
+       win-x64 native libraries next to the consuming application.  The
+       libraries are 64-bit only: build the application x64 (not AnyCPU
+       with Prefer32Bit). -->
+  <ItemGroup Condition="'$(OS)' == 'Windows_NT'">
+    <None Include="$(MSBuildThisFileDirectory)../../runtimes/win-x64/native/*.dll">
+      <Link>%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Visible>false</Visible>
+    </None>
+  </ItemGroup>
+</Project>

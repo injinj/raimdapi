@@ -14,4 +14,30 @@
     <Company>Rai Technology</Company>
     <Product>Rai API</Product>
   </PropertyGroup>
+
+  <!-- NuGet package (make dist_nuget).  The GNUmakefile passes
+       RaiNativeDir=<dist>/bin so the win-x64 native libraries ride along
+       under runtimes/win-x64/native; .NET Core/5+ resolve that by RID,
+       .NET Framework gets them via build/net472/RaiApi2.targets. -->
+  <PropertyGroup>
+    <PackageId>RaiApi2</PackageId>
+    <Authors>Rai Technology</Authors>
+    <Description>.NET binding for the Rai market data API (libraimdapi): subscribe, publish, interactive publish, dictionaries and entitlements over raims, TIBCO RV, NATS and OMM/RSSL. Mirrors the Java binding one to one. Includes the native win-x64 libraries.</Description>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageProjectUrl>https://www.raitechnology.com/raimdapi/</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/raitechnology/raimdapi</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>market-data;rai;raims;tibco;rv;nats;omm;rssl</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <IncludeSymbols>false</IncludeSymbols>
+    <IsPackable>true</IsPackable>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="../README.md" Pack="true" PackagePath="/" Visible="false" />
+    <None Include="build/RaiApi2.targets" Pack="true" PackagePath="build/net472/;buildTransitive/net472/" Visible="false" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(RaiNativeDir)' != ''">
+    <None Include="$(RaiNativeDir)/raimdapi.dll;$(RaiNativeDir)/libcares-2.dll;$(RaiNativeDir)/libpcre2-8-0.dll;$(RaiNativeDir)/libwinpthread-1.dll;$(RaiNativeDir)/zlib1.dll"
+          Pack="true" PackagePath="runtimes/win-x64/native/" Visible="false" />
+  </ItemGroup>
 </Project>

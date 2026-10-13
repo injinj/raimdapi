@@ -761,6 +761,18 @@ endif
 	else echo "makensis not found (dnf install mingw32-nsis), zip only" ; fi
 	@ls -la $(build_dir)/dist/*.zip $(build_dir)/dist/*.exe 2>/dev/null
 
+# NuGet package of the .NET binding with the win-x64 native libraries:
+# <build_dir>/dist/RaiApi2.<ver>.nupkg (make port_extra=-mingw dotnet=1 dist_nuget).
+# Publish with ../nuget/up.sh (sleet static feed on www).
+.PHONY: dist_nuget
+dist_nuget: dist_win
+	rm -f $(build_dir)/dist/RaiApi2.*.nupkg
+	dotnet pack $(dotnet_srcd)/RaiApi2/RaiApi2.csproj -c Release -nologo -v q \
+	  -p:RaiBuildDir=$(abspath $(dotnet_win)) -p:RaiNativeDir=$(abspath $(distd)/bin) \
+	  -p:Version=$(version) -p:FileVersion=$(version).$(build_num) -p:InformationalVersion="$(version_str)" \
+	  -o $(build_dir)/dist
+	@ls -la $(build_dir)/dist/*.nupkg
+
 # target for building installable rpm
 .PHONY: dist_rpm
 dist_rpm: srpm
