@@ -146,6 +146,7 @@ dec_home    := $(call test_makefile,libdecnumber)
 kv_home     := $(call test_makefile,raikv)
 sassrv_home := $(call test_makefile,sassrv)
 omm_home    := $(call test_makefile,omm)
+natsmd_home := $(call test_makefile,natsmd)
 
 ifeq (,$(dec_home))
 dec_home    := $(call test_makefile,$(md_home)/libdecnumber)
@@ -156,7 +157,7 @@ dlnk_lib    :=
 lnk_dep     :=
 dlnk_dep    :=
 
-# omm first: it depends on sassrv/raimd/raikv below
+# omm and natsmd first: they depend on sassrv/raimd/raikv below
 ifneq (,$(omm_home))
 omm_lib     := $(omm_home)/$(libd)/libomm.a
 omm_dll     := $(omm_home)/$(libd)/libomm.$(dll)
@@ -171,6 +172,22 @@ includes    += -I$(omm_home)/include
 else
 lnk_lib     += $(push_static) -lommapi -lomm $(pop_static)
 dlnk_lib    += -lommapi -lomm
+endif
+
+ifneq (,$(natsmd_home))
+natsmd_lib  := $(natsmd_home)/$(libd)/libnatsmd.a
+natsmd_dll  := $(natsmd_home)/$(libd)/libnatsmd.$(dll)
+natsapi_lib := $(natsmd_home)/$(libd)/libnatsapi.a
+natsapi_dll := $(natsmd_home)/$(libd)/libnatsapi.$(dll)
+lnk_lib     += $(natsapi_lib) $(natsmd_lib)
+lnk_dep     += $(natsapi_lib) $(natsmd_lib)
+dlnk_lib    += -L$(natsmd_home)/$(libd) -lnatsapi -lnatsmd
+dlnk_dep    += $(natsapi_dll) $(natsmd_dll)
+rpath6       = ,-rpath,$(pwd)/$(natsmd_home)/$(libd)
+includes    += -I$(natsmd_home)/include
+else
+lnk_lib     += $(push_static) -lnatsapi -lnatsmd $(pop_static)
+dlnk_lib    += -lnatsapi -lnatsmd
 endif
 
 ifneq (,$(sassrv_home))
@@ -231,11 +248,11 @@ lnk_lib     += $(push_static) -lraikv $(pop_static)
 dlnk_lib    += -lraikv
 endif
 
-rpath   := -Wl,-rpath,$(pwd)/$(libd)$(rpath1)$(rpath2)$(rpath3)$(rpath4)$(rpath5)
+rpath   := -Wl,-rpath,$(pwd)/$(libd)$(rpath1)$(rpath2)$(rpath3)$(rpath4)$(rpath5)$(rpath6)
 lnk_lib += -Wl,--pop-state
 
 .PHONY: everything
-everything: $(kv_lib) $(dec_lib) $(md_lib) $(sassrv_lib) $(omm_lib) all
+everything: $(kv_lib) $(dec_lib) $(md_lib) $(sassrv_lib) $(omm_lib) $(natsmd_lib) all
 
 clean_subs :=
 # build submodules if have them
@@ -279,6 +296,14 @@ clean_omm:
 	$(MAKE) -C $(omm_home) clean
 clean_subs += clean_omm
 endif
+ifneq (,$(natsmd_home))
+$(natsmd_lib) $(natsmd_dll):
+	$(MAKE) -C $(natsmd_home)
+.PHONY: clean_natsmd
+clean_natsmd:
+	$(MAKE) -C $(natsmd_home) clean
+clean_subs += clean_natsmd
+endif
 
 # copr/fedora build (with version env vars)
 # copr uses this to generate a source rpm with the srpm target
@@ -291,6 +316,8 @@ all_exes    :=
 all_libs    :=
 all_dlls    :=
 all_depends :=
+dlnk_dep    += .copr/Makefile
+lnk_dep     += .copr/Makefile
 
 # --- libraimdapi: one library -------------------------------------------------
 # v1 api (raiapi.h, namespace rai_old), v2 api (raiapi2.h), the C binding
@@ -299,12 +326,12 @@ all_depends :=
 # coexist with v2 in one object.  Named raimdapi (not raiapi/raiapi2, which
 # are RaiCore's libraries) to keep the two code bases apart.
 raiapi_files    := raiapi
-raiapi2_files   := raiapi2 raiapi2_tibrv raiapi2_omm
+raiapi2_files   := raiapi2 raiapi2_tibrv raiapi2_omm raiapi2_nats
 raiapi2c_files  := raiapi2_c
 base_files      := sys time log file thread mem dir
 stream_files    := io_stream file_stream stdio_stream byte_array_stream cycle_stream
 util_files      := snprintf strptime hash_util str_util args
-msg_files       := cfile_parser msg field dict subject sass_const wildcard mfeed_dict rai_form_msg
+msg_files       := cfile_parser msg field dict dict_md subject sass_const wildcard mfeed_dict rai_form_msg
 libraimdapi_files := $(raiapi_files) $(raiapi2_files) $(raiapi2c_files) $(msg_files) \
                    $(base_files) $(stream_files) $(util_files)
 libraimdapi_objs  := $(addprefix $(objd)/, $(addsuffix .o, $(libraimdapi_files)))
@@ -709,6 +736,32 @@ rpath_bins := $(all_dlls) $(filter-out $(java_progs) $(dotnet_progs), $(all_exes
 dist_bins: $(all_libs) $(all_dlls) $(all_exes) $(if $(filter 1,$(java)),$(java_progs)) $(if $(filter 1,$(dotnet)),$(dotnet_progs))
 	for p in $(rpath_bins) ; do $(remove_rpath) $$p ; done
 
+# --- code signing (Authenticode + NuGet) ------------------------------------
+# Signs when a key is present: SIGN_PFX defaults to ~/.rai-codesign/rai-codesign.pfx
+# (self-signed 10y cert, public half rai-codesign.cer next to it; the private key
+# never goes in a repo or package).  Without a key dist_win says "unsigned" and
+# carries on, so COPR/CI builds are unaffected.  jsign (github.com/ebourg/jsign)
+# signs the PE files; the same step moves to Azure Trusted Signing later by
+# changing only its arguments (--storetype TRUSTEDSIGNING ...).  The nupkg is
+# signed with dotnet nuget sign and the same cert (customers pin its SHA-256
+# fingerprint with <trustedSigners>).  RFC 3161 timestamps keep the signatures
+# valid after the cert expires.
+SIGN_PFX       ?= $(wildcard $(HOME)/.rai-codesign/rai-codesign.pfx)
+SIGN_PASS_FILE ?= $(dir $(SIGN_PFX))pass.txt
+SIGN_CER       ?= $(dir $(SIGN_PFX))rai-codesign.cer
+SIGN_TSA       ?= http://timestamp.digicert.com
+ifneq (,$(SIGN_PFX))
+sign_pe    = jsign --keystore $(SIGN_PFX) --storepass file:$(SIGN_PASS_FILE) --alias rai-codesign \
+               --alg SHA-256 --tsaurl $(SIGN_TSA) --tsmode RFC3161 $(1)
+sign_nupkg = dotnet nuget sign $(1) --certificate-path $(SIGN_PFX) \
+               --certificate-password "$$(cat $(SIGN_PASS_FILE))" --timestamper $(SIGN_TSA)
+sign_note  = echo "\# signed: $$(openssl x509 -in $(SIGN_CER) -noout -subject -fingerprint -sha256 | tr '\n' ' ')"
+else
+sign_pe    = echo "unsigned (no SIGN_PFX): $(1)"
+sign_nupkg = echo "unsigned (no SIGN_PFX): $(1)"
+sign_note  = echo "\# unsigned"
+endif
+
 # --- windows distribution (make port_extra=-mingw [dotnet=1] dist_win) ------
 # Everything a Windows box needs, in one directory: the exes and dlls are
 # statically linked against the sibling libraries, so only the four mingw
@@ -760,15 +813,18 @@ ifeq ($(dotnet),1)
 	    -p:Version=$(version) -p:FileVersion=$(version).$(build_num) -p:InformationalVersion="$(version_str)" ; done
 	rm -f $(distd)/bin/*.pdb
 endif
+	$(call sign_pe,$(distd)/bin/*.exe $(distd)/bin/*.dll)
 	# which source built this: this repo and every sibling, plus the toolchain
 	{ echo "# $(dist_name) built $$(date -u +%Y-%m-%dT%H:%MZ) on $$(hostname) with $$(x86_64-w64-mingw32-gcc --version | head -1)" ; \
 	  echo "# repo  describe  commit  origin   (debug symbols: $(dist_name)-debug.zip, unpack into bin/)" ; \
+	  $(sign_note) ; \
 	  ./deps.sh -s ; } > $(distd)/SOURCES.txt
 	cp -f $(distd)/SOURCES.txt $(dist_dbgd)/
 	cd $(build_dir)/dist && rm -f $(dist_name).zip $(dist_name)-debug.zip && zip -qr $(dist_name).zip $(dist_name) && zip -qr $(dist_name)-debug.zip $(dist_name)-debug
 	@if command -v makensis >/dev/null 2>&1 ; then \
 	  makensis -V2 -DNAME=$(name) -DVERSION=$(version) -DVER_BUILD=$(ver_build) -DSRC=$(abspath $(distd)) \
-	           -DOUT=$(abspath $(build_dir)/dist/$(dist_name)-setup.exe) win/raimdapi.nsi ; \
+	           -DOUT=$(abspath $(build_dir)/dist/$(dist_name)-setup.exe) win/raimdapi.nsi && \
+	  $(call sign_pe,$(build_dir)/dist/$(dist_name)-setup.exe) ; \
 	else echo "makensis not found (dnf install mingw32-nsis), zip only" ; fi
 	@ls -la $(build_dir)/dist/*.zip $(build_dir)/dist/*.exe 2>/dev/null
 
@@ -782,6 +838,7 @@ dist_nuget: dist_win
 	  -p:RaiBuildDir=$(abspath $(dotnet_win)) -p:RaiNativeDir=$(abspath $(distd)/bin) \
 	  -p:Version=$(version) -p:FileVersion=$(version).$(build_num) -p:InformationalVersion="$(version_str)" \
 	  -o $(build_dir)/dist
+	$(call sign_nupkg,$(build_dir)/dist/RaiApi2.$(version).nupkg)
 	@ls -la $(build_dir)/dist/*.nupkg
 
 # target for building installable rpm

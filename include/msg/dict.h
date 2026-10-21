@@ -18,19 +18,14 @@
 struct RaiMsg;
 struct RaiField;
 struct RaiMsg_config;
-struct RaiMsg_dtab;
-struct RaiMsg_ttab;
-struct RaiMsg_formref;
 struct RaiMsg_form;
+namespace rai { namespace md { struct MDDict; } }
 namespace rai {
   class CFileExpr;
   class CFileLocator;
   class InputStream;
-  class Mutex;
   extern RAIMSG_DLL_EXP
   RaiMsg_config *DataDictionary;
-  extern RAIMSG_DLL_EXP
-  RaiMsg        *PackedDataDictionaryFull;
 }
 
 /*extern const char MSG_TYPE_STRING[];
@@ -96,8 +91,6 @@ struct RAIMSG_DLL_EXP RaiMsg_form {
                     * seqNo,
                     * recStatus;
   Rai_u16           * fidIndex;
-  Rai_u64             typeHash,
-                      fidHash;
   Rai_u32             fieldCount;
   Rai_u16             fidMask;
   Rai_u8              fidBits,
@@ -112,8 +105,6 @@ struct RAIMSG_DLL_EXP RaiMsg_form {
     this->seqNo       = NULL;
     this->recStatus   = NULL;
     this->fidIndex    = NULL;
-    this->typeHash    = 0;
-    this->fidHash     = 0;
     this->fieldCount  = 0;
     this->fidMask     = 0;
     this->fidBits     = 0;
@@ -203,7 +194,6 @@ struct RAIMSG_DLL_EXP RaiMsg_form {
 
   void initFields( Rai_u16 *fid,  unsigned int fidCount,
                    bool setFieldName );
-  void computeHashes( void );
 
   static unsigned int calcIndexSize( Rai_u16 *fid,  unsigned int fidCount );
 
@@ -225,11 +215,8 @@ struct RAIMSG_DLL_EXP RaiMsg_config {
                 fidForm[ MAX_FID ];   /* entry[ fidIndex[ fid ] ] defined */
                                       /* for each class declared */
   RaiMsg_form * form;                 /* array of forms */
-  RaiMsg_dtab * dynamicForm;          /* table of dynamically created forms */
-  //RaiMsg_ttab * typeForm;             /* table of forms indexed by type */
   Rai_u32       entryCount,           /* number of unique class ids */
                 formCount;            /* number of forms */
-  rai::Mutex  * dynamicFormLock;
   Rai_u16       reservedMask;
   Rai_u32       dictSize;
 
@@ -246,10 +233,8 @@ struct RAIMSG_DLL_EXP RaiMsg_config {
     this->recStatus       = NULL;
     this->tstamp          = NULL;
     this->form            = NULL;
-    this->dynamicForm     = NULL;
     this->entryCount      = 0;
     this->formCount       = 0;
-    this->dynamicFormLock = NULL;
     this->reservedMask    = 0;
     this->dictSize        = 0;
   }
@@ -270,6 +255,9 @@ struct RAIMSG_DLL_EXP RaiMsg_config {
                                    char path_sep = 0 );
 
   static void release( RaiMsg_config *dict );
+  /* convert a raimd cfile dictionary (CFile::parse_path(), unpack_sass[3]())
+   * into these structures; dict may be the list from load_dict_files() */
+  static RaiMsg_config *fromMDDict( rai::md::MDDict *dict );
 
   static const char *tssTypeString( unsigned int typ );
 
@@ -309,23 +297,6 @@ struct RAIMSG_DLL_EXP RaiMsg_config {
                entry == this->recStatus );
   }
 
-  const RaiMsg_form *getAnonForm( Rai_u16 *fid,  unsigned int fidCount,
-                                  bool mustExist = false )
-;
-  const RaiMsg_form *getHashedForm( Rai_u64 typeHash );
-
-  void initAnonForms( void );
-
-  void derefForm( const RaiMsg_form *form );
-
-  void refForm( const RaiMsg_form *form );
-
-  void describeMemory( RaiMsg &msg );
-
-  const RaiMsg_form *describeAnonForm( RaiMsg &msg,  const char *name )
-;
-  bool getFormRefCount( const RaiMsg_form *form,  ullong &fidHash,
-                        unsigned int &count );
 };
 
 

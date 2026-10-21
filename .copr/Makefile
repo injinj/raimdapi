@@ -12,9 +12,9 @@ _ensure_git := $(shell command -v git >/dev/null 2>&1 || dnf -y install git-core
 
 git_hash    := $(shell git rev-parse --short=8 HEAD)
 major_num   := 1
-minor_num   := 2
+minor_num   := 3
 patch_num   := 0
-build_num   := 4
+build_num   := 5
 version     := $(major_num).$(minor_num).$(patch_num)
 ver_build   := $(version)-$(build_num)
 name_ver    := $(name)-$(ver_build)
@@ -40,6 +40,7 @@ rpmbuild/SOURCES/$(name_ver).tar.gz:
 	    -e "s/_sassrv_dep/>= $(sassrv_dep)/" \
 	    -e "s/_libdecnumber_dep/>= $(libdecnumber_dep)/" \
 	    -e "s/_omm_dep/>= $(omm_dep)/" \
+	    -e "s/_natsmd_dep/>= $(natsmd_dep)/" \
 	    -e "s/Sat Jan 01 2000/$(date)/" < rpm/$(name).spec > rpmbuild/SPECS/$(name).spec
 	mkdir -p $(rpm_src_dir)
 	for i in $(srctree) ; do ln -sf ../../../$$i $(rpm_src_dir) ; done

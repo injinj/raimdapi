@@ -3529,13 +3529,11 @@ RaiMsg::Read( const char *filename,  OutputStream *err )
 }
 
 RaiMsg_config *rai::DataDictionary;
-RaiMsg        *rai::PackedDataDictionaryFull;
 
 void
 RaiMsg::SetDataDictionary( RaiMsg_config *dictionary )
 {
   DataDictionary = dictionary;
-  PackedDataDictionaryFull = NULL;
 }
 
 

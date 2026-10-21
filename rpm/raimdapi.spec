@@ -46,6 +46,7 @@ BuildRequires:  raimd _raimd_dep
 BuildRequires:  sassrv _sassrv_dep
 BuildRequires:  libdecnumber _libdecnumber_dep
 BuildRequires:  omm _omm_dep
+BuildRequires:  natsmd _natsmd_dep
 BuildRequires:  pcre2-devel
 BuildRequires:  c-ares-devel
 BuildRequires:  zlib-devel
@@ -54,6 +55,7 @@ Requires:       raimd
 Requires:       sassrv
 Requires:       libdecnumber
 Requires:       omm
+Requires:       natsmd
 %if %{with java}
 BuildRequires:  java-%{jdk_ver}-openjdk-devel
 %endif

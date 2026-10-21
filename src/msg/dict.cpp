@@ -647,7 +647,6 @@ RaiMsg_config::parseDictionary( CFileExpr *expr )
       form->fidIndex = index;
       form->initFields( formFieldFids, j, false );
       index = &index[ form->indexSize() ];
-      form->computeHashes();
 
       dict->fidForm[ form->entry->fid ] = i;
     }
@@ -670,7 +669,6 @@ RaiMsg_config::parseDictionary( CFileExpr *expr )
     if ( dict->recStatus != NULL )
       dict->reservedMask |= dict->recStatus->fid;
 
-    dict->dynamicFormLock = Mutex::create();
 
     return dict;
   } catch ( ... ) {
@@ -776,48 +774,6 @@ RaiMsg_form::initFields( Rai_u16 *fid,  unsigned int fidCount,
 }
 
 
-void
-RaiMsg_form::computeHashes( void )
-{
-  Rai_u16        fid[ MAX_FID ];
-  unsigned int   fidCount;
-  RaiMsg_dict  * entry;
-  Rai_u8         buf[ 1024 ];
-  unsigned int   i,
-                 off;
-
-  off      = 0;
-  fidCount = 0;
-  ::memcpy( &buf[ off ], this->entry->fname, this->entry->fname_size );
-  off += this->entry->fname_size;
-
-  for ( i = 0; i < this->fieldCount; i++ ) {
-    entry = &this->fields[ i ];
-
-    ::memcpy( &buf[ off ], entry->fname, entry->fname_size );
-    off += entry->fname_size;
-    Unaligned::endianPutInt( entry->fsize, &buf[ off ] );
-    off += sizeof( entry->fsize );
-    fid[ fidCount++ ] = entry->fid;
-    Unaligned::endianPutInt( entry->fid, &buf[ off ] );
-    off += sizeof( entry->fid );
-    Unaligned::endianPutInt( entry->ftype, &buf[ off ] );
-    off += sizeof( entry->ftype );
-    buf[ off++ ] = entry->partial;
-
-    if ( off > 1024 - ( 128 + 16 ) ) {
-      this->typeHash = Hash64::newhash( buf, off, this->typeHash );
-      off = 0;
-    }
-  }
-  if ( off > 0 )
-    this->typeHash = Hash64::newhash( buf, off, this->typeHash );
-
-  this->fidHash = Hash64::newhash( (const Rai_u8 *) fid,
-                                   sizeof( fid[ 0 ] ) * fidCount, fidCount );
-}
-
-
 unsigned int
 RaiMsg_form::calcIndexSize( Rai_u16 *fid,  unsigned int fidCount )
 {
@@ -863,83 +819,11 @@ RaiMsg_form::indexSize( void )
   return ( ( 1U << this->fidBits ) * this->fieldBits + 31 ) / 16;
 }
 
-struct RaiMsg_formref {
-  RaiMsg_form * form;
-  AtomicUInt    refs;
-  Rai_u32       size;
-};
-
-struct RaiMsg_dtab : public LinearHashTable<RaiMsg_formref *, Rai_u64> {
-  protected:
-    virtual Rai_u64 value( RaiMsg_formref *formref ) {
-      return formref->form->fidHash;
-    }
-    virtual unsigned int hash( Rai_u64 val ) {
-      return (unsigned int) val ^ (unsigned int) ( val >> 32 );
-    }
-    virtual bool equals( Rai_u64 val,  RaiMsg_formref *formref ) {
-      return val == formref->form->fidHash;
-    }
-  public:
-    RaiMsg_formref * cfgForms;
-    unsigned int     cfgFormCount,
-                     anonFormCount,
-                     anonFormSize;
-    SYS_OPS( RaiMsg_dtab );
-    RaiMsg_dtab( unsigned int init ) :
-      LinearHashTable<RaiMsg_formref *, Rai_u64>( init ),
-      cfgForms( 0 ), cfgFormCount( 0 ), anonFormCount( 0 ),
-      anonFormSize( 0 ) {}
-
-    virtual ~RaiMsg_dtab() {
-      unsigned int i;
-
-      if ( ! this->isEmpty() ) {
-        for ( i = 0; i < this->tabSize; i++ ) {
-          if ( (this->tab[ i ].hashVal & SLOT_USED) != 0 ) {
-            if ( this->tab[ i ].elem->form->entry->fname ==
-                 ANONYMOUS_FORM_STRING ) {
-              FREE( this->tab[ i ].elem );
-            }
-          }
-        }
-      }
-      if ( this->cfgForms != NULL )
-        FREE( this->cfgForms );
-    }
-};
-
-
-struct RaiMsg_ttab : public LinearHashTable<RaiMsg_formref *, Rai_u64> {
-  protected:
-    virtual Rai_u64 value( RaiMsg_formref *formref ) {
-      return formref->form->typeHash;
-    }
-    virtual unsigned int hash( Rai_u64 val ) {
-      return (unsigned int) val ^ (unsigned int) ( val >> 32 );
-    }
-    virtual bool equals( Rai_u64 val,  RaiMsg_formref *formref ) {
-      return val == formref->form->typeHash;
-    }
-  public:
-    SYS_OPS( RaiMsg_ttab );
-    RaiMsg_ttab( unsigned int init ) :
-      LinearHashTable<RaiMsg_formref *, Rai_u64>( init ) {}
-};
-
-
 void
 RaiMsg_config::release( RaiMsg_config *dict )
 {
-  if ( dict != NULL ) {
-    if ( dict->dynamicForm != NULL )
-      delete dict->dynamicForm;
-    /*if ( dict->typeForm != NULL )
-      delete dict->typeForm;*/
-    if ( dict->dynamicFormLock != NULL )
-      delete dict->dynamicFormLock;
+  if ( dict != NULL )
     FREE( dict );
-  }
 }
 
 
@@ -1000,345 +884,6 @@ RaiMsg_config::getForm( const char *fname,  unsigned int fname_size ) const
       return this->getForm( (Rai_u16) ( neg ? -recType : recType ) );
   }
   return NULL;
-}
-
-
-void
-RaiMsg_config::initAnonForms( void )
-{
-  unsigned int j;
-
-  this->dynamicForm = NEW RaiMsg_dtab( this->formCount + 16 );
-  /*this->typeForm = NEW RaiMsg_ttab( this->formCount + 16 );*/
-  MALLOC( sizeof( this->dynamicForm->cfgForms[ 0 ] ) * this->formCount,
-          &this->dynamicForm->cfgForms );
-  this->dynamicForm->cfgFormCount = this->formCount;
-  for ( j = 0; j < this->formCount; j++ ) {
-    this->dynamicForm->cfgForms[ j ].form = &this->form[ j ];
-    this->dynamicForm->cfgForms[ j ].refs.init( 0 );
-    this->dynamicForm->cfgForms[ j ].size = 0;
-  }
-  for ( j = 0; j < this->formCount; j++ )
-    this->dynamicForm->insert( &this->dynamicForm->cfgForms[ j ] );
-  /*for ( j = 0; j < this->formCount; j++ )
-    this->typeForm->insert( &this->dynamicForm->cfgForms[ j ] );*/
-}
-
-
-#define DBG_REF( w, f )
-#if 0
-static void
-DBG_REF( const char *where,  const RaiMsg_formref *formRef )
-{
-  logMinor( LMINOR, "%s r=%u h=%qx", where, formRef->refs,
-            formRef->form->typeHash );
-}
-#endif
-#if 0
-const RaiMsg_form *
-RaiMsg_config::getHashedForm( Rai_u64 typeHash )
-{
-  RaiMsg_formref * formRef;
-
-  if ( this->dynamicFormLock != NULL )
-    this->dynamicFormLock->lock();
-  try {
-    if ( this->typeForm == NULL )
-      this->initAnonForms();
-    if ( (formRef = this->typeForm->findElem( typeHash )) != NULL ) {
-      formRef->refs.add( 1 );
-      DBG_REF( "thash ref", formRef );
-    }
-    if ( this->dynamicFormLock != NULL )
-      this->dynamicFormLock->unlock();
-
-    return formRef != NULL ? formRef->form : NULL;
-  } catch ( ... ) {
-    if ( this->dynamicFormLock != NULL )
-      this->dynamicFormLock->unlock();
-    throw;
-  }
-}
-#endif
-
-const RaiMsg_form *
-RaiMsg_config::getAnonForm( Rai_u16 *fid,  unsigned int fidCount,
-                            bool mustExist )
-{
-  RaiMsg_formref    * formRef;
-  RaiMsg_form       * newForm;
-  const RaiMsg_dict * classEntry;
-  Rai_u64             hash;
-  unsigned int        i, j, h, sz;
-
-  hash = Hash64::newhash( (const Rai_u8 *) fid, sizeof( fid[ 0 ] ) * fidCount,
-                          fidCount );
-  if ( this->dynamicFormLock != NULL )
-    this->dynamicFormLock->lock();
-
-  try {
-    if ( this->dynamicForm == NULL )
-      this->initAnonForms();
-    formRef = this->dynamicForm->findElem( hash );
-    if ( formRef != NULL ) {
-      formRef->refs.add( 1 );
-      DBG_REF( "anon ref", formRef );
-      if ( this->dynamicFormLock != NULL )
-        this->dynamicFormLock->unlock();
-      return formRef->form;
-    }
-    if ( mustExist ) {
-      if ( this->dynamicFormLock != NULL )
-        this->dynamicFormLock->unlock();
-      return NULL;
-    }
-  } catch ( ... ) {
-    if ( this->dynamicFormLock != NULL )
-      this->dynamicFormLock->unlock();
-    throw;
-  }
-  if ( this->dynamicFormLock != NULL )
-    this->dynamicFormLock->unlock();
-
-  /* if newForm doesn't already exist */
-  /* check all fids are valid */
-  for ( j = 0; j < fidCount; j++ ) {
-    if ( (classEntry = this->getEntry( fid[ j ] )) == NULL )
-      throw RaiMsgErr::getErr( RaiMsgErr::BAD_DICT_FID );
-  }
-  /* allocate space for form */
-  j  = RaiMsg_form::calcIndexSize( fid, fidCount );
-  sz = sizeof( RaiMsg_formref ) + sizeof( RaiMsg_form ) +
-       sizeof( RaiMsg_dict ) * ( fidCount + 1 ) +
-       sizeof( Rai_u16 ) * j;
-  MALLOC( sz, &formRef );
-
-  newForm = (RaiMsg_form *) (void *) &formRef[ 1 ];
-  formRef->form = newForm;
-  formRef->refs.init( 1 );
-  formRef->size = sz;
-  newForm->init( this );
-  newForm->entry      = (RaiMsg_dict *) (void *) &newForm[ 1 ];
-  newForm->entry->init( ANONYMOUS_FORM_STRING,
-                        sizeof( ANONYMOUS_FORM_STRING ) );
-  newForm->entry->fid = 0;
-  newForm->fields     = &newForm->entry[ 1 ];
-  newForm->fidIndex   = (Rai_u16 *) (void *) &newForm->fields[ fidCount ];
-
-  newForm->initFields( fid, fidCount, true );
-  newForm->computeHashes();
-  if ( newForm->fidHash != hash ) {
-    logError( LERROR, NULL, "fidHash 0x%qx != hash 0x%qx",
-              newForm->fidHash, hash );
-  }
-
-  if ( this->dynamicFormLock != NULL )
-    this->dynamicFormLock->lock();
-
-  try {
-    RaiMsg_formref *formRef2;
-    formRef2 = this->dynamicForm->findInsert( hash, i, h );
-    if ( formRef2 != NULL ) {
-      if ( formRef2->refs.add( 0 ) == 0 ) { /* its about to be deleted */
-        this->dynamicForm->addInsert( formRef, i, h );
-      }
-      else { /* use existing form instead */
-        RaiMsg_formref *tmp = formRef;
-        formRef = formRef2;
-        formRef2 = tmp;
-        formRef->refs.add( 1 );
-      }
-    }
-    else { /* its new */
-      this->dynamicForm->anonFormCount++;
-      this->dynamicForm->anonFormSize += formRef->size;
-      this->dynamicForm->addInsert( formRef, i, h );
-    }
-    if ( this->dynamicFormLock != NULL )
-      this->dynamicFormLock->unlock();
-    if ( formRef2 != NULL )
-      FREE( formRef2 );
-
-    return formRef->form;
-  } catch ( ... ) {
-    if ( this->dynamicFormLock != NULL )
-      this->dynamicFormLock->unlock();
-    throw;
-  }
-}
-
-
-void
-RaiMsg_config::derefForm( const RaiMsg_form *form )
-{
-  RaiMsg_formref * formRef;
-
-  if ( form->entry->fname != ANONYMOUS_FORM_STRING )
-    return;
-
-  formRef = &((RaiMsg_formref *) (void *) form)[ -1 ];
-  if ( formRef->form != form ) {
-    logError( LERROR, NULL, "Formref incorrect pointer (deref)" );
-    return;
-  }
-  /* get the key before derefing, since formRef may be deleted before lock()
-   * and after deref */
-  Rai_u64 hash = formRef->form->fidHash;
-
-  if ( formRef->refs.add( -1 ) != 1 )
-    return;
-
-  RaiMsg_formref * formRef2 = NULL;
-  unsigned int     i        = 0;
-
-  if ( this->dynamicFormLock != NULL )
-    this->dynamicFormLock->lock();
-  /* if its still in the hash table, it's not deleted yet */
-  if ( this->dynamicForm->findSlot( hash, i ) == formRef ) {
-    /* if no refs, delete it */
-    if ( formRef->refs.add( 0 ) == 0 ) {
-      this->dynamicForm->removeSlot( i );
-      this->dynamicForm->anonFormCount--;
-      this->dynamicForm->anonFormSize -= formRef->size;
-      formRef2 = formRef;
-    }
-  }
-  if ( this->dynamicFormLock != NULL )
-    this->dynamicFormLock->unlock();
-  if ( formRef2 != NULL )
-    FREE( formRef2 );
-}
-
-
-void
-RaiMsg_config::refForm( const RaiMsg_form *form )
-{
-  RaiMsg_formref * formRef;
-
-  if ( form->entry->fname != ANONYMOUS_FORM_STRING )
-    return;
-
-  formRef = &((RaiMsg_formref *) (void *) form)[ -1 ];
-  if ( formRef->form != form ) {
-    logError( LERROR, NULL, "Formref incorrect pointer (ref)" );
-    return;
-  }
-  formRef->refs.add( 1 );
-}
-
-
-void
-RaiMsg_config::describeMemory( RaiMsg &msg )
-{
-  Error e2 = NULL;
-  msg.Append( "sass-dict-size", this->dictSize );
-  if ( this->dynamicFormLock != NULL )
-    this->dynamicFormLock->lock();
-  if ( this->dynamicForm != NULL ) {
-    try {
-      msg.Append( "sass-anon-formclass-count",
-                  this->dynamicForm->anonFormCount );
-      msg.Append( "sass-anon-formclass-size",
-                  this->dynamicForm->anonFormSize );
-    } catch ( Error e ) {
-      e2 = e;
-    }
-  }
-  if ( this->dynamicFormLock != NULL )
-    this->dynamicFormLock->unlock();
-  if ( e2 != NULL )
-    throw e2;
-}
-
-
-const RaiMsg_form *
-RaiMsg_config::describeAnonForm( RaiMsg &msg,  const char *name )
-
-{
-  const RaiMsg_form * form = NULL;
-  RaiMsg_formref    * ref;
-  Error               e2 = NULL;
-  ullong              fidHash;
-  unsigned int        i, j, k, count = 0;
-  char                buf[ 24 ];
-
-  if ( this->dynamicFormLock != NULL )
-    this->dynamicFormLock->lock();
-  if ( this->dynamicForm != NULL ) {
-    try {
-      if ( name == NULL ) {
-        if ( (ref = this->dynamicForm->first( i )) != NULL ) {
-          do {
-            buf[ 0 ] = '0';
-            buf[ 1 ] = 'x';
-            k = 2;
-            for ( j = 64 - 4; ; j -= 4 ) {
-              byte x = ( ( ( 0xfULL << j ) & ref->form->fidHash ) >> j );
-              buf[ k++ ] = ( x < 10 ? x + '0' : x - 10 + 'a' );
-              if ( j == 0 )
-                break;
-            }
-            buf[ k ] = '\0';
-            if ( ref->form->entry->fname != ANONYMOUS_FORM_STRING )
-              msg.Append( buf, ref->form->entry->fname );
-            else
-              msg.Append( buf, ref->refs.val );
-            count += ref->refs.val;
-          } while ( (ref = this->dynamicForm->next( i )) != NULL );
-        }
-        msg.Append( "total-refs", count );
-      }
-      else {
-        fidHash = 0;
-        k = 2;
-        if ( name[ 0 ] == '0' && name[ 1 ] == 'x' ) {
-          for ( j = 64 - 4; ; j -= 4 ) {
-            byte x = (byte) name[ k++ ];
-            if ( x >= '0' && x <= '9' )
-              x -= '0';
-            else if ( x >= 'a' && x <= 'f' )
-              x = ( x - 'a' ) + 10;
-            fidHash |= (ullong) x << j;
-            if ( j == 0 )
-              break;
-          }
-        }
-        if ( (ref = this->dynamicForm->findElem( fidHash )) != NULL ) {
-          ref->refs.add( 1 );
-          form = ref->form;
-        }
-      }
-    } catch ( Error e ) {
-      e2 = e;
-    }
-  }
-  if ( this->dynamicFormLock != NULL )
-    this->dynamicFormLock->unlock();
-  if ( count == 0 && form != NULL )
-    msg.Append( "no-entries", true );
-  if ( e2 != NULL )
-    throw e2;
-  return form;
-}
-
-
-bool
-RaiMsg_config::getFormRefCount( const RaiMsg_form *form,  ullong &fidHash,
-                                unsigned int &count )
-{
-  RaiMsg_formref * formRef;
-
-  if ( form->entry->fname != ANONYMOUS_FORM_STRING )
-    return false;
-
-  formRef = &((RaiMsg_formref *) (void *) form)[ -1 ];
-  if ( formRef->form != form ) {
-    logError( LERROR, NULL, "Formref incorrect pointer (ref)" );
-    return false;
-  }
-  fidHash = formRef->form->fidHash;
-  count = formRef->refs.add( 0 );
-  return true;
 }
 
 
@@ -2418,7 +1963,6 @@ RaiMsg_config::unpackDataDictionary( RaiMsg &msg )
         form->fidIndex = index;
         form->initFields( fieldFid, count, false );
         index = &index[ form->indexSize() ];
-        form->computeHashes();
 
       } while ( field.Next() );
     }
@@ -2442,7 +1986,6 @@ RaiMsg_config::unpackDataDictionary( RaiMsg &msg )
     if ( dict->recStatus != NULL )
       dict->reservedMask |= dict->recStatus->fid;
 
-    dict->dynamicFormLock = Mutex::create();
 
     return dict;
   } catch ( ... ) {

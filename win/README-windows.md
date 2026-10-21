@@ -16,7 +16,7 @@ lib/   raimdapi.lib (import library for raimdapi.dll), libraimdapi.a (mingw stat
 include/  raiapi2.h raiapi2_c.h raiapi.h and the base/msg/stream/util headers
 ```
 
-Everything is self contained: the sibling libraries (raikv, raimd, sassrv, omm, libdecnumber) are linked in statically, so no other Rai dlls are needed.
+Everything is self contained: the sibling libraries (raikv, raimd, sassrv, omm, natsmd, libdecnumber) are linked in statically, so no other Rai dlls are needed.
 
 ## Requirements
 
@@ -35,3 +35,18 @@ Either unzip anywhere and run from `bin\`, or run `raimdapi-<ver>-win64-setup.ex
 - C (any compiler, MSVC included): `include\raiapi2_c.h` + `lib\raimdapi.lib`.
 - C++: the classes in `raiapi2.h` are mingw-ABI; link `lib\libraimdapi.a` from a mingw toolchain.  For MSVC use the C interface.
 - Java: `lib\*.jar` on the classpath, `-Djava.library.path=bin`.
+
+## Signatures
+
+The exes, dlls, the installer and the RaiApi2 NuGet package are Authenticode-signed with the
+Rai Technology code-signing certificate (self-signed; SHA-256 fingerprint
+`E9:19:03:48:61:9A:C6:FB:8B:EE:3D:08:2A:F0:24:4E:1D:2B:52:50:E0:76:FA:E9:7D:80:C3:BC:37:92:51:B7`,
+also recorded in `SOURCES.txt`).  Windows reports the signature as valid once the certificate
+`rai-codesign.cer` from https://www.raitechnology.com/ is imported into *Trusted Root Certification
+Authorities* and *Trusted Publishers*:
+
+    Import-Certificate -FilePath rai-codesign.cer -CertStoreLocation Cert:\CurrentUser\Root
+    Import-Certificate -FilePath rai-codesign.cer -CertStoreLocation Cert:\CurrentUser\TrustedPublisher
+    Get-AuthenticodeSignature bin\*.exe
+
+The signatures carry RFC 3161 timestamps and stay valid after the certificate expires.

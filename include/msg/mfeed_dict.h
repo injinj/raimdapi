@@ -221,10 +221,6 @@ struct RAIMSG_DLL_EXP RaiMfeed_dict {
                                int maxFid,
                                unsigned int rwfTypeCount )
 ;
-  void printAppendix( rai::OutputStream *appendixOut ) const
-;
-  void printEnumtype( rai::OutputStream *enumtypeOut ) const
-;
   const RaiMfeed_entry *getMapEntry( const RaiMsg_dict *entry ) const;
 
   const RaiMfeed_entry *getMapEntry( Rai_i16 fid,
@@ -254,34 +250,13 @@ struct RAIMSG_DLL_EXP RaiMfeed_dict {
   };
   const RaiMfeed_enumEntry *getEnum( Rai_u16 fenum,  const char *disp ) const;
 
-  const RaiMfeed_entry *firstEntry( Rai_u32 &i,  Rai_u32 &off ) const;
-
-  const RaiMfeed_entry *nextEntry( Rai_u32 &i,  Rai_u32 &off ) const;
-
-  const RaiMfeed_enumList *firstEnumList( Rai_u32 &i ) const;
-
-  const RaiMfeed_enumList *nextEnumList( Rai_u32 &i ) const;
-
   void indexSass( void );
 
-  void packDataDictionary( RaiMsg &msg,  bool full ) const
-;
   void packDataDictionary2( RaiMsg &msg ) const;
 
-  static RaiMfeed_dict *unpackDataDictionary2( RaiMsg &msg )
-;
-  static RaiMfeed_dict *unpackDataDictionary( RaiMsg &msg )
-;
-  static bool isMfeedPackedDict( RaiMsg &msg );
-
+  static RaiMfeed_dict *unpackDataDictionary2( RaiMsg &msg );
   static RaiMfeed_type getType( const char *p );
-
   static RaiRWF_type getRWFType( const char *p,  Rai_u8 &bits );
-
-  static const char *getTypeString( RaiMfeed_type t );
-
-  static const char *getRWFTypeString( RaiRWF_type t,  Rai_u8 bits );
-
   static void release( RaiMfeed_dict *d );
 };
 
