@@ -450,30 +450,30 @@ all_exes += $(bind)/raiping2$(exe)
 all_depends +=  $(raiping2_deps)
 
 rai_api_jni_includes = $(jni_includes) -Isrc
-libjraiapi2_files := rai_api_jni
-libjraiapi2_objs  := $(addprefix src/raiapi/c++/java/com/rai/raiapi2/, $(addsuffix .cpp, $(libjraiapi2_files)))
-libjraiapi2_dbjs  := $(addprefix $(objd)/, $(addsuffix .fpic.o, $(libjraiapi2_files)))
-libjraiapi2_deps  := $(addprefix $(dependd)/, $(addsuffix .fpic.d, $(libjraiapi2_files)))
-libjraiapi2_dlnk  := -L$(libd) $(raiapi2_dlnk) $(dlnk_lib)
-libjraiapi2_spec  := $(ver_build)_$(git_hash)
-libjraiapi2_ver   := $(major_num).$(minor_num)
+libjraimdapi_files := rai_api_jni
+libjraimdapi_objs  := $(addprefix src/raiapi/c++/java/com/rai/raiapi2/, $(addsuffix .cpp, $(libjraimdapi_files)))
+libjraimdapi_dbjs  := $(addprefix $(objd)/, $(addsuffix .fpic.o, $(libjraimdapi_files)))
+libjraimdapi_deps  := $(addprefix $(dependd)/, $(addsuffix .fpic.d, $(libjraimdapi_files)))
+libjraimdapi_dlnk  := -L$(libd) $(raiapi2_dlnk) $(dlnk_lib)
+libjraimdapi_spec  := $(ver_build)_$(git_hash)
+libjraimdapi_ver   := $(major_num).$(minor_num)
 
-$(libd)/libjraiapi2.$(dll): $(libjraiapi2_dbjs) $(raiapi2_dlib) $(lnk_dep) $(dlnk_dep)
+$(libd)/libjraimdapi.$(dll): $(libjraimdapi_dbjs) $(raiapi2_dlib) $(lnk_dep) $(dlnk_dep)
 
 rai_msg_jni_includes = $(jni_includes) -Isrc
-libjraimsg_files := rai_msg_jni
-libjraimsg_objs  := $(addprefix src/raiapi/c++/java/com/rai/raiapi2/, $(addsuffix .cpp, $(libjraimsg_files)))
-libjraimsg_dbjs  := $(addprefix $(objd)/, $(addsuffix .fpic.o, $(libjraimsg_files)))
-libjraimsg_deps  := $(addprefix $(dependd)/, $(addsuffix .fpic.d, $(libjraimsg_files)))
-libjraimsg_dlnk  := -L$(libd) $(raiapi2_dlnk) $(dlnk_lib)
-libjraimsg_spec  := $(ver_build)_$(git_hash)
-libjraimsg_ver   := $(major_num).$(minor_num)
+libjraimdmsg_files := rai_msg_jni
+libjraimdmsg_objs  := $(addprefix src/raiapi/c++/java/com/rai/raiapi2/, $(addsuffix .cpp, $(libjraimdmsg_files)))
+libjraimdmsg_dbjs  := $(addprefix $(objd)/, $(addsuffix .fpic.o, $(libjraimdmsg_files)))
+libjraimdmsg_deps  := $(addprefix $(dependd)/, $(addsuffix .fpic.d, $(libjraimdmsg_files)))
+libjraimdmsg_dlnk  := -L$(libd) $(raiapi2_dlnk) $(dlnk_lib)
+libjraimdmsg_spec  := $(ver_build)_$(git_hash)
+libjraimdmsg_ver   := $(major_num).$(minor_num)
 
-$(libd)/libjraimsg.$(dll): $(libjraimsg_dbjs) $(raiapi2_dlib) $(lnk_dep) $(dlnk_dep)
+$(libd)/libjraimdmsg.$(dll): $(libjraimdmsg_dbjs) $(raiapi2_dlib) $(lnk_dep) $(dlnk_dep)
 
 ifeq ($(java),1)
-all_dlls    += $(libd)/libjraiapi2.$(dll) $(libd)/libjraimsg.$(dll)
-all_depends += $(libjraiapi2_deps) $(libjraimsg_deps)
+all_dlls    += $(libd)/libjraimdapi.$(dll) $(libd)/libjraimdmsg.$(dll)
+all_depends += $(libjraimdapi_deps) $(libjraimdmsg_deps)
 endif
 
 
@@ -574,7 +574,7 @@ $(bind)/j%: $(libd)/%.jar GNUmakefile
 	   echo 'here=$$(cd "$$(dirname "$$0")/.." && pwd)'; \
 	   echo 'lib="$$here/lib64"'; \
 	   echo 'cp="$$lib"; for j in "$$lib"/*.jar; do cp="$$cp:$$j"; done'; \
-	   echo '# JNI libs (libjraimsg.so, libjraiapi2.so) live beside the jars'; \
+	   echo '# JNI libs (libjraimdmsg.so, libjraimdapi.so) live beside the jars'; \
 	   echo 'exec java -Djava.library.path="$$lib" -classpath "$$cp" $* "$$@"'; } > $@
 	chmod +x $@
 
@@ -767,7 +767,7 @@ endif
 # statically linked against the sibling libraries, so only the four mingw
 # runtime dlls come along.  Windows loaders look for names without the "lib"
 # prefix (.NET DllImport("raimdapi") -> raimdapi.dll, java loadLibrary
-# ("jraiapi2") -> jraiapi2.dll), so the dlls are renamed on the way in.  The
+# ("jraimdapi") -> jraimdapi.dll), so the dlls are renamed on the way in.  The
 # .NET programs are published as win-x64 apphosts named d<prog>.exe (like the
 # d<prog> launchers on linux) so they do not collide with the C++ <prog>.exe.
 # Produces <build_dir>/dist/raimdapi-<ver>-win64.zip and, when makensis
@@ -796,8 +796,8 @@ dist_win: all
 	cp -f src/raiapi/java/*.java $(distd)/examples/java/
 	cp -f src/raiapi/dotnet/rai*2/*.cs $(distd)/examples/dotnet/
 ifeq ($(java),1)
-	$(dist_strip) $(libd)/libjraiapi2.$(dll) $(distd)/bin/jraiapi2.dll $(dist_dbgd)
-	$(dist_strip) $(libd)/libjraimsg.$(dll) $(distd)/bin/jraimsg.dll $(dist_dbgd)
+	$(dist_strip) $(libd)/libjraimdapi.$(dll) $(distd)/bin/jraimdapi.dll $(dist_dbgd)
+	$(dist_strip) $(libd)/libjraimdmsg.$(dll) $(distd)/bin/jraimdmsg.dll $(dist_dbgd)
 	cp -f $(libd)/*.jar $(distd)/lib/
 	for p in $(java_progs) ; do n=$$(basename $$p) ; n=$${n#j} ; \
 	  { printf '@echo off\r\n'; \

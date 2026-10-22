@@ -313,11 +313,7 @@ public class RaiApi {
 
   static synchronized void initRaiApi() {
     if ( ! isInitialized ) {
-      try {
-        System.loadLibrary( "jraiapi264" );
-      } catch ( java.lang.LinkageError e ) {
-        System.loadLibrary( "jraiapi2" );
-      }
+      System.loadLibrary( "jraimdapi" );
       initClasses();
       isInitialized = true;
     }

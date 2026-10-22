@@ -10,7 +10,7 @@ bin/   raisub2.exe raipub2.exe raiping2.exe raireplay2.exe    C++ v2 programs
        draisub2.exe draipub2.exe draiping2.exe draireplay2.exe .NET programs (+ .dll/.runtimeconfig.json)
        RaiApi2.dll                                             .NET binding (netstandard2.0)
        raimdapi.dll                                            the api, C interface (raiapi2_c.h) for .NET / C
-       jraiapi2.dll jraimsg.dll  jraisub2.cmd ...              java JNI dlls and launchers
+       jraimdapi.dll jraimdmsg.dll  jraisub2.cmd ...              java JNI dlls and launchers
        libcares-2.dll libpcre2-8-0.dll libwinpthread-1.dll zlib1.dll   mingw runtime
 lib/   raimdapi.lib (import library for raimdapi.dll), libraimdapi.a (mingw static, C++ api), *.jar
 include/  raiapi2.h raiapi2_c.h raiapi.h and the base/msg/stream/util headers

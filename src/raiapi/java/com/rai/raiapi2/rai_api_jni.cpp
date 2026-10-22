@@ -279,27 +279,21 @@ JaRaiApi( initClasses )( JNIEnv *env, jclass /* me */ )
   jclass cls;
 
 #if defined( _WIN32 ) || defined( _WIN64 )
-  HMODULE dllp = ::LoadLibrary( "jraiapi264.dll" );
-  if ( dllp == NULL ) {
-    dllp = ::LoadLibrary( "jraiapi2.dll" );
-  }
+  HMODULE dllp = ::LoadLibrary( "jraimdapi.dll" );
 #else
   /* map it global, otherwise exceptions won't work; re-open *this* library
-   * by its own path (dladdr), not by name: a bare "libjraiapi264.so" lookup
-   * goes through ld.so.cache and can bind to a different RaiApi build (for
-   * example /usr/rai/dll from RaiCore), whose RaiApi::RaiOpen then wins at
-   * lazy-bind time and tries to dlopen rai_api_<api>.so.2.3 */
+   * by its own path (dladdr), not by name: a bare name lookup goes through
+   * ld.so.cache and once bound a different RaiApi build (libjraiapi264.so
+   * from RaiCore in /usr/rai/dll), whose RaiApi::RaiOpen then won at
+   * lazy-bind time and tried to dlopen rai_api_<api>.so.2.3 */
   void   *a = NULL;
   Dl_info info;
   if ( ::dladdr( (void *) &JaRaiApi( initClasses ), &info ) != 0 &&
        info.dli_fname != NULL ) {
     a = ::dlopen( info.dli_fname, RTLD_NOW | RTLD_GLOBAL | RTLD_NOLOAD );
   }
-  if ( a == NULL ) {
-    a = ::dlopen( "libjraiapi264.so", RTLD_NOW | RTLD_GLOBAL );
-    if ( a == NULL )
-      a = ::dlopen( "libjraiapi2.so", RTLD_NOW | RTLD_GLOBAL );
-  }
+  if ( a == NULL )
+    a = ::dlopen( "libjraimdapi.so", RTLD_NOW | RTLD_GLOBAL );
 #endif
   raiJNIEnvKey = rai::Thread::createSpecificKey();
   rai::Thread::putSpecific( raiJNIEnvKey, env );

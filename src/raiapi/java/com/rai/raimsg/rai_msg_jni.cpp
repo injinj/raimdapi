@@ -99,19 +99,19 @@ JaRaiMsg( initClasses )( JNIEnv *env,  jclass /* me */,
   jclass cls;
 
 #if defined( _WIN32 ) || defined( _WIN64 )
-  HMODULE dllp = ::LoadLibrary( "jraimsg.dll" );
-  if ( dllp == NULL ) {
-    dllp = ::LoadLibrary( "jraimsg64.dll" );
-  }
+  HMODULE dllp = ::LoadLibrary( "jraimdmsg.dll" );
 #else
-  /* map it global, otherwise exceptions won't work */
-  void *a = ::dlopen( "libjraimsg.so", RTLD_NOW | RTLD_GLOBAL );
-  if ( a == NULL ) {
-    //fprintf( stderr, "dlerror %s\n", dlerror() );
-    a = ::dlopen( "libjraimsg64.so", RTLD_NOW | RTLD_GLOBAL );
-    //if ( a == NULL )
-    //fprintf( stderr, "dlerror %s\n", dlerror() );
+  /* map it global, otherwise exceptions won't work; re-open *this* library
+   * by its own path (dladdr) so a same-named library elsewhere in the
+   * loader path can never be bound instead */
+  void   *a = NULL;
+  Dl_info info;
+  if ( ::dladdr( (void *) &JaRaiMsg( initClasses ), &info ) != 0 &&
+       info.dli_fname != NULL ) {
+    a = ::dlopen( info.dli_fname, RTLD_NOW | RTLD_GLOBAL | RTLD_NOLOAD );
   }
+  if ( a == NULL )
+    a = ::dlopen( "libjraimdmsg.so", RTLD_NOW | RTLD_GLOBAL );
 #endif
   if ( (cls = env->FindClass( JaRaiMsgPATH "RaiMsgException" )) == NULL ||
        (RaiMsgException_cls   = (jclass) env->NewGlobalRef( cls )) == NULL ||

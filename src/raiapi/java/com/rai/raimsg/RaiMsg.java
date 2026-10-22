@@ -684,11 +684,7 @@ public class RaiMsg {
                                           Class double_cls );
 
   static {
-    try {
-      System.loadLibrary( "jraimsg64" );
-    } catch ( java.lang.LinkageError e ) {
-      System.loadLibrary( "jraimsg" );
-    }
+    System.loadLibrary( "jraimdmsg" );
     initClasses( java.lang.Boolean.TYPE, java.lang.Byte.TYPE,
                  java.lang.Short.TYPE, java.lang.Integer.TYPE,
                  java.lang.Long.TYPE, java.lang.Float.TYPE,
