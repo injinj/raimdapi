@@ -575,7 +575,7 @@ $(bind)/j%: $(libd)/%.jar GNUmakefile
 	   echo 'lib="$$here/lib64"'; \
 	   echo 'cp="$$lib"; for j in "$$lib"/*.jar; do cp="$$cp:$$j"; done'; \
 	   echo '# JNI libs (libjraimdmsg.so, libjraimdapi.so) live beside the jars'; \
-	   echo 'exec java -Djava.library.path="$$lib" -classpath "$$cp" $* "$$@"'; } > $@
+	   echo 'exec java --enable-native-access=ALL-UNNAMED -Djava.library.path="$$lib" -classpath "$$cp" $* "$$@"'; } > $@
 	chmod +x $@
 
 ifeq ($(java),1)
