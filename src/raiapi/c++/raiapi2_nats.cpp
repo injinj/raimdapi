@@ -7,13 +7,24 @@
  *
  * NATS carries the sassrv subject schema, so the message flow is the tibrv
  * one: the dictionary is requested on _TIC.REPLY.SASS.DATA.DICTIONARY with
- * an inbox reply, a snapshot / initial image is requested on _SNAP.<subject>
- * (-snapPrefix) with an inbox reply and the sass flags, updates arrive on
+ * an inbox reply, a snapshot is requested on _SNAP.<subject> (-snapPrefix)
+ * with an inbox reply and the sass flags (the initial image of a
+ * subscription comes from the LISTEN.START advisory, below), updates arrive on
  * the subject itself (the publisher prefixes _TIC. or not; -prefix on the
  * publish side).  A payload is whatever the publisher wrote -- a raw TIBMSG /
  * TIB_SASS / RVMSG, or an RVMSG { _data_ : <msg> } the way an RV daemon
  * encapsulates it -- RaiMsg::ExtractProtocolEx() sorts that out.  Publish()
  * sends the RaiMsg's packed bytes as they are, with its codec id.
+ *
+ * Initial image: where tibrv sends an INITIAL_VALUES _SNAP, this transport
+ * turns on the natsmd session advisories (natsTransportParams.advisory):
+ * the _NATS.LISTEN.START.<session> of a subject carries the reply
+ * _INBOX.<session>.I.<subject>, an advisory-aware cache (rv_cache's
+ * NatsSubscriptionDB) answers it with the INITIAL, and natsmd delivers that
+ * on the subject to this subscriber only; onMsg() reports an INITIAL on the
+ * subject listener as a SNAP event, as the _SNAP inbox reply would be.
+ * -snapInitial true restores the tibrv way for a network without such a
+ * cache.  Snapshot() and Refresh() always request on _SNAP.
  *
  * Not in v1: interactive publish (NATS has no _RV.INFO.SYSTEM.LISTEN
  * notifications), raises UNSUPPORTED_MTHD. */
@@ -48,10 +59,11 @@ struct RaiApi_nats : public RaiApi {
        * token,
        * snapPrefix, /* _SNAP. */
        * queueGroup; /* NATS queue group for listeners, NULL = none */
+  bool   snapInitial; /* initial image by _SNAP (tibrv), not LISTEN.START */
 
   SYS_OPS( RaiApi_nats );
   RaiApi_nats() : daemon( 0 ), appName( 0 ), user( 0 ), pass( 0 ),
-    token( 0 ), snapPrefix( 0 ), queueGroup( 0 ) {}
+    token( 0 ), snapPrefix( 0 ), queueGroup( 0 ), snapInitial( false ) {}
   virtual ~RaiApi_nats();
 
   virtual const char *GetApiName( void ) { return "nats"; }
@@ -235,7 +247,7 @@ struct RaiSubscribe_nats : public RaiSubscribe {
 
   virtual void Start( const char *subject,  RaiSubParameter parm,
                       Rai_u32 timeoutMSecs );
-  void sendSubRequest( void );
+  void sendSubRequest( bool force = false ); /* force: Refresh() */
   void startTimer( Rai_u32 timeoutMSecs );
   virtual void Cancel( void );
   virtual void Refresh( Rai_u32 timeoutMSecs );
@@ -343,6 +355,7 @@ static const char daemon_arg[]      = "daemon",
                   pass_arg[]        = "pass",
                   token_arg[]       = "token",
                   snap_prefix_arg[] = "snapPrefix",
+                  snap_initial_arg[] = "snapInitial",
                   queue_group_arg[] = "queueGroup";
 
 static const char * prefix_null_check( const char *value ) {
@@ -368,6 +381,8 @@ RaiApi_nats::GetArgs( Args &args )
                           "NATS CONNECT auth token" );
   static StringArg snapPref( snap_prefix_arg, "_SNAP.", "<string>",
                              "Prefix to use for snapshot and initial values" );
+  static BoolArg   snapInit( snap_initial_arg, false, "<bool>",
+                 "Initial image by a _SNAP request, not the LISTEN.START inbox" );
   static StringArg queueGroup( queue_group_arg, NULL, "<name>",
                                "Subscribe as a member of this NATS queue "
                                "group" );
@@ -380,6 +395,7 @@ RaiApi_nats::GetArgs( Args &args )
   args.add( &token, COMMAND_ARG | RESOURCE_ARG );
   args.add( &snapPref, COMMAND_ARG | RESOURCE_ARG );
   args.add( &queueGroup, COMMAND_ARG | RESOURCE_ARG );
+  args.add( &snapInit, COMMAND_ARG | RESOURCE_ARG );
 }
 
 void
@@ -406,6 +422,7 @@ RaiApi_nats::ParseArgs( Args &args )
   s = prefix_null_check( args.getString( snap_prefix_arg ) );
   if ( s != NULL )
     STRDUP( this->snapPrefix, s );
+  this->snapInitial = args.getBoolean( snap_initial_arg );
   s = args.getString( queue_group_arg );
   if ( s != NULL )
     STRDUP( this->queueGroup, s );
@@ -434,6 +451,8 @@ RaiApi_nats::SetIoctl( const char *parameter,  const void *value )
     STRDUP( this->snapPrefix, prefix_null_check( (const char *) value ) );
   else if ( ::strcmp( parameter, queue_group_arg ) == 0 )
     STRDUP( this->queueGroup, (const char *) value );
+  else if ( ::strcmp( parameter, snap_initial_arg ) == 0 )
+    this->snapInitial = ( value != NULL && *(const bool *) value );
   else
     return this->RaiApi::SetIoctl( parameter, value );
   return true;
@@ -456,6 +475,8 @@ RaiApi_nats::GetIoctl( const char *parameter,  void *value )
     *(char **) value = this->snapPrefix;
   else if ( ::strcmp( parameter, queue_group_arg ) == 0 )
     *(char **) value = this->queueGroup;
+  else if ( ::strcmp( parameter, snap_initial_arg ) == 0 )
+    *(bool *) value = this->snapInitial;
   else
     return this->RaiApi::GetIoctl( parameter, value );
   return true;
@@ -538,6 +559,9 @@ RaiSession_nats::Start( void )
   parms.user       = this->api.user != NULL ? this->api.user : user;
   parms.password   = this->api.pass;
   parms.auth_token = this->api.token;
+  /* the session advisories: LISTEN.START asks the cache for the initial on
+   * _INBOX.<session>.I.<subject> (not with -snapInitial, the tibrv way) */
+  parms.advisory   = this->api.snapInitial ? 0 : 1;
 
   status = natsTransport_Create( &this->tport, &parms );
   if ( status != NATS_OK ) {
@@ -750,7 +774,8 @@ RaiQueue_nats::CreateSubscribe( RaiMsgCallback *cb,  void *closure )
   return NEW RaiSubscribe_nats( *this, cb, closure );
 }
 
-/* no _RV.INFO.SYSTEM.LISTEN.START/STOP equivalent on NATS */
+/* the transport publishes _NATS.LISTEN.START/STOP advisories (initial on
+ * listen) but nothing consumes them here: no interactive publish yet */
 RaiInteractivePublish *
 RaiQueue_nats::CreateInteractivePublish( RaiSubscribeCallback *,  void * )
 {
@@ -1187,7 +1212,11 @@ RaiSubscribe_nats::onMsg( natsEvent id,  natsMsg msg,  void *cl )
                               rstate = SassToSubState( msgType, recStatus );
     me.state = NewState( ostate, rstate );
     RaiMsgEvent event( me, subj,
-                  ( id == me.snapId ? RaiMsgEvent::SNAP : RaiMsgEvent::UPDATE ),
+                  ( id == me.snapId ||
+                    /* the LISTEN.START initial, delivered on the subject */
+                    ( id == me.listenId && msgType == SassConst::INITIAL &&
+                      ! me.q.session.api.snapInitial ) ?
+                    RaiMsgEvent::SNAP : RaiMsgEvent::UPDATE ),
                     msgType, recStatus, ostate, rstate, me.state, 0, 0, 0, 0 );
     me.count++;
     if ( RaiApi::contentEntitle( &raiMsg ) == false ) {
@@ -1302,7 +1331,7 @@ convertToRvMsg( RaiMsg &rvmsg,  RaiMsg &raimsg )
  * published on <snapPrefix><subject> with the reply set to an inbox of
  * this transport; the image comes back on the inbox */
 void
-RaiSubscribe_nats::sendSubRequest( void )
+RaiSubscribe_nats::sendSubRequest( bool force )
 {
   char            snapSubjectName[ SassConst::MAX_SUBJECT_LEN ],
                   inboxName[ NATS_MAX_INBOX_LEN ];
@@ -1311,6 +1340,9 @@ RaiSubscribe_nats::sendSubRequest( void )
   nats_status     status;
 
   if ( parm == UPDATE )
+    return;
+  /* subscribe: the initial comes from the LISTEN.START inbox */
+  if ( parm == BOTH && ! force && ! this->q.session.api.snapInitial )
     return;
 
   /* create a snap/initial reply inbox */
@@ -1367,7 +1399,7 @@ RaiSubscribe_nats::Refresh( Rai_u32 timeoutMSecs )
   }
   try {
     this->startTimer( timeoutMSecs );
-    this->sendSubRequest();
+    this->sendSubRequest( true ); /* a refresh is always a _SNAP */
   } catch ( RaiException e ) {
     logError( LERROR, e, "Refresh subject \"%s\"", this->subject );
     e2 = e;

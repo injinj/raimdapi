@@ -181,9 +181,15 @@ sassrv, omm, natsmd, libdecnumber; Java needs a JDK (`JAVA_HOME`, or `java=0`),
 - NATS transport (`raiapi2_nats.cpp`, natsmd `natsapi.h`): the tibrv
   message flow over raw NATS payloads — dictionary request on
   `_TIC.REPLY.SASS.DATA.DICTIONARY` with an inbox reply, snapshot /
-  initial image request on `<snapPrefix><subject>` (`-snapPrefix _SNAP.`)
+  refresh request on `<snapPrefix><subject>` (`-snapPrefix _SNAP.`)
   with the sass `flags` in an RVMSG and an inbox reply, updates on the
-  subject; `Publish()` sends the packed RaiMsg bytes as they are (no RV
+  subject. The subscribe initial is not a `_SNAP`: the transport turns on
+  the natsmd session advisories, the `_NATS.LISTEN.START.<session>` carries
+  the reply `_INBOX.<session>.I.<subject>`, an advisory-aware cache
+  (rv_cache `NatsSubscriptionDB`) answers with the INITIAL and natsmd
+  delivers it on the subject (reported as a SNAP event);
+  `-snapInitial true` restores the tibrv `_SNAP` initial for networks
+  without such a cache; `Publish()` sends the packed RaiMsg bytes as they are (no RV
   opaque wrapper), the receive side unwraps either raw TIBMSG/TIB_SASS/
   RVMSG or RVMSG `{_data_|_QFORM|_TIBMSG|_RAIMSG}` via
   `RaiMsg::ExtractProtocolEx()`. Args: `-daemon host:4222`, `-appName`,
