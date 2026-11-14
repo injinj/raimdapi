@@ -1146,8 +1146,15 @@ JaRaiApi( PrintLog )( JNIEnv *env,  jobject me,  jint level,  jthrowable err,
       jstring      s1 = NULL;
       const char * s2 = NULL;
       env->PushLocalFrame( 2 );
+      /* Exception.toString() takes no arguments -- CallObjectMethodV()
+       * needs a real va_list to forward, not a bare NULL/0 placeholder.
+       * That happened to compile on x86_64 (va_list there is array-typed
+       * and decays pointer-like) but is wrong on any ABI where va_list is
+       * a distinct opaque struct (e.g. AArch64's multi-field layout),
+       * which rejects an integer literal outright. Since there's nothing
+       * to forward, the correct call is the non-variadic CallObjectMethod. */
       s1 = (jstring)
-        env->CallObjectMethodV( err, Exception_mid_toString, NULL );  
+        env->CallObjectMethod( err, Exception_mid_toString );
       if ( s1 != NULL ) {
         s2 = env->GetStringUTFChars( s1, NULL );
         if ( s2 != NULL ) {
@@ -1189,8 +1196,11 @@ JaRaiApi( Log )( JNIEnv *env, jclass /* cls */, jint level, jthrowable err, jstr
       jstring      s1 = NULL;
       const char * s2 = NULL;
       env->PushLocalFrame( 2 );
+      /* see the matching comment in PrintLog() above: toString() takes no
+       * args, so this needs the non-variadic CallObjectMethod, not a
+       * bare-NULL CallObjectMethodV that only happened to compile on x86. */
       s1 = (jstring)
-        env->CallObjectMethodV( err, Exception_mid_toString, NULL );  
+        env->CallObjectMethod( err, Exception_mid_toString );
       if ( s1 != NULL ) {
         s2 = env->GetStringUTFChars( s1, NULL );
         if ( s2 != NULL ) {

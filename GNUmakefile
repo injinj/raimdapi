@@ -78,7 +78,13 @@ CC          ?= gcc
 CXX         ?= g++
 cc          := $(CC) -std=c11
 cpp         := $(CXX)
-arch_cflags := -mavx -fno-omit-frame-pointer
+ifeq ($(filter $(uname_m),aarch64 arm64),$(uname_m))
+  arch_cflags := -march=armv8-a+crc -fno-omit-frame-pointer
+else ifeq ($(filter $(uname_m),x86_64 i686 i386),$(uname_m))
+  arch_cflags := -mavx -fno-omit-frame-pointer
+else
+  arch_cflags := -fno-omit-frame-pointer
+endif
 gcc_wflags  := -Wall -Wextra
 #-Werror
 # if windows cross compile
@@ -116,6 +122,7 @@ CFLAGS ?= $(build_cflags) $(default_cflags)
 #CFLAGS ?= $(RPM_OPT_FLAGS)
 #endif
 cflags := $(gcc_wflags) $(CFLAGS) $(arch_cflags)
+cxxflags := $(filter-out -Werror=implicit-function-declaration,$(cflags))
 lflags := $(cxxrt_lflags)
 
 INCLUDES   ?= -Iinclude
@@ -706,7 +713,7 @@ $(dependd):
 # remove target bins, objs, depends
 .PHONY: clean
 clean:
-	rm -r -f $(bind) $(libd) $(objd) $(dependd)
+	rm -r -f $(bind) $(libd) $(objd) $(dependd) $(java_classd)
 	if [ "$(build_dir)" != "." ] ; then rmdir $(build_dir) ; fi
 
 .PHONY: clean_dist
@@ -884,9 +891,15 @@ endif
 # this should be 64 for rpm based, /64 for SunOS
 install_lib_suffix ?=
 
+# there is no include/raiapi/ subdirectory -- public headers are flat
+# (raiapi.h, raiapi2.h, ...) plus base/msg/stream/util/ subdirs; the RPM
+# spec (rpm/raimdapi.spec) already handles this correctly by copying the
+# whole include tree wholesale ("cp -a ./include ./usr/include" +
+# "/usr/include/*" in %files) rather than cherry-picking a subdirectory
+# that doesn't exist, so mirror that here instead of guessing a subset.
 install: dist_bins
 	install -d $(install_prefix)/lib$(install_lib_suffix)
-	install -d $(install_prefix)/bin $(install_prefix)/include/raiapi
+	install -d $(install_prefix)/bin $(install_prefix)/include
 	for f in $(libd)/libraimdapi.* ; do \
 	if [ -h $$f ] ; then \
 	cp -a $$f $(install_prefix)/lib$(install_lib_suffix) ; \
@@ -894,52 +907,52 @@ install: dist_bins
 	install $$f $(install_prefix)/lib$(install_lib_suffix) ; \
 	fi ; \
 	done
-	install -m 644 include/raiapi/*.h $(install_prefix)/include/raiapi
+	cp -a include/. $(install_prefix)/include
 
 $(objd)/%.o: src/raiapi/c++/%.cpp
-	$(cpp) $(cflags) $(cppflags) $(includes) $(defines) $($(notdir $*)_includes) $($(notdir $*)_defines) -c $< -o $@
+	$(cpp) $(cxxflags) $(cppflags) $(includes) $(defines) $($(notdir $*)_includes) $($(notdir $*)_defines) -c $< -o $@
 
 $(objd)/%.o: src/raiapi/c/%.cpp
-	$(cpp) $(cflags) $(cppflags) $(includes) $(defines) $($(notdir $*)_includes) $($(notdir $*)_defines) -c $< -o $@
+	$(cpp) $(cxxflags) $(cppflags) $(includes) $(defines) $($(notdir $*)_includes) $($(notdir $*)_defines) -c $< -o $@
 
 $(objd)/%.o: src/base/%.cpp
-	$(cpp) $(cflags) $(cppflags) $(includes) $(defines) $($(notdir $*)_includes) $($(notdir $*)_defines) -c $< -o $@
+	$(cpp) $(cxxflags) $(cppflags) $(includes) $(defines) $($(notdir $*)_includes) $($(notdir $*)_defines) -c $< -o $@
 
 $(objd)/%.o: src/util/%.cpp
-	$(cpp) $(cflags) $(cppflags) $(includes) $(defines) $($(notdir $*)_includes) $($(notdir $*)_defines) -c $< -o $@
+	$(cpp) $(cxxflags) $(cppflags) $(includes) $(defines) $($(notdir $*)_includes) $($(notdir $*)_defines) -c $< -o $@
 
 $(objd)/%.o: src/stream/%.cpp
-	$(cpp) $(cflags) $(cppflags) $(includes) $(defines) $($(notdir $*)_includes) $($(notdir $*)_defines) -c $< -o $@
+	$(cpp) $(cxxflags) $(cppflags) $(includes) $(defines) $($(notdir $*)_includes) $($(notdir $*)_defines) -c $< -o $@
 
 $(objd)/%.o: src/msg/%.cpp
-	$(cpp) $(cflags) $(cppflags) $(includes) $(defines) $($(notdir $*)_includes) $($(notdir $*)_defines) -c $< -o $@
+	$(cpp) $(cxxflags) $(cppflags) $(includes) $(defines) $($(notdir $*)_includes) $($(notdir $*)_defines) -c $< -o $@
 
 $(objd)/%.o: src/util/%.c
 	$(cc) $(cflags) $(includes) $(defines) $($(notdir $*)_includes) $($(notdir $*)_defines) -c $< -o $@
 
 $(objd)/%.fpic.o: src/raiapi/java/com/rai/raiapi2/%.cpp
-	$(cpp) $(cflags) $(fpicflags) $(cppflags) $(includes) $(defines) $($(notdir $*)_includes) $($(notdir $*)_defines) -c $< -o $@
+	$(cpp) $(cxxflags) $(fpicflags) $(cppflags) $(includes) $(defines) $($(notdir $*)_includes) $($(notdir $*)_defines) -c $< -o $@
 
 $(objd)/%.fpic.o: src/raiapi/c/%.cpp
-	$(cpp) $(cflags) $(fpicflags) $(cppflags) $(includes) $(defines) $($(notdir $*)_includes) $($(notdir $*)_defines) -c $< -o $@
+	$(cpp) $(cxxflags) $(fpicflags) $(cppflags) $(includes) $(defines) $($(notdir $*)_includes) $($(notdir $*)_defines) -c $< -o $@
 
 $(objd)/%.fpic.o: src/raiapi/java/com/rai/raimsg/%.cpp
-	$(cpp) $(cflags) $(fpicflags) $(cppflags) $(includes) $(defines) $($(notdir $*)_includes) $($(notdir $*)_defines) -c $< -o $@
+	$(cpp) $(cxxflags) $(fpicflags) $(cppflags) $(includes) $(defines) $($(notdir $*)_includes) $($(notdir $*)_defines) -c $< -o $@
 
 $(objd)/%.fpic.o: src/raiapi/c++/%.cpp
-	$(cpp) $(cflags) $(fpicflags) $(cppflags) $(includes) $(defines) $($(notdir $*)_includes) $($(notdir $*)_defines) -c $< -o $@
+	$(cpp) $(cxxflags) $(fpicflags) $(cppflags) $(includes) $(defines) $($(notdir $*)_includes) $($(notdir $*)_defines) -c $< -o $@
 
 $(objd)/%.fpic.o: src/base/%.cpp
-	$(cpp) $(cflags) $(fpicflags) $(cppflags) $(includes) $(defines) $($(notdir $*)_includes) $($(notdir $*)_defines) -c $< -o $@
+	$(cpp) $(cxxflags) $(fpicflags) $(cppflags) $(includes) $(defines) $($(notdir $*)_includes) $($(notdir $*)_defines) -c $< -o $@
 
 $(objd)/%.fpic.o: src/util/%.cpp
-	$(cpp) $(cflags) $(fpicflags) $(cppflags) $(includes) $(defines) $($(notdir $*)_includes) $($(notdir $*)_defines) -c $< -o $@
+	$(cpp) $(cxxflags) $(fpicflags) $(cppflags) $(includes) $(defines) $($(notdir $*)_includes) $($(notdir $*)_defines) -c $< -o $@
 
 $(objd)/%.fpic.o: src/stream/%.cpp
-	$(cpp) $(cflags) $(fpicflags) $(cppflags) $(includes) $(defines) $($(notdir $*)_includes) $($(notdir $*)_defines) -c $< -o $@
+	$(cpp) $(cxxflags) $(fpicflags) $(cppflags) $(includes) $(defines) $($(notdir $*)_includes) $($(notdir $*)_defines) -c $< -o $@
 
 $(objd)/%.fpic.o: src/msg/%.cpp
-	$(cpp) $(cflags) $(fpicflags) $(cppflags) $(includes) $(defines) $($(notdir $*)_includes) $($(notdir $*)_defines) -c $< -o $@
+	$(cpp) $(cxxflags) $(fpicflags) $(cppflags) $(includes) $(defines) $($(notdir $*)_includes) $($(notdir $*)_defines) -c $< -o $@
 
 $(objd)/%.fpic.o: src/util/%.c
 	$(cc) $(cflags) $(fpicflags) $(includes) $(defines) $($(notdir $*)_includes) $($(notdir $*)_defines) -c $< -o $@
