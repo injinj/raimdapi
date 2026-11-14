@@ -2,12 +2,12 @@ Source: raimdapi
 Section: devel
 Priority: optional
 Maintainer: Chris Anderson <chris@raitechnology.com>
-Build-Depends: debhelper (>= 9)
+Build-Depends: debhelper (>= 9), raikv, raimd, sassrv, libdecnumber, omm, natsmd, libpcre2-dev, libc-ares-dev, zlib1g-dev, chrpath
 Standards-Version: 3.9.5
 Homepage: https://www.github.com/raitechnology/raimdapi
 
 Package: raimdapi
-Architecture: amd64
+Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: Rai market data api
  Client api (C++, C, Java, .NET) for the Rai market data services.
