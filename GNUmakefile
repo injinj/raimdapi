@@ -45,6 +45,13 @@ jni_os       := $(shell uname -s | tr A-Z a-z)
 jni_includes := -I$(java_home)/include -I$(java_home)/include/$(jni_os)
 # Emit class files loadable by this JDK's runtime.  Spec sets jdk_release per
 # chroot (11 on EL7, 21 elsewhere); default = whatever javac we found.
+# The Windows packages are documented as needing a JRE 21, whatever JDK the
+# build host has, so the mingw build defaults to 21 (jdk_release=N overrides).
+# make does not notice a changed release: remove $(java_classd) and the jars
+# in $(libd) when switching it.
+ifeq (-mingw,$(findstring -mingw,$(port_extra)))
+jdk_release ?= 21
+endif
 jdk_release ?= $(shell $(java_home)/bin/javac -version 2>&1 | sed -E 's/^javac ([0-9]+).*/\1/')
 javac_flags := --release $(jdk_release)
 JAVAC       := $(java_home)/bin/javac $(javac_flags)
